@@ -16,11 +16,11 @@
                 <img src="{{ asset('logosu.jpg') }}" alt="Logo" class="w-14 h-14 rounded-full object-cover">
                 <li
                     class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer">
-                    <a href="#" class="text-[rgba(255,242,216,0.805)] font-serif">Beranda</a>
+                    <a href="{{ route('home') }}" class="text-[rgba(255,242,216,0.805)] font-serif">Beranda</a>
                 </li>
                 <li
                     class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer">
-                    <a href="toko.blade.php" class="text-[rgba(255,242,216,0.805)] font-serif">Toko</a>
+                    <a href="#" class="text-[rgba(255,242,216,0.805)] font-serif">Toko</a>
                 </li>
                 <li
                     class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer">
@@ -47,42 +47,10 @@
     <main>
         <img src="logos3.jpg" alt="logo" class="w-full h-auto">
 
+        {{-- K --}}
+
         <!-- GALERI -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1>
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-        </div>
-
-        <!-- ULASAN -->
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">ULASAN</h1>
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-        </div>
-
-        <!-- TENTANG -->
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">TESTIMONI</h1>
         <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5 mb-16">
             <div
                 class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
