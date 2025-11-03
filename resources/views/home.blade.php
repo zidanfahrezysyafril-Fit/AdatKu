@@ -57,7 +57,7 @@
                 <img src="bajumelayu.jpg" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
            <div>
-                <img src="bajujawa.png" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
+                <img src="bajujawa.jpg" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
             <div>
                 <img src="bajumelayu.jpg" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
