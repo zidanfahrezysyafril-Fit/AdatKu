@@ -20,7 +20,7 @@
                 </li>
                 <li
                     class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer">
-                    <a href="{{ route('toko') }}" class="text-[rgba(255,242,216,0.805)] font-serif">Toko</a>
+                    <a href="toko.blade.php" class="text-[rgba(255,242,216,0.805)] font-serif">Toko</a>
                 </li>
                 <li
                     class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer">
