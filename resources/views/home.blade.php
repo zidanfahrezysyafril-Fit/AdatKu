@@ -43,7 +43,6 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <main>
         <img src="logos3.jpg" alt="logo" class="w-full h-auto">
 
@@ -64,46 +63,13 @@
             </div>
         </div>
 
-        <!-- ULASAN -->
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">ULASAN</h1>
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-        </div>
 
-        <!-- TENTANG -->
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">TESTIMONI</h1>
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5 mb-16">
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
-            </div>
-        </div>
-    </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6">
-        <p>&copy; 2025 AdatKu</p>
-        <img src="ig.png" alt="Instagram" class="w-12 h-10 rounded-full object-cover mx-auto mt-2">
-    </footer>
+        <!-- FOOTER -->
+        <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6">
+            <p>&copy; 2025 AdatKu</p>
+            <img src="ig.png" alt="Instagram" class="w-12 h-10 rounded-full object-cover mx-auto mt-2">
+        </footer>
 </body>
 
 </html>
