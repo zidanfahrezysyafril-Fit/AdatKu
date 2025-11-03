@@ -50,8 +50,8 @@
         <!-- GALERI -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1>
         <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+            <div>
+                <img src="bajuminang.jpg" class="w-[350px] h-[400px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
             <div
                 class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
