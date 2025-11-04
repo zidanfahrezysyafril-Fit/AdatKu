@@ -29,16 +29,16 @@
             </ul>
 
             <!-- Search -->
-            <form action="hubungi kami.html" class="w-1/3">
+            {{-- <form action="hubungi kami.html" class="w-1/3">
                 <input type="text" name="search" placeholder="S e a r c h.."
                     class="w-full border-2 border-[#d4af37] bg-white text-black rounded-full text-[15px] px-10 py-2 focus:outline-none focus:ring-2 focus:ring-[#d4af37]" />
 
-            </form>
+            </form> --}}
 
             <!-- Sign In -->
             <li
                 class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer font-serif">
-                <a href="#" class="text-[rgba(255,242,216,0.805)]">Sign In</a>
+                <a href="{{ route('auth') }}" class="text-[rgba(255,242,216,0.805)]">Sign In</a>
             </li>
         </div>
     </header>
