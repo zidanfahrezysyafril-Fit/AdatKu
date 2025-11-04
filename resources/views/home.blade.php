@@ -45,7 +45,7 @@
 
     <!-- MAIN CONTENT -->
     <main>
-        {{-- <img src="logos3.jpg" alt="logo" class="w-full h-auto"> --}}
+        <img src="logo3.jpg" alt="logo" class="w-full h-auto">
 
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
