@@ -11,7 +11,6 @@
 <body class="bg-[rgba(255,242,216,0.152)]">
     <!-- NAVBAR -->
     <header class="bg-[rgb(57,40,50)] text-[rgba(255,242,216,0.805)]">
-        {{-- <img src="{{ asset('') }}" alt="Logo" class="w-14 h-14 rounded-full object-cover"> --}}
         <div class="flex justify-between items-center px-10 py-3">
             {{-- <ul class="flex items-center gap-5"> --}}
                 <img src="{{ asset('logosu.jpg') }}" alt="Logo" class="w-14 h-14 rounded-full object-cover">
@@ -46,7 +45,7 @@
 
     <!-- MAIN CONTENT -->
     <main>
-        <img src="logos3.jpg" alt="logo" class="w-full h-auto">
+        {{-- <img src="logos3.jpg" alt="logo" class="w-full h-auto"> --}}
 
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>

@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 @section('content')
-    <div class="bg-[rgba(255,242,216,0.152)] shadow-lg rounded-xl p-6 space-y-4">
+    <div class="bg-white shadow-lg rounded-xl p-6 space-y-4">
         <h1 class="text-2xl font-bold text-center">Login</h1>
         @if (session('success'))
             <div class="bg-green-100 text-green-700 p-2 rounded text-center">
