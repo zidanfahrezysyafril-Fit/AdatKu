@@ -29,16 +29,16 @@
             </ul>
 
             <!-- Search -->
-            <form action="hubungi kami.html" class="w-1/3">
+            {{-- <form action="hubungi kami.html" class="w-1/3">
                 <input type="text" name="search" placeholder="S e a r c h.."
                     class="w-full border-2 border-[#d4af37] bg-white text-black rounded-full text-[15px] px-10 py-2 focus:outline-none focus:ring-2 focus:ring-[#d4af37]" />
 
-            </form>
+            </form> --}}
 
             <!-- Sign In -->
             <li
                 class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer font-serif">
-                <a href="#" class="text-[rgba(255,242,216,0.805)]">Sign In</a>
+                <a href="{{ route('auth') }}" class="text-[rgba(255,242,216,0.805)]">Sign In</a>
             </li>
         </div>
     </header>
@@ -49,8 +49,8 @@
 
         <!-- GALERI -->
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
+        <h1 class="text-center text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
         <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
             <div>
                 <img src="bajuminang.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
@@ -66,40 +66,38 @@
         </div>
 
         <!-- ULASAN -->
-    
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Make-UP</h1>
+        <h1 class="text-center text-[35px] pb-12 font-bold text-black font-serif">Make Up</h1>
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
             <div>
-                <img src="bajujawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+                <img src="makeupjawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+            <div>
+                <img src="makeupnikah.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+           <div>
+                <img src="makeuplamaran.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+            <div>
+                <img src="makeupwisuda.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
         </div>
 
         <!-- TENTANG -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif"></h1>
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5 mb-16">
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
+            <div>
+                <img src="makeupjawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+            <div>
+                <img src="makeupnikah.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+           <div>
+                <img src="makeuplamaran.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+            <div>
+                <img src="makeupwisuda.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
         </div>
-    </main>
 
     <!-- FOOTER -->
     <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6">
