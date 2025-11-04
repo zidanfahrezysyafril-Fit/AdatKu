@@ -6,19 +6,22 @@
             @csrf
             <input type="text" name="name" placeholder="Nama Lengkap" class="border p-2 w-full rounded"
                 value="{{ old('name') }}" required>
+
             <input type="email" name="email" placeholder="Email" class="border p-2 w-full rounded"
                 value="{{ old('email') }}" required>
+
             <input type="password" name="password" placeholder="Password" class="border p-2 w-full rounded" required>
+
             <input type="password" name="password_confirmation" placeholder="Konfirmasi Password"
                 class="border p-2 w-full rounded" required>
-            <button type="submit" class="bg-green-600 hover:bg-green-700 textwhite px-4 py-2 rounded w-full">
+
+            <button type="submit" class="bg-blue-600 hover:bg-white-700 textwhite px-4 py-2 rounded w-full">
                 Daftar
             </button>
         </form>
         <p class="text-center text-sm">
             Sudah punya akun?
-            <a href="{{ route('login') }}" class="text-blue-600
-hover:underline">Login</a>
+            <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Login</a>
         </p>
     </div>
 @endsection

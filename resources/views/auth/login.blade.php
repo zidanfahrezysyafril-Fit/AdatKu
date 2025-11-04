@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 @section('content')
-    <div class="bg-white shadow-lg rounded-xl p-6 space-y-4">
+    <div class="bg-[rgb(255,255,255,0.2)] shadow-lg rounded-xl p-6 space-y-4">
         <h1 class="text-2xl font-bold text-center">Login</h1>
         @if (session('success'))
             <div class="bg-green-100 text-green-700 p-2 rounded text-center">
@@ -11,7 +11,7 @@
             @csrf
             <div>
                 <input type="email" name="email" placeholder="Email"
-                    class="border p-2 w-full rounded @error('email') border-red500 @enderror" value="{{ old('email') }}"
+                    class="bg-[rgb(255,255,255,0.8)] border p-2 w-full rounded @error('email') border-red500 @enderror" value="{{ old('email') }}"
                     required>
                 @error('email')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -19,7 +19,7 @@
             </div>
             <div>
                 <input type="password" name="password" placeholder="Password"
-                    class="border p-2 w-full rounded @error('password') borderred-500 @enderror" required>
+                    class="bg-[rgb(255,255,255,0.8)] border p-2 w-full rounded @error('password') borderred-500 @enderror" required>
                 @error('password')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
