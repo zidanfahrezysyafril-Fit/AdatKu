@@ -65,7 +65,7 @@
         </div>
 
         <!-- ULASAN -->
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">ULASAN</h1>
+        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif"></h1>
         <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
             <div>
                 <img src="bajujawa.jpg" class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
@@ -82,7 +82,7 @@
         </div>
 
         <!-- TENTANG -->
-        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">TESTIMONI</h1>
+        <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif"></h1>
         <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5 mb-16">
             <div
                 class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
