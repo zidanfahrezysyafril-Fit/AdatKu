@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-Route::get('home', function () {
+Route::get('/', function () {
     return redirect('/home');
 });
 Route::get('/home', function () {

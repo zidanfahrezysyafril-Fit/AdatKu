@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 @section('content')
-    <div class="bg-[rgb(255,255,255,0.2)] shadow-lg rounded-xl p-6 space-y-4">
-        <h1 class="text-2xl font-bold text-center">Login</h1>
+    <div class="bg-[rgb(255,255,255,0.6)] shadow-lg rounded-xl p-9 space-y-2">
+        <h1 class="text-2xl font-bold text-center text-red-800">Login</h1>
         @if (session('success'))
             <div class="bg-green-100 text-green-700 p-2 rounded text-center">
                 {{ session('success') }}
@@ -24,7 +24,7 @@
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded w-full">
                 Login
             </button>
         </form>
