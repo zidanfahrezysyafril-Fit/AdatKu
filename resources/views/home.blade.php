@@ -100,7 +100,7 @@
         </div>
 
     <!-- FOOTER -->
-    <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6">
+    <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-45">
         <p>&copy; 2025 AdatKu</p>
         <img src="ig.png" alt="Instagram" class="w-12 h-10 rounded-full object-cover mx-auto mt-2">
     </footer>
