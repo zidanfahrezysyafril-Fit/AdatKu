@@ -7,7 +7,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <form method="POST" action="{{ route('login.post') }}" class="space-y-4">
+        <form method="POST" action="{{ route('login.post') }}" class="space-y-4 borde p-8">
             @csrf
             <div>
                 <input type="email" name="email" placeholder="Email"
