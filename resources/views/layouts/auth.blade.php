@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-[rgb(57,40,50)] min-h-screen flex items-center justify-center">
+<body class="bg-[rgb(57,40,50,0.9)] min-h-screen flex items-center justify-center">
     {{-- Tempat konten halaman login/register --}}
     <main class="w-full max-w-md p-4">
         @yield('content')
