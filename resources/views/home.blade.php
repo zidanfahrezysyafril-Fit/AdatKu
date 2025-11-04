@@ -49,26 +49,26 @@
 
         <!-- GALERI -->
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5 mt-16">
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
             <div>
-                <img src="bajuminang.jpg" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
+                <img src="bajuminang.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
             <div>
-                <img src="bajumelayu.jpg" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+                <img src="bajumelayu.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
            <div>
-                <img src="bajujawa.jpg" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
+                <img src="bajujawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
             <div>
-                <img src="bajumelayu.jpg" class="w-[300px] h-[300px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+                <img src="bajumelayu.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
         </div>
 
         <!-- ULASAN -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">ULASAN</h1>
         <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
-            <div
-                class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+            <div>
+                <img src="bajujawa.jpg" class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
             <div
                 class="w-[250px] h-[250px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
