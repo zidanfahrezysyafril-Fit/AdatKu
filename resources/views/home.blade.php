@@ -11,10 +11,11 @@
 <body class="bg-[rgba(255,242,216,0.152)]">
     <!-- NAVBAR -->
     <header class="bg-[rgb(57,40,50)] text-[rgba(255,242,216,0.805)]">
+        {{-- <img src="{{ asset('') }}" alt="Logo" class="w-14 h-14 rounded-full object-cover"> --}}
         <div class="flex justify-between items-center px-10 py-3">
-            <ul class="flex items-center gap-5">
+            {{-- <ul class="flex items-center gap-5"> --}}
                 <img src="{{ asset('logosu.jpg') }}" alt="Logo" class="w-14 h-14 rounded-full object-cover">
-                <li
+                {{-- <li
                     class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer">
                     <a href="#" class="text-[rgba(255,242,216,0.805)] font-serif">Beranda</a>
                 </li>
@@ -26,7 +27,7 @@
                     class="list-none px-4 py-2 rounded-lg text-[20px] hover:bg-[rgba(240,248,255,0.364)] cursor-pointer">
                     <a href="#" class="text-[rgba(255,242,216,0.805)] font-serif">Hubungi Kami</a>
                 </li>
-            </ul>
+            </ul> --}}
 
             <!-- Search -->
             {{-- <form action="hubungi kami.html" class="w-1/3">
@@ -47,7 +48,6 @@
     <main>
         <img src="logos3.jpg" alt="logo" class="w-full h-auto">
 
-        <!-- GALERI -->
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
         <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5">
@@ -65,7 +65,6 @@
             </div>
         </div>
 
-        <!-- ULASAN -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Make Up</h1>
         <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5">
             <div>
@@ -82,7 +81,6 @@
             </div>
         </div>
 
-        <!-- TENTANG -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Pelamin</h1>
         <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mb-6">
             <div>
