@@ -49,8 +49,8 @@
 
         <!-- GALERI -->
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
-        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
             <div>
                 <img src="bajuminang.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
@@ -66,9 +66,8 @@
         </div>
 
         <!-- ULASAN -->
-    
-        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Make-UP</h1>
+        <div class="flex justify-center flex-wrap gap-16 mx-auto w-4/5">
             <div>
                 <img src="bajujawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-lg shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
