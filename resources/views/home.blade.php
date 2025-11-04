@@ -95,7 +95,7 @@
                 <img src="pelamin3.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
             <div>
-                <img src="pelamin3.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+                <img src="pelamin4.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
         </div>
 
