@@ -49,8 +49,13 @@
 
         <!-- GALERI -->
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
+<<<<<<< HEAD
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
         <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5">
+=======
+        <h1 class="text-center text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
+>>>>>>> b204a1630c76d306b2310572960fdc1b1da718d7
             <div>
                 <img src="bajuminang.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
@@ -66,8 +71,13 @@
         </div>
 
         <!-- ULASAN -->
+<<<<<<< HEAD
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Make Up</h1>
         <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5">
+=======
+        <h1 class="text-center text-[35px] pb-12 font-bold text-black font-serif">Make Up</h1>
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
+>>>>>>> b204a1630c76d306b2310572960fdc1b1da718d7
             <div>
                 <img src="makeupjawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
@@ -86,16 +96,16 @@
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif"></h1>
         <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mb-16">
             <div>
-                <img src="makeupjawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
+                <img src="pelamin1.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
             <div>
-                <img src="makeupnikah.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+                <img src="pelamin2.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
            <div>
-                <img src="makeuplamaran.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
+                <img src="pelamin3.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
             <div>
-                <img src="makeupwisuda.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+                <img src="pelamin4.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
             </div>
         </div>
 
