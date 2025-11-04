@@ -50,7 +50,7 @@
         <!-- GALERI -->
         {{-- <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">GALERI</h1> --}}
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Baju Adat</h1>
-        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5">
             <div>
                 <img src="bajuminang.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
@@ -67,7 +67,7 @@
 
         <!-- ULASAN -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif">Make Up</h1>
-        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5">
             <div>
                 <img src="makeupjawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
@@ -84,7 +84,7 @@
 
         <!-- TENTANG -->
         <h1 class="text-center mt-5 text-[35px] pb-12 font-bold text-black font-serif"></h1>
-        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mt-16">
+        <div class="flex justify-center flex-wrap gap-1 mx-auto w-4/5 mb-16">
             <div>
                 <img src="makeupjawa.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform" >
             </div>
