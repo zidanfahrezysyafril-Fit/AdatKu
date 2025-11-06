@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Panel')</title>
+    <title>@yield('title', 'MUA Panel')</title>
     {{-- Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- Extra CSS --}}
@@ -14,9 +14,9 @@
 <body>
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-800 text-white flex flex-col">
+        <aside class="w-59 bg-[rgb(57,40,50)] text-white flex flex-col">
             <div class="p-4 text-2xl font-bold border-b border-gray-700">
-                Admin Panel
+                MUA Panel
             </div>
             <nav class="flex-1 p-4 space-y-2">
                 <a href="{{ route('dashboard') }}" class="block py-2 px-3

@@ -11,18 +11,28 @@
             @csrf
             <div>
                 <input type="email" name="email" placeholder="Email"
-                    class="bg-[rgb(255,255,255,0.8)] border p-2 w-full rounded @error('email') border-red500 @enderror" value="{{ old('email') }}"
-                    required>
+                    class="bg-[rgb(255,255,255,0.8)] border p-2 w-full rounded @error('email') border-red500 @enderror"
+                    value="{{ old('email') }}" required>
                 @error('email')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
             <div>
                 <input type="password" name="password" placeholder="Password"
-                    class="bg-[rgb(255,255,255,0.8)] border p-2 w-full rounded @error('password') borderred-500 @enderror" required>
+                    class="bg-[rgb(255,255,255,0.8)] border p-2 w-full rounded @error('password') borderred-500 @enderror"
+                    required>
                 @error('password')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <label class="form-check-label d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                        <span class="bg-[blue] form-check-sign"></span>
+                        {{ __('Remember me') }}
+                    </label>
+                </div>
             </div>
             <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded w-full">
                 Login

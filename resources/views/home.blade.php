@@ -29,8 +29,8 @@
                 </a>
             </div>
             <nav class="hidden md:flex items-center gap-6 text-[18px] text-red-300">
-                <a href="#" class="hover:text-red-500">Beranda</a>
-                <a href="#" class=" hover:text-red-500">Toko</a>
+                <a href="/" class="hover:text-red-500">Beranda</a>
+                <a href="{{ ('mua') }}" class=" hover:text-red-500">Daftar MUA</a>
                 <a href="#" class="hover:text-red-500">Hubungi Kami</a>
             </nav>
             <div class="flex items-center gap-3">
