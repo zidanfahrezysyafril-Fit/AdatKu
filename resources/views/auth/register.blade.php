@@ -1,5 +1,4 @@
 @extends('layouts.auth')
-
 @section('content')
 <div class="bg-white/90 shadow-xl rounded-2xl p-3 space-y-1 border border-gray-200 backdrop-blur-sm">
     <h1 class="text-3xl font-bold text-center text-red-800 ">Register</h1>
