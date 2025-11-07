@@ -30,18 +30,19 @@
             </div>
             <nav class="hidden md:flex items-center gap-6 text-[18px] text-red-300">
                 <a href="/" class="hover:text-red-500">Beranda</a>
-                <a href="{{ ('mua') }}" class=" hover:text-red-500">Daftar MUA</a>
+                <a href="{{ ('mua') }}" class="hidden hover:text-red-500">Daftar MUA</a>
                 <a href="#" class="hover:text-red-500">Hubungi Kami</a>
             </nav>
             <div class="flex items-center gap-3">
                 <a href="{{ route('auth') }}"
-                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">SignIn</a>
+                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign
+                    In</a>
             </div>
         </div>
     </header>
-
+    
     <section class="relative">
-        <img src="{{ asset('logos3.jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
+        <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
         <div
             class="absolute inset-0 flex flex-col justify-center items-center text-center text-red-200 bg-gradient-to-b from-black/30 via-black/20 to-black/30">
             <h1 class="text-5xl md:text-6xl font-semibold mb-3">Selamat Datang di <span
@@ -50,7 +51,7 @@
                 adat, rias, dan pelaminan terbaik.</p>
             <div class="mt-6 flex gap-4">
                 <a href="#"
-                    class="bg-red-200 text-[rgb(57,40,50)] px-6 py-3 rounded-full font-medium hover:scale-105 transition">Kunjungi
+                    class="hidden bg-red-200 text-[rgb(57,40,50)] px-6 py-3 rounded-full font-medium hover:scale-105 transition">Kunjungi
                     Toko</a>
                 <a href="#"
                     class="border border-white-500 text-red-200 px-6 py-3 rounded-full hover:bg-red-500/10 transition">Pelajari
@@ -58,59 +59,86 @@
             </div>
         </div>
     </section>
-
-    <!-- GALERI SECTION -->
-    <main class="py-16">
-        <!-- Baju Adat -->
-        <section class="text-center mb-14">
-            <h2 class="text-4xl font-bold tex mb-8 text-red-300">Baju Adat</h2>
-            <div class="flex flex-wrap justify-center gap-6">
-                <img src="{{ asset('bajuminang.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg transition duration-300 ease-in-out hover:scale-105"
-                    alt="Baju Minang">
-                <img src="{{ asset('bajumelayu.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg transition duration-300 ease-in-out hover:scale-105"
-                    alt="Baju Melayu">
-                <img src="{{ asset('bajujawa.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg transition duration-300 ease-in-out hover:scale-105"
-                    alt="Baju Jawa">
-                <img src="{{ asset('bajusunda.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg transition duration-300 ease-in-out hover:scale-105"
-                    alt="Baju Sunda">
+    
+<!-- GALERI SECTION -->
+<main class="py-16 space-y-28">
+    <!-- BAJU ADAT -->
+    <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
+        <!-- Slider -->
+        <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
+            <div class="flex w-[400%] animate-slide">
+                <img src="{{ asset('bajuminang.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Baju Minang">
+                <img src="{{ asset('bajumelayu.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Baju Melayu">
+                <img src="{{ asset('bajujawa.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Baju Jawa">
+                <img src="{{ asset('bajusunda.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Baju Sunda">
             </div>
-        </section>
+        </div>
+        <div class="mt-10 md:mt-0 md:w-[420px] text-center md:text-left">
+            <h2 class="logo-font text-4xl font-bold text-red-300 mb-4">Baju Adat</h2>
+            <p class="justify-teks text-gray-600 leading-relaxed text-lg">
+                Baju adat adalah simbol kebanggaan daerah dan identitas budaya. Setiap daerah di Indonesia memiliki
+                ciri khas tersendiri pada busana adatnya yang mencerminkan keindahan, filosofi, serta nilai-nilai luhur
+                masyarakat setempat.
+            </p>
+        </div>
+    </section>
 
-
-        <!-- Make Up -->
-        <section class="text-center mb-14">
-            <h2 class="text-4xl font-bold mb-8 text-red-300">Make Up</h2>
-            <div class="flex flex-wrap justify-center gap-6">
-                <img src="{{ asset('makeupjawa.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Makeup Jawa">
-                <img src="{{ asset('makeupnikah.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Makeup Nikah">
-                <img src="{{ asset('makeuplamaran.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Makeup Lamaran">
-                <img src="{{ asset('makeupwisuda.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Makeup Wisuda">
+    <!-- MAKE UP -->
+    <section class="flex flex-col md:flex-row-reverse items-center justify-center md:space-x-16 md:space-x-reverse">
+        <!-- Slider -->
+        <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
+            <div class="flex w-[400%] animate-slide">
+                <img src="{{ asset('makeupjawa.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Jawa">
+                <img src="{{ asset('makeupnikah.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Nikah">
+                <img src="{{ asset('makeuplamaran.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Lamaran">
+                <img src="{{ asset('makeupwisuda.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Wisuda">
             </div>
-        </section>
+        </div>
+        <div class="mt-10 md:mt-0 md:w-[420px] text-center md:text-right">
+            <h2 class="logo-font text-4xl font-bold text-red-300 mb-4">Make Up</h2>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                Seni rias atau make up berperan penting dalam mempercantik penampilan. Dari rias pengantin hingga
+                wisuda, setiap gaya memiliki karakteristik unik yang mempertegas keanggunan dan kepercayaan diri
+                seseorang.
+            </p>
+        </div>
+    </section>
 
-        <!-- Pelamin -->
-        <section class="text-center">
-            <h2 class="text-4xl font-bold mb-8 text-green-900">Pelamin</h2>
-            <div class="flex flex-wrap justify-center gap-6">
-                <img src="{{ asset('pelamin1.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Pelamin 1">
-                <img src="{{ asset('pelamin2.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Pelamin 2">
-                <img src="{{ asset('pelamin3.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Pelamin 3">
-                <img src="{{ asset('pelamin4.jpg') }}"
-                    class="w-[270px] h-[270px] rounded-2xl shadow-lg card-img hover:scale-105" alt="Pelamin 4">
+    <!-- PELAMINAN -->
+    <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
+        <!-- Slider -->
+        <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
+            <div class="flex w-[400%] animate-slide">
+                <img src="{{ asset('pelamin1.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Pelamin 1">
+                <img src="{{ asset('pelamin2.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Pelamin 2">
+                <img src="{{ asset('pelamin3.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Pelamin 3">
+                <img src="{{ asset('pelamin4.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Pelamin 4">
             </div>
-        </section>
-    </main>
+        </div>
+        <div class="mt-10 md:mt-0 md:w-[420px] text-center md:text-left">
+            <h2 class="logo-font text-4xl font-bold text-red-300 mb-4">Pelaminan</h2>
+            <p class="text-gray-600 leading-relaxed text-lg">
+                Pelaminan adalah simbol kebahagiaan dalam pernikahan. Setiap desain pelaminan menonjolkan kekayaan adat
+                dan keindahan budaya, menciptakan suasana yang megah dan sakral bagi pasangan pengantin.
+            </p>
+        </div>
+    </section>
+</main>
+
+<!-- ANIMASI SLIDER -->
+<style>
+@keyframes slide {
+  0%, 20% { transform: translateX(0); }
+  25%, 45% { transform: translateX(-25%); }
+  50%, 70% { transform: translateX(-50%); }
+  75%, 95% { transform: translateX(-75%); }
+  100% { transform: translateX(0); }
+}
+.animate-slide {
+  animation: slide 12s infinite ease-in-out;
+}
+</style>
+
 
     <!-- FOOTER -->
     <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6 mt-10">

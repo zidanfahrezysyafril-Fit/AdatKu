@@ -40,11 +40,13 @@
             </nav>
             <div class="flex items-center gap-3">
                 <a href="{{ route('auth') }}"
-                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">SignIn</a>
+                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign
+                    In</a>
             </div>
         </div>
     </header>
 
+    <!-- HERO -->
     <section class="relative">
         <img src="{{ asset('logos3.jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
         <div
@@ -56,26 +58,27 @@
         </div>
     </section>
 
-    <!-- Sidebar -->
-    <aside class="w-64 text-black border-b border-r border-gray-700 flex flex-col">
-        <div class="p-4 text-2xl font-bold border-b border-gray-700">
-            Daftar MUA
-        </div>
-        <nav class="flex-1 p-4 space-y-2 ">
-            <a href="#" class="block py-2 px-3 rounded
-hover:bg-gray-700">Dashboard</a>
-            @if (Auth::user()->role === 'admin')
-                <a href="#" class="block py-2 px-3 rounded
-hover:bg-gray-700">Users</a>
-            @endif
-            @if (Auth::user()->role === 'user')
-                <a href="#" class="block py-2 px-3 rounded
-hover:bg-gray-700">Anggota</a>
-                <a href="#" class="block py-2 px-3
-rounded hover:bg-gray-700">Kegiatan</a>
-            @endif
-        </nav>
-    </aside>
+    <!-- BAGIAN MENU DAN KONTEN -->
+    <main class="max-w-9xl mx-auto px-6 py-10 flex space-x-6">
+        <!-- Sidebar -->
+        <aside class="w-60 bg-white shadow-md rounded-md border border-gray-200 flex flex-col">
+            <div class="p-4 text-2xl font-bold border-b border-gray-300">
+                Daftar MUA
+            </div>
+            <!-- List Pilihan MUA -->
+            <nav class="flex-1 overflow-auto p-4 space-y-2 text-gray-700">
+                <button class="block w-full text-left py-2 px-3 rounded hover:bg-gray-200 transition"
+                    onclick="showContent('dashboard')" id="menu-dashboard">MUA</button>
+            </nav>
+        </aside>
+
+        <!-- Konten Menu -->
+        <section class="flex-1 bg-white rounded-md shadow-md border p-6 min-h-[300px]" id="content-area">
+            <p class="text-gray-600 text-lg leading-relaxed">
+                Pilih menu dari daftar di sebelah kiri untuk menampilkan isi disini.
+            </p>
+        </section>
+    </main>
 
     <!-- FOOTER -->
     <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6 mt-10">
@@ -89,6 +92,31 @@ rounded hover:bg-gray-700">Kegiatan</a>
                     class="w-10 h-10 rounded-full hover:scale-110 transition"></a>
         </div>
     </footer>
+
+    <script>
+        // Fungsi untuk menampilkan konten sesuai menu yang dipilih
+        function showContent(menu) {
+            const contentArea = document.getElementById('content-area');
+            const contentMap = {
+                mua: `<h2 class="text-2xl font-bold mb-4">Mua</h2><p>Daftar semua pengguna MUA.</p>`,
+                users: `<h2 class="text-2xl font-bold mb-4">Users</h2><p>Daftar semua pengguna MUA.</p>`,
+                anggota: `<h2 class="text-2xl font-bold mb-4">Anggota</h2><p>Profil anggota MUA yang terdaftar.</p>`,
+                kegiatan: `<h2 class="text-2xl font-bold mb-4">Kegiatan</h2><p>Informasi kegiatan MUA terbaru.</p>`
+            };
+
+            contentArea.innerHTML = contentMap[menu] || `<p>Konten tidak tersedia.</p>`;
+
+            // Highlight menu aktif
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('bg-gray-300', 'font-bold');
+            });
+            const activeBtn = document.getElementById(`menu-${menu}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-gray-300', 'font-bold');
+            }
+        }
+    </script>
+
 </body>
 
 </html>
