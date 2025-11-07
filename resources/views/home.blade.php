@@ -59,7 +59,12 @@
             </div>
         </div>
     </section>
-    
+    {{-- keterangan adataku --}}
+    <div>
+        <h1 class="flex flex-col items-center">Sekilas Tentang Adatku</h1>
+        <a>Website Adatku ini</a>
+    </div>
+
 <!-- GALERI SECTION -->
 <main class="py-16 space-y-28">
     <!-- BAJU ADAT -->
