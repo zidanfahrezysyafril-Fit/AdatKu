@@ -63,12 +63,14 @@
         <!-- Sidebar -->
         <aside class="w-60 bg-white shadow-md rounded-md border border-gray-200 flex flex-col">
             <div class="p-4 text-2xl font-bold border-b border-gray-300">
-                Daftar MUA
+                Pilih
             </div>
             <!-- List Pilihan MUA -->
             <nav class="flex-1 overflow-auto p-4 space-y-2 text-gray-700">
                 <button class="block w-full text-left py-2 px-3 rounded hover:bg-gray-200 transition"
-                    onclick="showContent('dashboard')" id="menu-dashboard">MUA</button>
+                    onclick="showContent('dashboard')" id="menu-dashboard">Dashboard</button>
+                <button class="block w-full text-left py-2 px-3 rounded hover:bg-gray-200 transition"
+                    onclick="showContent('mua')" id="menu-mua">MUA</button>
             </nav>
         </aside>
 
@@ -98,9 +100,26 @@
         function showContent(menu) {
             const contentArea = document.getElementById('content-area');
             const contentMap = {
-                mua: `<h2 class="text-2xl font-bold mb-4">Mua</h2><p>Daftar semua pengguna MUA.</p>`,
-                users: `<h2 class="text-2xl font-bold mb-4">Users</h2><p>Daftar semua pengguna MUA.</p>`,
-                anggota: `<h2 class="text-2xl font-bold mb-4">Anggota</h2><p>Profil anggota MUA yang terdaftar.</p>`,
+                dashboard: `<h2 class="text-2xl font-bold mb-4">Pilih Mua yang tertera disini</h2>
+                            <div class="flex gap-6">
+                            <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+                                <img src="https://pbs.twimg.com/profile_images/1978582245096165376/l-CxaLRm.jpg" 
+                                    alt="Mitia" 
+                                    class="cursor-pointer w-full h-64 object-cover rounded-lg">
+                                <div class="p-3 text-center">
+                                <h3 class="text-lg font-semibold text-gray-800">Mythia Batford</h3>
+                                </div>
+                            </div>
+                            <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+                                <img src="https://yt3.googleusercontent.com/-x_6zm9yYEbDnsl7FOKifiYqbW7e5JfWEcFTwyGxsEc_aX2Z_P2XhXgfIf8Pn5AMHiuRNerARw=s160-c-k-c0x00ffffff-no-rj" 
+                                    alt="MUA Kedua" 
+                                    class="cursor-pointer w-full h-64 object-cover rounded-lg">
+                                <div class="p-3 text-center">
+                                <h3 class="text-lg font-semibold text-gray-800"></h3>
+                                </div>
+                            </div>
+                            </div>`,
+                mua: `<h2 class="text-2xl font-bold mb-4">Anggota</h2><p>Profil MUA yang terdaftar.</p>`,
                 kegiatan: `<h2 class="text-2xl font-bold mb-4">Kegiatan</h2><p>Informasi kegiatan MUA terbaru.</p>`
             };
 

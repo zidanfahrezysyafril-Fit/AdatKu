@@ -35,8 +35,7 @@
             </nav>
             <div class="flex items-center gap-3">
                 <a href="{{ route('auth') }}"
-                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign
-                    In</a>
+                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign In</a>
             </div>
         </div>
     </header>
