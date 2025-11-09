@@ -115,7 +115,7 @@
                                     alt="MUA Kedua" 
                                     class="cursor-pointer w-full h-64 object-cover rounded-lg">
                                 <div class="p-3 text-center">
-                                <h3 class="text-lg font-semibold text-gray-800"></h3>
+                                <h3 class="text-lg font-semibold text-gray-800">MyIstriku</h3>
                                 </div>
                             </div>
                             </div>`,
