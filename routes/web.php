@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
- 
-Route::get('/', function () {
+Route::view('/dashboard', 'dashboard')->name('dashboard');   
+Route::get('/home', function () {
     return view('home');
 })->name('home');
 
