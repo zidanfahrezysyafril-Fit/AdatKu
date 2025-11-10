@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MUA Panel — Katalog MUA</title>
+    <title>MUA Panel — Profil MUA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.tailwindcss.min.css">
     <style>
         body {
             background-color: #fff9f7;
@@ -36,7 +35,7 @@
                         </div>
                         <div>
                             <p class="text-xs uppercase tracking-wide text-rose-600">MUA Panel</p>
-                            <h1 class="text-lg font-semibold">Katalog MUA</h1>
+                            <h1 class="text-lg font-semibold">Dashboard</h1>
                         </div>
                     </div>
                 </div>
@@ -60,136 +59,131 @@
                     <div class="px-6 py-6 border-b border-white/10">
                         <h2 class="text-lg font-semibold">MUA Panel</h2>
                     </div>
-                    <nav class="flex-1 px-4 py-3 space-y-1 text-sm">
+                    <nav x-data="{ openMua:false, openKatalog:false }" class="flex-1 px-4 py-3 space-y-1 text-sm">
                         <a href="{{ route('dashboard') }}"
-                            class="block px-4 py-2 rounded-lg hover:bg-white/10 transition">Dashboard</a>
-                        <a href="{{ route('panelmua.index') }}"
-                            class="block px-4 py-2 rounded-lg bg-white/10 hover:bg-white/15 transition">Katalog MUA</a>
-                        <a href="#" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition">Settings</a>
+                            class="block px-4 py-2 rounded-lg bg-white/10 hover:bg-white/15 transition">Dashboard</a>
+
+                        <!-- MUA (dropdown) -->
+                        <button @click="openMua = !openMua"
+                            class="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-white/10 transition">
+                            <span>MUA</span>
+                            <svg :class="openMua ? 'rotate-180' : ''" class="w-4 h-4 transition-transform"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <div x-show="openMua" x-collapse class="ml-2 pl-3 border-l border-white/10 space-y-1">
+                            <a href="{{ route('panelmua.index') }}"
+                                class="block px-3 py-2 rounded-md hover:bg-white/10">
+                                Profil MUA
+                            </a>
+
+                            <!-- Katalog Layanan (sub dropdown) -->
+                            <button @click="openKatalog = !openKatalog"
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-white/10">
+                                <span>Katalog Layanan</span>
+                                <svg :class="openKatalog ? 'rotate-180' : ''" class="w-4 h-4 transition-transform"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+
+                            <div x-show="openKatalog" x-collapse class="ml-2 pl-3 border-l border-white/10 space-y-1">
+                                <a href="{{ route('dashboard') }}"
+                                    class="block px-3 py-2 rounded-md hover:bg-white/10">Baju Adat</a>
+                                <a href="{{ route('dashboard') }}"
+                                    class="block px-3 py-2 rounded-md hover:bg-white/10">Makeup</a>
+                                <a href="{{ route('dashboard') }}"
+                                    class="block px-3 py-2 rounded-md hover:bg-white/10">Pelamin</a>
+                            </div>
+                        </div>
                     </nav>
+
                     <div class="p-4 border-t border-white/10 text-xs text-white/80">
                         <p>29°C — Cerah Berawan</p>
                     </div>
                 </div>
             </aside>
 
-            <!-- MAIN CONTENT -->
-            <main class="flex-1 p-8 bg-[#fff9f7] min-h-screen overflow-y-auto">
 
-                <!-- HEADER TABLE -->
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-2xl font-bold text-rose-700">Kelola Katalog MUA</h1>
-                    <a href="#"
-                        class="bg-gradient-to-r from-rose-500 to-amber-400 hover:opacity-90 text-white px-4 py-2 rounded-lg shadow font-medium">
-                        + Tambah Item
-                    </a>
+<!-- MAIN CONTENT -->
+<main class="flex-1 p-8 bg-[#fff9f7] min-h-screen overflow-y-auto">
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Kotak Panel -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+
+            <h2 class="text-2xl font-bold text-rose-700 mb-6">Profil MUA Anda</h2>
+
+            @if(session('success'))
+                <div class="mb-4 bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded">
+                    {{ session('success') }}
                 </div>
+            @endif
 
-                @if(session('success'))
-                    <div class="bg-emerald-100 text-emerald-700 px-4 py-3 rounded mb-4 border border-emerald-200">
-                        {{ session('success') }}
-                    </div>
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div class="w-32 h-32 rounded-xl overflow-hidden border bg-slate-100">
+                    <img src="{{ ($mua && $mua->foto) ? asset('storage/' . $mua->foto) : 'https://placehold.co/200x200?text=Belum+Ada' }}"
+                        alt="Foto MUA" class="object-cover w-full h-full">
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-rose-700">{{ $mua->nama_usaha ?? 'Belum diisi' }}</h3>
+                    <p class="text-slate-600 text-sm mt-1">WA: {{ $mua->kontak_wa ?? '-' }}</p>
+                    <p class="text-slate-600 text-sm">Alamat: {{ $mua->alamat ?? '-' }}</p>
+                </div>
+            </div>
+
+            <hr class="my-4 border-rose-100">
+
+            <div>
+                <h4 class="text-lg font-semibold text-rose-700 mb-2">Deskripsi Singkat</h4>
+                <p class="text-slate-700 leading-relaxed">
+                    {{ $mua->deskripsi ?? 'Belum ada deskripsi yang diisi.' }}
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <h4 class="font-semibold text-rose-700 mb-2">Instagram</h4>
+                    <a href="{{ $mua->instagram ?? '#' }}" target="_blank"
+                        class="text-rose-600 hover:underline">{{ $mua->instagram ?? 'Belum diisi' }}</a>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-rose-700 mb-2">TikTok</h4>
+                    <a href="{{ $mua->tiktok ?? '#' }}" target="_blank"
+                        class="text-rose-600 hover:underline">{{ $mua->tiktok ?? 'Belum diisi' }}</a>
+                </div>
+            </div>
+
+            <div class="pt-6 flex gap-2">
+                <a href="{{ route('panelmua.create') }}"
+                    class="px-5 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700">Buat Profil</a>
+                @if(isset($mua))
+                    <a href="{{ route('panelmua.edit', $mua->id) }}"
+                        class="px-5 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600">Edit Profil</a>
                 @endif
+            </div>
 
-                <!-- DATA TABLE -->
-                <div class="bg-white rounded-2xl shadow border border-rose-50 overflow-hidden">
-                    <div class="p-4">
-                        <table id="catalogTable" class="min-w-full text-sm">
-                            <thead class="bg-[#fdf6f5] text-slate-700">
-                                <tr>
-                                    <th class="px-4 py-3 text-left font-medium">Nama Usaha</th>
-                                    <th class="px-4 py-3 text-left font-medium">Kontak WA</th>
-                                    <th class="px-4 py-3 text-left font-medium">Rekening</th>
-                                    <th class="px-4 py-3 text-left font-medium">Profil</th>
-                                    <th class="px-4 py-3 text-center font-medium">Aksi</th>
-                                </tr>
-                            </thead>
+            <p class="text-xs text-slate-500 mt-4">
+                Data ini akan ditampilkan di halaman publik <span class="font-medium">Pilih MUA</span>.
+            </p>
+        </div>
+        <!-- END Kotak Panel -->
 
-                            <tbody class="divide-y divide-slate-100">
-                                @php use Illuminate\Support\Str; @endphp
+        <footer class="mt-10 text-xs text-slate-500 text-center pb-8">
+            © {{ date('Y') }} AdatKu — MUA Panel
+        </footer>
+    </div>
+</main>
 
-                                @php $adaItem = false; @endphp
 
-                                @forelse($mua as $mua)
-                                    @forelse($mua->layanan as $item)
-                                        @php $adaItem = true; @endphp
-                                        <tr class="hover:bg-rose-50 transition">
-                                            <td class="px-4 py-2">{{ ucfirst($item->Kategori ?? '-') }}</td>
-                                            <td class="px-4 py-2 font-medium text-slate-800">
-                                                {{ $item->Nama_Layanan ?? '-' }}
-                                                <div class="text-xs text-slate-500">MUA: {{ $mua->Nama_Usaha }}</div>
-                                            </td>
-                                            <td class="px-4 py-2 text-rose-600 font-semibold">
-                                                @if(isset($item->Harga))
-                                                    Rp {{ number_format($item->Harga, 0, ',', '.') }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td class="px-4 py-2 text-slate-600">
-                                                {{ \Illuminate\Support\Str::limit($item->Deskripsi ?? '-', 50) }}
-                                            </td>
-                                            <td class="px-4 py-2 text-center space-x-2">
-                                                {{-- GUNAKAN ROUTE LAYANAN kalau yang dikelola adalah layanan --}}
-                                                <a href="{{ route('layanan.show', $item->id) }}"
-                                                    class="text-blue-600 hover:underline font-medium">Detail</a>
-                                                <a href="{{ route('layanan.edit', $item->id) }}"
-                                                    class="text-amber-600 hover:underline font-medium">Edit</a>
-                                                <form action="{{ route('layanan.destroy', $item->id) }}" method="POST"
-                                                    class="inline" onsubmit="return confirm('Yakin ingin menghapus item ini?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="text-red-600 hover:underline font-medium">Hapus</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        {{-- MUA ini belum punya layanan, lewati baris kosong --}}
-                                    @endforelse
-                                @empty
-                                    {{-- Belum ada MUA sama sekali --}}
-                                @endforelse
-
-                                @if(!$adaItem)
-                                    <tr>
-                                        <td colspan="5" class="px-4 py-6 text-center text-slate-400">
-                                            Belum ada item katalog ditambahkan.
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-
-                <footer class="mt-10 text-xs text-slate-500 text-center pb-8">
-                    © {{ date('Y') }} AdatKu — MUA Panel
-                </footer>
-            </main>
         </div>
     </div>
-
-    <!-- SCRIPT -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.tailwindcss.min.js"></script>
-    <script>
-        $.fn.dataTable.ext.errMode = 'none';
-        $(function () {
-            $('#catalogTable').DataTable({
-                initComplete: function () {
-                    $('select, input[type="search"], .pagination').each(function () {
-                        this.className = this.className
-                            .split(' ')
-                            .filter(cls => !cls.startsWith('dark:'))
-                            .join(' ');
-                    });
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>
