@@ -1,64 +1,39 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Mua;
 use Illuminate\Http\Request;
 
 class MuaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $mua = Mua::with('layanan')->get();
+        return view('mua.index', compact('mua'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('mua.create_mua');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'Nama_Usaha' => 'required',
+            'Kontak_WA' => 'required',
+            'Rekening_Bank' => 'required',
+            'Profile_MUA' => 'nullable',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        Mua::create([
+            'Id_Pengguna' => 1, // sementara
+            'Nama_Usaha' => $request->Nama_Usaha,
+            'Kontak_WA' => $request->Kontak_WA,
+            'Rekening_Bank' => $request->Rekening_Bank,
+            'Profile_MUA' => $request->Profile_MUA,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('mua.index')->with('success', 'Data MUA berhasil ditambahkan.');
     }
 }

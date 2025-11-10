@@ -32,7 +32,7 @@ dalam 1 menit.'
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             session()->forget('login_attempts');
-            return redirect()->intended('/home')->with('success', 'Login
+            return redirect()->intended('/')->with('success', 'Login
 berhasil!');
         }
         session()->increment('login_attempts', 1);
