@@ -27,7 +27,7 @@ class MuaController extends Controller
         ]);
 
         Mua::create([
-            'Id_Pengguna' => 1, // sementara
+            'Id_Pengguna' => 1, 
             'Nama_Usaha' => $request->Nama_Usaha,
             'Kontak_WA' => $request->Kontak_WA,
             'Rekening_Bank' => $request->Rekening_Bank,
