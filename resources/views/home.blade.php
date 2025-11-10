@@ -23,7 +23,6 @@
 
 <body class="bg-[rgba(255,242,213,0.08)] text-gray-900">
 
-    <!-- NAVBAR -->
     <header class="sticky top-0 z-50 bg-opacity-1 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -75,7 +74,7 @@
             </div>
         </div>
     </section>
-    {{-- keterangan adataku --}}
+  
     <div class="object-cover space-y-2 my-10 mx-20">
         <h1 class="flex flex-col items-center text-4xl text-bold logo-font text-[rgb(57,40,50)]">Sekilas Tentang Adatku
         </h1>
@@ -89,12 +88,11 @@
         </a>
     </div>
 
-    <!-- GALERI SECTION -->
     <h1 class="flex flex-col items-center text-6xl text-bold logo-font text-[rgb(57,40,50)]">Galeri AdatKu</h1>
     <main class="py-16 space-y-28">
-        <!-- BAJU ADAT -->
+
         <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
-            <!-- Slider -->
+          
             <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
                 <div class="flex w-[400%] animate-slide">
                     <img src="{{ asset('bajuminang.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Baju Minang">
@@ -114,9 +112,8 @@
             </div>
         </section>
 
-        <!-- MAKE UP -->
         <section class="flex flex-col md:flex-row-reverse items-center justify-center md:space-x-16 md:space-x-reverse">
-            <!-- Slider -->
+          
             <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
                 <div class="flex w-[400%] animate-slide">
                     <img src="{{ asset('makeupjawa.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Jawa">
@@ -136,9 +133,8 @@
             </div>
         </section>
 
-        <!-- PELAMINAN -->
         <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
-            <!-- Slider -->
+         
             <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
                 <div class="flex w-[400%] animate-slide">
                     <img src="{{ asset('pelamin1.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Pelamin 1">
@@ -158,7 +154,6 @@
         </section>
     </main>
 
-    <!-- ANIMASI SLIDER -->
     <style>
         @keyframes slide {
 
@@ -192,8 +187,6 @@
         }
     </style>
 
-
-    <!-- FOOTER -->
     <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6 mt-10">
         <p class="text-lg">&copy; 2025 AdatKu. All rights reserved.</p>
         <div class="flex justify-center mt-4 gap-4">
