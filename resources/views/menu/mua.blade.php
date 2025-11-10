@@ -105,7 +105,7 @@
                             <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
                                 <img src="https://pbs.twimg.com/profile_images/1978582245096165376/l-CxaLRm.jpg" 
                                     alt="Mitia" 
-                                    class="cursor-pointer w-full h-64 object-cover rounded-lg">
+                                    class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='mua'">
                                 <div class="p-3 text-center">
                                 <h3 class="text-lg font-semibold text-gray-800">Mythia Batford</h3>
                                 </div>
@@ -116,6 +116,14 @@
                                     class="cursor-pointer w-full h-64 object-cover rounded-lg">
                                 <div class="p-3 text-center">
                                 <h3 class="text-lg font-semibold text-gray-800">Maysa</h3>
+                                </div>
+                            </div>
+                            <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+                                <img src="ilham.jpg" 
+                                    alt="MUA Kedua" 
+                                    class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='https://www.instagram.com/ilhamfad1llah?igsh=bHJ1Mjg1eTFrb2F6'">
+                                <div class="p-3 text-center">
+                                <h3 class="text-lg font-semibold text-gray-800">Ilham Fadillah</h3>
                                 </div>
                             </div>
                             </div>`,

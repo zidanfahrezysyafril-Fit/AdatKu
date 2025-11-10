@@ -11,8 +11,13 @@
         rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {font-family: 'Poppins', monospace, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
-        .logo-font {font-family: 'Perfecto Kaligrafi', 'Great Vibes', cursive;}
+        body {
+            font-family: 'Poppins', monospace, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+
+        .logo-font {
+            font-family: 'Perfecto Kaligrafi', 'Great Vibes', cursive;
+        }
     </style>
 </head>
 
@@ -30,28 +35,40 @@
             </div>
             <nav class="hidden md:flex items-center gap-6 text-[18px] text-[rgb(57,40,50)]">
                 <a href="/" class="hover:text-red-500">Beranda</a>
-                <a href="{{ ('mua') }}" class="hidden hover:text-red-500">Daftar MUA</a>
+                @auth
+                    <a href="{{ ('mua') }}" class=" hover:text-red-500">Daftar MUA</a>
+                @endauth
                 <a href="#" class="hover:text-red-500">Hubungi Kami</a>
             </nav>
             <div class="flex items-center gap-3">
-                <a href="{{ route('auth') }}"
-                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign In</a>
+                @guest
+                    <a href="{{ route('auth') }}"
+                        class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign
+                        In</a>
+                @endguest
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                            Logout
+                        </button>
+                    </form>
+                @endauth
             </div>
         </div>
     </header>
-    
+
     <section class="relative">
         <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
         <div
             class="absolute inset-0 flex flex-col justify-center items-center text-center text-red-200 bg-gradient-to-b from-black/30 via-black/20 to-black/30">
             <h1 class="text-5xl md:text-6xl font-semibold mb-3 text-[rgb(57,40,50)]">Selamat Datang di <span
                     class="logo-font text-6xl md:text-7xl">AdatKu</span></h1>
-            <p class="text-lg md:text-xl w-11/12 md:w-2/5 text-[rgb(57,40,50)]">Temukan keindahan budaya dan tradisi melalui koleksi busana
+            <p class="text-lg md:text-xl w-11/12 md:w-2/5 text-[rgb(57,40,50)]">Temukan keindahan budaya dan tradisi
+                melalui koleksi busana
                 adat, rias, dan pelaminan terbaik.</p>
             <div class="mt-6 flex gap-4">
-                <a href="#"
-                    class="hidden bg-red-200 text-[rgb(57,40,50)] px-6 py-3 rounded-full font-medium hover:scale-105 transition">Kunjungi
-                    Toko</a>
                 <a href="#"
                     class="border border-white-500 text-[rgb(57,40,50)] px-6 py-3 rounded-full hover:bg-red-500/10 transition">Pelajari
                     Lebih</a>
@@ -60,11 +77,14 @@
     </section>
     {{-- keterangan adataku --}}
     <div class="object-cover space-y-2 my-10 mx-20">
-        <h1 class="flex flex-col items-center text-4xl text-bold logo-font text-[rgb(57,40,50)]">Sekilas Tentang Adatku</h1>
+        <h1 class="flex flex-col items-center text-4xl text-bold logo-font text-[rgb(57,40,50)]">Sekilas Tentang Adatku
+        </h1>
         <a class="flex flex-col items-center justify-center text-lg text-gray-600">
-            AdatKu adalah sebuah website berbasis digital yang dibuat untuk melestarikan budaya daerah Indonesia sekaligus
+            AdatKu adalah sebuah website berbasis digital yang dibuat untuk melestarikan budaya daerah Indonesia
+            sekaligus
             mempermudah masyarakat dalam memesan layanan adat secara online.
-            Website ini menggabungkan unsur kebudayaan tradisional dengan teknologi modern, sehingga menghadirkan pengalaman
+            Website ini menggabungkan unsur kebudayaan tradisional dengan teknologi modern, sehingga menghadirkan
+            pengalaman
             baru dalam mengenal dan menggunakan layanan adat seperti baju adat, make up (MUA), dan pelaminan.
         </a>
     </div>
@@ -87,12 +107,13 @@
                 <h2 class="logo-font text-4xl font-bold text-red-300 mb-4">Baju Adat</h2>
                 <p class="justify-teks text-gray-600 leading-relaxed text-lg">
                     Baju adat adalah simbol kebanggaan daerah dan identitas budaya. Setiap daerah di Indonesia memiliki
-                    ciri khas tersendiri pada busana adatnya yang mencerminkan keindahan, filosofi, serta nilai-nilai luhur
+                    ciri khas tersendiri pada busana adatnya yang mencerminkan keindahan, filosofi, serta nilai-nilai
+                    luhur
                     masyarakat setempat.
                 </p>
             </div>
         </section>
-    
+
         <!-- MAKE UP -->
         <section class="flex flex-col md:flex-row-reverse items-center justify-center md:space-x-16 md:space-x-reverse">
             <!-- Slider -->
@@ -100,7 +121,8 @@
                 <div class="flex w-[400%] animate-slide">
                     <img src="{{ asset('makeupjawa.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Jawa">
                     <img src="{{ asset('makeupnikah.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Nikah">
-                    <img src="{{ asset('makeuplamaran.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Lamaran">
+                    <img src="{{ asset('makeuplamaran.jpg') }}" class="w-1/4 h-[340px] object-cover"
+                        alt="Makeup Lamaran">
                     <img src="{{ asset('makeupwisuda.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Wisuda">
                 </div>
             </div>
@@ -113,7 +135,7 @@
                 </p>
             </div>
         </section>
-    
+
         <!-- PELAMINAN -->
         <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
             <!-- Slider -->
@@ -128,26 +150,47 @@
             <div class="mt-10 md:mt-0 md:w-[420px] text-center md:text-left">
                 <h2 class="logo-font text-4xl font-bold text-red-300 mb-4">Pelaminan</h2>
                 <p class="text-gray-600 leading-relaxed text-lg">
-                    Pelaminan adalah simbol kebahagiaan dalam pernikahan. Setiap desain pelaminan menonjolkan kekayaan adat
+                    Pelaminan adalah simbol kebahagiaan dalam pernikahan. Setiap desain pelaminan menonjolkan kekayaan
+                    adat
                     dan keindahan budaya, menciptakan suasana yang megah dan sakral bagi pasangan pengantin.
                 </p>
             </div>
         </section>
     </main>
 
-<!-- ANIMASI SLIDER -->
-<style>
-@keyframes slide {
-  0%, 20% { transform: translateX(0); }
-  25%, 45% { transform: translateX(-25%); }
-  50%, 70% { transform: translateX(-50%); }
-  75%, 95% { transform: translateX(-75%); }
-  100% { transform: translateX(0); }
-}
-.animate-slide {
-  animation: slide 12s infinite ease-in-out;
-}
-</style>
+    <!-- ANIMASI SLIDER -->
+    <style>
+        @keyframes slide {
+
+            0%,
+            20% {
+                transform: translateX(0);
+            }
+
+            25%,
+            45% {
+                transform: translateX(-25%);
+            }
+
+            50%,
+            70% {
+                transform: translateX(-50%);
+            }
+
+            75%,
+            95% {
+                transform: translateX(-75%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .animate-slide {
+            animation: slide 12s infinite ease-in-out;
+        }
+    </style>
 
 
     <!-- FOOTER -->
