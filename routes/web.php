@@ -1,13 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-Route::view('/dashboard', 'dashboard')->name('dashboard');
-
-<<<<<<< HEAD
-Route::view('/users', 'dashboard')->name('users.index');   
-Route::view('/settings', 'dashboard')->name('settings');   
-=======
+Route::view('/dashboard', 'dashboard')->name('dashboard');   
 Route::get('/home', function () {
     return view('home');
 })->name('home');
@@ -38,5 +34,3 @@ Route::middleware(['auth'])->group(function () {
 
     })->name('dashboard.auth');
 });
-
->>>>>>> eddd48bd16f538cd5a96234736cb87bdc6ba427f
