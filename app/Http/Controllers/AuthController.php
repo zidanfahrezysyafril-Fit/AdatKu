@@ -32,7 +32,7 @@ dalam 1 menit.'
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             session()->forget('login_attempts');
-            return redirect()->intended('/dashboard')->with('success', 'Login
+            return redirect()->intended('/home')->with('success', 'Login
 berhasil!');
         }
         session()->increment('login_attempts', 1);
@@ -64,7 +64,7 @@ berhasil. Silakan login.');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login')->with('success', 'Anda telah
+        return redirect()->route('landing')->with('success', 'Anda telah
 logout.');
     }
 }

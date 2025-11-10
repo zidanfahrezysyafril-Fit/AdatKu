@@ -39,9 +39,18 @@
                 <a href="#" class="hover:text-red-500">Hubungi Kami</a>
             </nav>
             <div class="flex items-center gap-3">
-                <a href="{{ route('auth') }}"
-                    class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign
-                    In</a>
+                @guest
+                    <a href="{{ route('auth') }}"
+                        class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign In</a>
+                @endguest
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                            Logout
+                        </button>
+                    </form>
+                @endauth
             </div>
         </div>
     </header>
@@ -105,7 +114,7 @@
                             <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
                                 <img src="https://pbs.twimg.com/profile_images/1978582245096165376/l-CxaLRm.jpg" 
                                     alt="Mitia" 
-                                    class="cursor-pointer w-full h-64 object-cover rounded-lg">
+                                    class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='mua'">
                                 <div class="p-3 text-center">
                                 <h3 class="text-lg font-semibold text-gray-800">Mythia Batford</h3>
                                 </div>
@@ -116,6 +125,14 @@
                                     class="cursor-pointer w-full h-64 object-cover rounded-lg">
                                 <div class="p-3 text-center">
                                 <h3 class="text-lg font-semibold text-gray-800">Maysa</h3>
+                                </div>
+                            </div>
+                            <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+                                <img src="ilham.jpg" 
+                                    alt="MUA Kedua" 
+                                    class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='https://www.instagram.com/ilhamfad1llah?igsh=bHJ1Mjg1eTFrb2F6'">
+                                <div class="p-3 text-center">
+                                <h3 class="text-lg font-semibold text-gray-800">Ilham Fadillah</h3>
                                 </div>
                             </div>
                             </div>`,
