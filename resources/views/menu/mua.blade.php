@@ -57,7 +57,7 @@
 
     <!-- HERO -->
     <section class="relative">
-        <img src="{{ asset('logos3.jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
+        <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
         <div
             class="absolute inset-0 flex flex-col justify-center items-center text-center text-red-200 bg-gradient-to-b from-black/30 via-black/20 to-black/30">
             <h1 class="text-5xl md:text-6xl font-semibold mb-3">Selamat Datang di <span
