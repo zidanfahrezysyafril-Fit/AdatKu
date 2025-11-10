@@ -10,6 +10,7 @@
 
 <body class="bg-[rgba(255,242,216,0.152)]">
     <!-- NAVBAR -->
+<<<<<<< HEAD
     <header class="bg-[rgb(57,40,50)] text-[rgba(255,242,216,0.805)]">
         <div class="flex justify-between items-center px-10 py-3">
             {{-- <ul class="flex items-center gap-5"> --}}
@@ -61,6 +62,56 @@
             </div>
             <div>
                 <img src="bajusunda.jpg" class="w-[290px] h-[290px] border-2 border-[#d4af37] rounded-xl shadow-lg bg-[#fafafa] hover:scale-105 transition-transform">
+=======
+    <header class="sticky top-0 z-50 bg-opacity-1 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-3">
+                    <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
+                        class="w-14 h-14 rounded-full object-cover shadow-md">
+                    <h1 class="text-2xl logo-font text-red-300 tracking-wide">AdatKu</h1>
+                </a>
+            </div>
+            <nav class="hidden md:flex items-center gap-6 text-[18px] text-red-300">
+                <a href="/" class="hover:text-red-500">Beranda</a>
+                @auth
+                    <a href="{{ ('mua') }}" class=" hover:text-red-500">Daftar MUA</a>
+                @endauth
+                <a href="#" class="hover:text-red-500">Hubungi Kami</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                @guest
+                    <a href="{{ route('auth') }}"
+                        class=" bg-red-200 text-[rgb(57,40,50)] px-5 py-2 rounded-full font-Arial hover:shadow-lg transition">Sign
+                        In</a>
+                @endguest
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+                            Logout
+                        </button>
+                    </form>
+                @endauth
+            </div>
+        </div>
+    </header>
+
+    <section class="relative">
+        <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
+        <div
+            class="absolute inset-0 flex flex-col justify-center items-center text-center text-red-200 bg-gradient-to-b from-black/30 via-black/20 to-black/30">
+            <h1 class="text-5xl md:text-6xl font-semibold mb-3 text-red-200">Selamat Datang di <span
+                    class="logo-font text-6xl md:text-7xl">AdatKu</span></h1>
+            <p class="text-lg md:text-xl w-11/12 md:w-2/5 text-red-200">Temukan keindahan budaya dan tradisi
+                melalui koleksi busana
+                adat, rias, dan pelaminan terbaik.</p>
+            <div class="mt-6 flex gap-4">
+                <a href="#"
+                    class="border border-white-500 text-red-200 px-6 py-3 rounded-full hover:bg-red-500/10 transition">Pelajari
+                    Lebih</a>
+>>>>>>> d357a4052ae19e65fe0b0e967bdaff9c5465de25
             </div>
         </div>
 
