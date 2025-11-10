@@ -30,10 +30,10 @@
                 <a href="/" class="flex items-center gap-3">
                     <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
                         class="w-14 h-14 rounded-full object-cover shadow-md">
-                    <h1 class="text-2xl logo-font text-[rgb(57,40,50)] tracking-wide">AdatKu</h1>
+                    <h1 class="text-2xl logo-font text-red-300 tracking-wide">AdatKu</h1>
                 </a>
             </div>
-            <nav class="hidden md:flex items-center gap-6 text-[18px] text-[rgb(57,40,50)]">
+            <nav class="hidden md:flex items-center gap-6 text-[18px] text-red-300">
                 <a href="/" class="hover:text-red-500">Beranda</a>
                 @auth
                     <a href="{{ ('mua') }}" class=" hover:text-red-500">Daftar MUA</a>
@@ -63,14 +63,14 @@
         <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
         <div
             class="absolute inset-0 flex flex-col justify-center items-center text-center text-red-200 bg-gradient-to-b from-black/30 via-black/20 to-black/30">
-            <h1 class="text-5xl md:text-6xl font-semibold mb-3 text-[rgb(57,40,50)]">Selamat Datang di <span
+            <h1 class="text-5xl md:text-6xl font-semibold mb-3 text-red-200">Selamat Datang di <span
                     class="logo-font text-6xl md:text-7xl">AdatKu</span></h1>
-            <p class="text-lg md:text-xl w-11/12 md:w-2/5 text-[rgb(57,40,50)]">Temukan keindahan budaya dan tradisi
+            <p class="text-lg md:text-xl w-11/12 md:w-2/5 text-red-200">Temukan keindahan budaya dan tradisi
                 melalui koleksi busana
                 adat, rias, dan pelaminan terbaik.</p>
             <div class="mt-6 flex gap-4">
                 <a href="#"
-                    class="border border-white-500 text-[rgb(57,40,50)] px-6 py-3 rounded-full hover:bg-red-500/10 transition">Pelajari
+                    class="border border-white-500 text-red-200 px-6 py-3 rounded-full hover:bg-red-500/10 transition">Pelajari
                     Lebih</a>
             </div>
         </div>
