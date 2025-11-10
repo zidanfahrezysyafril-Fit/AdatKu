@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-Route::view('/dashboard', 'dashboard')->name('dashboard');   
+
+Route::view('/dashboard', 'dashboard')->name('dashboard');
 Route::get('/home', function () {
     return view('home');
 })->name('home');
@@ -12,10 +13,8 @@ Route::get('auth', function () {
 })->name('auth');
 
 Route::get('mua', function () {
-    return view('menu.mua');
+    return view('menudpn.mua');
 })->name('mua');
-
-
 
 Route::get('/', function () {
     return view('home');
@@ -27,7 +26,7 @@ Route::post('login', [AuthController::class, 'login'])->name('login.post');
 Route::get('register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('register', [AuthController::class, 'register'])->name('register.post');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-Route::resource('mua', \App\Http\Controllers\MuaController::class);
+Route::resource('panelmua', \App\Http\Controllers\MuaController::class);
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');

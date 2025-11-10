@@ -59,17 +59,47 @@
           <div class="px-6 py-6 border-b border-white/10">
             <h2 class="text-lg font-semibold">MUA Panel</h2>
           </div>
-          <nav class="flex-1 px-4 py-3 space-y-1 text-sm">
+          <nav x-data="{ openMua:false, openKatalog:false }" class="flex-1 px-4 py-3 space-y-1 text-sm">
             <a href="{{ route('dashboard') }}"
               class="block px-4 py-2 rounded-lg bg-white/10 hover:bg-white/15 transition">Dashboard</a>
-            <a href="{{ route('mua.index') }}" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition">MUA</a>
-            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-white/10 transition">Baju
-              Adat</a>
-            <a href="#"
-              class="block px-4 py-2 rounded-lg hover:bg-white/10 transition">Makeup</a>
-            <a href="#"
-              class="block px-4 py-2 rounded-lg hover:bg-white/10 transition">Pelamin</a>
+
+            <!-- MUA (dropdown) -->
+            <button @click="openMua = !openMua"
+              class="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-white/10 transition">
+              <span>MUA</span>
+              <svg :class="openMua ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div x-show="openMua" x-collapse class="ml-2 pl-3 border-l border-white/10 space-y-1">
+              <a href="{{ route('panelmua.index') }}" class="block px-3 py-2 rounded-md hover:bg-white/10">
+                Profil MUA
+              </a>
+
+              <!-- Katalog Layanan (sub dropdown) -->
+              <button @click="openKatalog = !openKatalog"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-white/10">
+                <span>Katalog Layanan</span>
+                <svg :class="openKatalog ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" viewBox="0 0 20 20"
+                  fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+
+              <div x-show="openKatalog" x-collapse class="ml-2 pl-3 border-l border-white/10 space-y-1">
+                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md hover:bg-white/10">Baju Adat</a>
+                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md hover:bg-white/10">Makeup</a>
+                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md hover:bg-white/10">Pelamin</a>
+              </div>
+            </div>
           </nav>
+
           <div class="p-4 border-t border-white/10 text-xs text-white/80">
             <p>29°C — Cerah Berawan</p>
           </div>
@@ -102,8 +132,7 @@
             <div class="bg-pink-50 border border-pink-200 rounded-xl p-6 text-center hover:shadow-lg transition">
               <h3 class="text-lg font-semibold text-pink-700 mb-2">Katalog Baju Adat</h3>
               <p class="text-gray-600 text-sm mb-4">Tambahkan atau kelola koleksi baju adat.</p>
-              <a href="#"
-                class="inline-block px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
+              <a href="#" class="inline-block px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
                 + Tambah Baju Adat
               </a>
             </div>
@@ -111,8 +140,7 @@
             <div class="bg-rose-50 border border-rose-200 rounded-xl p-6 text-center hover:shadow-lg transition">
               <h3 class="text-lg font-semibold text-rose-700 mb-2">Katalog Makeup</h3>
               <p class="text-gray-600 text-sm mb-4">Kelola berbagai jenis makeup profesional Anda.</p>
-              <a href="#"
-                class="inline-block px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition">
+              <a href="#" class="inline-block px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition">
                 + Tambah Makeup
               </a>
             </div>
