@@ -36,7 +36,7 @@
             <nav class="hidden md:flex items-center gap-6 text-[18px] text-red-300">
                 <a href="/" class="hover:text-red-500">Beranda</a>
                 @auth
-                    <a href="{{ ('mua') }}" class=" hover:text-red-500">Daftar MUA</a>
+                    <a href="{{ route('mua') }}" class=" hover:text-red-500">Daftar MUA</a>
                 @endauth
                 <a href="#" class="hover:text-red-500">Hubungi Kami</a>
             </nav>
