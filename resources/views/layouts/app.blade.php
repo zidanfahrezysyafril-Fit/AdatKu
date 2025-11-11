@@ -13,6 +13,10 @@
         <header class="bg-white shadow-md p-4 flex justify-between items-center">
             <h1 class="font-bold text-xl text-pink-600">MUA Panel</h1>
             <a href="/" class="text-gray-600 hover:text-pink-600">Dashboard</a>
+            <a href="{{ route('profile.show') }}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray100 transition">
+                Profil
+            </a>
         </header>
 
         <main class="flex-1 container mx-auto p-6">

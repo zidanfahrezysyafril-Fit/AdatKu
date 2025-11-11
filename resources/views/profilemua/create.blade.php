@@ -141,8 +141,8 @@
             <!-- Deskripsi -->
             <div>
                 <label class="block text-sm font-medium mb-1">Deskripsi singkat</label>
-                <textarea name="profile_pengguna" rows="4"
-                    class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ old('profile_pengguna', $mua->profile_pengguna ?? '') }}</textarea>
+                <textarea name="deskripsi" rows="4"
+                    class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ old('deskripsi', $mua->deskripsi ?? '') }}</textarea>
             </div>
 
             <!-- Instagram / TikTok -->

@@ -16,7 +16,7 @@ class MuaController extends Controller
     public function index()
     {
         $mua = Mua::where('user_id', auth::id())->first(); // bisa null jika belum buat profil
-        return view('mua.index', compact('mua'));
+        return view('profilemua.index', compact('mua'));
     }
 
     /**
@@ -24,7 +24,7 @@ class MuaController extends Controller
      */
     public function create()
     {
-        return view('mua.create');
+        return view('profilemua.create');
     }
 
     /**
@@ -35,12 +35,12 @@ class MuaController extends Controller
         $request->validate([
             'nama_usaha' => 'required|string|max:100',
             'kontak_wa' => 'required|string|max:20|unique:muas,kontak_wa',
-            'nomor_rekening' => 'nullable|string|max:20|unique:muas,nomor_rekening',
-            'profile_mua' => 'nullable|string',
-            'foto' => 'nullable|image|max:2048', // max 2MB
+            'alamat' => 'nullable|string',
+            'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|max:2048',
         ]);
 
-        $data = $request->only(['nama_usaha', 'kontak_wa', 'nomor_rekening', 'profile_mua']);
+        $data = $request->only(['nama_usaha', 'kontak_wa', 'alamat', 'deskripsi', 'instagram', 'tiktok',]);
         $data['user_id'] = auth::id();
 
         // Upload foto jika ada
@@ -59,7 +59,7 @@ class MuaController extends Controller
     public function edit($id)
     {
         $mua = Mua::findOrFail($id);
-        return view('mua.create', compact('mua'));
+        return view('profilemua.create', compact('mua'));
     }
 
     /**
@@ -71,13 +71,12 @@ class MuaController extends Controller
 
         $request->validate([
             'nama_usaha' => 'required|string|max:100',
-            'kontak_wa' => 'required|string|max:20|unique:muas,kontak_wa,' . $mua->id,
-            'nomor_rekening' => 'nullable|string|max:20|unique:muas,nomor_rekening,' . $mua->id,
-            'profile_mua' => 'nullable|string',
-            'foto' => 'nullable|image|max:2048', // max 2MB
+            'kontak_wa' => 'required|string|max:20|unique:muas,kontak_wa,',
+            'alamat' => 'nullable|string',
+            'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|max:2048',
         ]);
-
-        $data = $request->only(['nama_usaha', 'kontak_wa', 'nomor_rekening', 'profile_mua']);
+        $data = $request->only(['nama_usaha', 'kontak_wa', 'alamat', 'deskripsi', 'instagram', 'tiktok',]);
 
         // Upload foto jika ada
         if($request->hasFile('foto')){
