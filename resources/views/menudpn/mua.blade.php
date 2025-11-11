@@ -30,14 +30,12 @@
                 <a href="/" class="flex items-center gap-3">
                     <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
                         class="w-14 h-14 rounded-full object-cover shadow-md">
-                    <!-- Judul brand dibuat emas gradasi -->
                     <h1
                         class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent tracking-wide">
                         AdatKu
                     </h1>
                 </a>
             </div>
-            <!-- Link navbar pakai warna emas tua dan hover lebih cerah -->
             <nav class="hidden md:flex items-center gap-6 text-[18px] text-[#b48a00]">
                 <a href="{{ 'home' }}" class="hover:text-[#eab308]">Beranda</a>
                 <a href="/" class="hover:text-[#eab308]">Daftar MUA</a>
@@ -68,7 +66,6 @@
         <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
         <div
             class="absolute inset-0 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black/30 via-black/20 to-black/30">
-            <!-- Judul & subjudul diganti jadi teks emas gradasi -->
             <h1 class="text-5xl md:text-6xl font-semibold mb-3">
                 <span class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
                     Selamat Datang di <span class="logo-font text-6xl md:text-7xl">AdatKu</span>
@@ -82,14 +79,11 @@
         </div>
     </section>
 
-    <!-- BAGIAN MENU DAN KONTEN -->
     <main class="max-w-9xl mx-auto px-6 py-10 flex space-x-6">
-        <!-- Sidebar -->
         <aside class="w-60 bg-white shadow-md rounded-md border border-gray-200 flex flex-col">
             <div class="p-4 text-2xl font-bold border-b border-gray-300">
                 Pilih
             </div>
-            <!-- List Pilihan MUA -->
             <nav class="flex-1 overflow-auto p-4 space-y-2 text-gray-700">
                 <button class="block w-full text-left py-2 px-3 rounded hover:bg-gray-200 transition"
                     onclick="showContent('dashboard')" id="menu-dashboard">Dashboard</button>
@@ -120,7 +114,6 @@
     </footer>
 
     <script>
-        // Fungsi untuk menampilkan konten sesuai menu yang dipilih
         function showContent(menu) {
             const contentArea = document.getElementById('content-area');
             const contentMap = {
@@ -157,7 +150,7 @@
 
             contentArea.innerHTML = contentMap[menu] || `<p>Konten tidak tersedia.</p>`;
 
-            // Highlight menu aktif
+ 
             document.querySelectorAll('nav button').forEach(btn => {
                 btn.classList.remove('bg-gray-300', 'font-bold');
             });
