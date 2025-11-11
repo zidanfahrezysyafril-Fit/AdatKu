@@ -1,36 +1,44 @@
 @extends('layouts.auth')
 @section('content')
-<div class="bg-white/90 shadow-xl rounded-2xl p-3 space-y-1 border border-gray-200 backdrop-blur-sm">
-    <h1 class="text-3xl font-bold text-center text-red-800 ">Register</h1>
+<div class="bg-white/90 shadow-xl rounded-2xl p-6 space-y-3 border border-[#f5d547]/60 backdrop-blur-sm">
+    <!-- JUDUL EMAS GRADASI -->
+    <h1 class="text-3xl font-bold text-center bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
+        Register
+    </h1>
 
     <form method="POST" action="{{ route('register.post') }}" class="space-y-4">
         @csrf
 
         <input type="text" name="name" placeholder="Nama Lengkap"
-            class="border border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
             value="{{ old('name') }}" required>
 
         <input type="email" name="email" placeholder="Email"
-            class="border border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
             value="{{ old('email') }}" required>
 
         <input type="password" name="password" placeholder="Password"
-            class="border border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
             required>
 
         <input type="password" name="password_confirmation" placeholder="Konfirmasi Password"
-            class="border border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-300"
+            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
             required>
 
+        <!-- Tombol daftar gradasi emas -->
         <button type="submit"
-            class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg w-full transition duration-300">
+            class="w-full bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition duration-300">
             Daftar
         </button>
     </form>
 
-    <p class="text-center text-sm text-gray-600">
+    <!-- Link login dengan teks emas gradasi -->
+    <p class="text-center text-sm text-gray-700">
         Sudah punya akun?
-        <a href="{{ route('login') }}" class="text-red-500 font-medium hover:underline">Login</a>
+        <a href="{{ route('login') }}"
+            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent font-semibold hover:underline">
+            Login
+        </a>
     </p>
 </div>
 @endsection
