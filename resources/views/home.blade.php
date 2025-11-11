@@ -23,8 +23,7 @@
 </head>
 
 <body class="bg-[rgba(255,242,213,0.08)] text-gray-900">
-
-  <!-- 🔹 NAVBAR -->
+>
   <header class="sticky top-0 z-50 bg-opacity-1 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -61,14 +60,12 @@
     </div>
   </header>
 
-  <!-- 🔹 HERO -->
   <section class="relative">
     <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu"
       class="w-full h-[580px] object-cover brightness-75">
     <div
       class="absolute inset-0 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black/30 via-black/20 to-black/30">
-      
-      <!-- Teks Gradasi Emas -->
+
       <h1 class="text-5xl md:text-6xl font-semibold mb-3">
         <span
           class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
@@ -91,7 +88,6 @@
     </div>
   </section>
 
-  <!-- 🔹 SEKILAS TENTANG -->
   <div class="object-cover space-y-2 my-10 mx-20">
     <h1 class="flex flex-col items-center text-4xl text-bold logo-font text-[#5c2b33]">
       Sekilas Tentang AdatKu
@@ -104,13 +100,11 @@
     </a>
   </div>
 
-  <!-- 🔹 GALERI -->
   <h1 class="flex flex-col items-center text-6xl text-bold logo-font text-[#5c2b33]">
     Galeri AdatKu
   </h1>
   <main class="py-16 space-y-28">
 
-    <!-- Baju Adat -->
     <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
       <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
         <div class="flex w-[400%] animate-slide">
@@ -130,7 +124,6 @@
       </div>
     </section>
 
-    <!-- Make Up -->
     <section class="flex flex-col md:flex-row-reverse items-center justify-center md:space-x-16 md:space-x-reverse">
       <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
         <div class="flex w-[400%] animate-slide">
@@ -150,7 +143,6 @@
       </div>
     </section>
 
-    <!-- Pelaminan -->
     <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
       <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
         <div class="flex w-[400%] animate-slide">
@@ -170,7 +162,6 @@
     </section>
   </main>
 
-  <!-- 🔹 ANIMASI SLIDE -->
   <style>
     @keyframes slide {
       0%, 20% { transform: translateX(0); }
@@ -182,7 +173,6 @@
     .animate-slide { animation: slide 12s infinite ease-in-out; }
   </style>
 
-  <!-- 🔹 FOOTER -->
   <footer class="bg-[#3d2630] text-[wheat] text-center py-6 mt-10">
     <p class="text-lg">&copy; 2025 AdatKu. All rights reserved.</p>
     <div class="flex justify-center mt-4 gap-4">
@@ -195,7 +185,6 @@
     </div>
   </footer>
 
-  <!-- 🔹 KOTAK MELAYANG: LOGIN MUA -->
   <div class="fixed left-5 bottom-5 z-50">
     <a href="{{ route('auth') }}"
       class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:from-[#f8e48c] hover:to-[#e0a100] transition font-medium">
