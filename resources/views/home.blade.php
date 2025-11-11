@@ -23,7 +23,6 @@
 </head>
 
 <body class="bg-[rgba(255,242,213,0.08)] text-gray-900">
->
   <header class="sticky top-0 z-50 bg-opacity-1 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
