@@ -82,116 +82,136 @@
                 </div>
             </aside>
 
-<!-- MAIN CONTENT -->
-<main class="flex-1 p-8 bg-[#fff9f7] min-h-screen overflow-y-auto flex justify-center items-start">
-    <div class="w-full max-w-xl">
+            <!-- MAIN CONTENT -->
+            <main class="flex-1 p-8 bg-[#fff9f7] min-h-screen overflow-y-auto flex justify-center items-start">
+                <div class="w-full max-w-xl">
 
-        <h2 class="text-2xl font-bold text-rose-700 mb-6 text-center">Profil MUA</h2>
+                    <h2 class="text-2xl font-bold text-rose-700 mb-6 text-center">Profil MUA</h2>
 
-        @if(session('success'))
-            <div class="mb-4 bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded">
-                {{ session('success') }}
-            </div>
-        @endif
+                    @if(session('success'))
+                        <div class="mb-4 bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-        <form action="{{ route('panelmua.store') }}" method="POST" enctype="multipart/form-data"
-            class="bg-white rounded-2xl shadow-lg border border-rose-50 p-6 space-y-6">
+                    <form method="POST"
+                        action="{{ isset($mua) ? route('panelmua.update', $mua->id) : route('panelmua.store') }}"
+                        enctype="multipart/form-data" class="space-y-6">
+                        @csrf
+                        @if(isset($mua)) @method('PUT') @endif
 
-            @csrf <!-- penting untuk mencegah 419 -->
+                        <!-- MEDIA -->
+                        <section class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-5">
+                            <h3 class="text-base font-semibold text-slate-800 mb-4">Media</h3>
+                            <div class="flex flex-col md:flex-row items-start gap-5">
+                                <div
+                                    class="w-28 h-28 md:w-36 md:h-36 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                                    <img id="preview"
+                                        src="{{ ($mua->foto ?? null) ? asset('storage/' . $mua->foto) : 'https://placehold.co/200x200?text=Foto' }}"
+                                        alt="foto" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Foto profil</label>
+                                    <input type="file" name="foto" accept="image/*" onchange="previewImg(event)"
+                                        class="block w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                    @error('foto') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
+                                    <p class="text-xs text-slate-500 mt-1">Format JPG/PNG, maks 2MB.</p>
+                                </div>
+                            </div>
+                        </section>
 
-            <!-- Foto profil -->
-            <div class="flex flex-col md:flex-row gap-5 items-start">
-                <div class="w-28 h-28 rounded-xl overflow-hidden bg-slate-100 border">
-                    <img id="preview"
-                        src="{{ ($mua->foto ?? null) ? asset('storage/' . $mua->foto) : 'https://placehold.co/160x160?text=Foto' }}"
-                        class="w-full h-full object-cover" alt="foto">
+                        <!-- INFORMASI UTAMA -->
+                        <section class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-5">
+                            <h3 class="text-base font-semibold text-slate-800 mb-4">Informasi Utama</h3>
+                            <div class="grid grid-cols-1 gap-5">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Nama MUA</label>
+                                    <input type="text" name="nama_usaha"
+                                        value="{{ old('nama_usaha', $mua->nama_usaha ?? '') }}"
+                                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                    @error('nama_usaha') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Nomor Telepon /
+                                        WA</label>
+                                    <input type="text" name="kontak_wa"
+                                        value="{{ old('kontak_wa', $mua->kontak_wa ?? '') }}"
+                                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                    @error('kontak_wa') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Alamat /
+                                        Domisili</label>
+                                    <input type="text" name="alamat" value="{{ old('alamat', $mua->alamat ?? '') }}"
+                                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi
+                                        singkat</label>
+                                    <textarea name="deskripsi" rows="4"
+                                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">{{ old('deskripsi', $mua->deskripsi ?? '') }}</textarea>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- SOSIAL MEDIA -->
+                        <section class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-5">
+                            <h3 class="text-base font-semibold text-slate-800 mb-4">Sosial Media</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Instagram</label>
+                                    <input type="text" name="instagram"
+                                        value="{{ old('instagram', $mua->instagram ?? '') }}"
+                                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">TikTok</label>
+                                    <input type="text" name="tiktok" value="{{ old('tiktok', $mua->tiktok ?? '') }}"
+                                        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ACTIONS -->
+                        <div class="flex items-center justify-center gap-3">
+                            <a href="{{ route('dashboard') }}"
+                                class="px-5 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">
+                                Batal
+                            </a>
+                            <button type="submit" class="px-5 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+
+
+                    <p class="text-xs text-slate-500 mt-4 text-center">
+                        Data dari menu ini akan tampil di halaman Profil MUA.
+                    </p>
+
+                    <footer class="mt-10 text-xs text-slate-500 text-center pb-8">
+                        © {{ date('Y') }} AdatKu — MUA Panel
+                    </footer>
                 </div>
-                <div class="flex-1">
-                    <label class="block text-sm font-medium mb-1">Foto profil</label>
-                    <input type="file" name="foto" accept="image/*" onchange="previewImg(event)"
-                        class="block w-full rounded-lg border border-slate-300 px-3 py-2">
-                    @error('foto')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
-                    <p class="text-xs text-slate-500 mt-1">Format JPG/PNG, maks 2MB.</p>
-                </div>
-            </div>
+            </main>
 
-            <!-- Nama MUA -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Nama MUA</label>
-                <input type="text" name="nama_usaha" value="{{ old('nama_usaha', $mua->nama_usaha ?? '') }}"
-                    class="w-full rounded-lg border border-slate-300 px-3 py-2">
-                @error('nama_usaha')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
-            </div>
+            <script>
+                function previewImg(event) {
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                        const output = document.getElementById('preview');
+                        output.src = reader.result;
+                    };
+                    reader.readAsDataURL(event.target.files[0]);
+                }
+            </script>
 
-            <!-- Nomor WA -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Nomor Telepon / WA</label>
-                <input type="text" name="kontak_wa" value="{{ old('kontak_wa', $mua->kontak_wa ?? '') }}"
-                    class="w-full rounded-lg border border-slate-300 px-3 py-2">
-                @error('kontak_wa')<p class="text-sm text-rose-600 mt-1">{{ $message }}</p>@enderror
-            </div>
-
-            <!-- Alamat -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Alamat / Domisili</label>
-                <input type="text" name="alamat" value="{{ old('alamat', $mua->alamat ?? '') }}"
-                    class="w-full rounded-lg border border-slate-300 px-3 py-2">
-            </div>
-
-            <!-- Deskripsi -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Deskripsi singkat</label>
-                <textarea name="deskripsi" rows="4"
-                    class="w-full rounded-lg border border-slate-300 px-3 py-2">{{ old('deskripsi', $mua->deskripsi ?? '') }}</textarea>
-            </div>
-
-            <!-- Instagram / TikTok -->
-            <div class="grid md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Instagram</label>
-                    <input type="text" name="instagram"
-                        value="{{ old('instagram', $mua->instagram ?? '') }}"
-                        class="w-full rounded-lg border border-slate-300 px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">TikTok</label>
-                    <input type="text" name="tiktok" value="{{ old('tiktok', $mua->tiktok ?? '') }}"
-                        class="w-full rounded-lg border border-slate-300 px-3 py-2">
-                </div>
-            </div>
-
-            <!-- Tombol -->
-            <div class="pt-2 flex justify-center gap-2">
-                <button type="submit" class="px-5 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700">
-                    Simpan
-                </button>
-                <a href="{{ route('dashboard') }}"
-                    class="px-5 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">Batal</a>
-            </div>
-        </form>
-
-        <p class="text-xs text-slate-500 mt-4 text-center">
-            Data dari menu ini akan tampil di halaman Profil MUA.
-        </p>
-
-        <footer class="mt-10 text-xs text-slate-500 text-center pb-8">
-            © {{ date('Y') }} AdatKu — MUA Panel
-        </footer>
-    </div>
-</main>
-
-<script>
-    function previewImg(event) {
-        const reader = new FileReader();
-        reader.onload = function(){
-            const output = document.getElementById('preview');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
-
-    </div>
+        </div>
 </body>
 
 </html>
