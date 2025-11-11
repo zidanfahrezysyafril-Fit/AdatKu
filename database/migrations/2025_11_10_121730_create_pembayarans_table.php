@@ -6,20 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('pembayaran', function (Blueprint $table) {
-            $table->id('Id_Pembayaran');
-            $table->unsignedBigInteger('Id_Pesanan');
-            $table->date('Tanggal_Bayar');
-            $table->enum('Metode_Bayar', ['Transfer_Bank', 'E_Wallet', 'COD']);
-            $table->text('Bukti_Transfer')->nullable();
-            $table->enum('Status_Verifikasi', ['Menunggu', 'Diterima'])->default('Menunggu');
+        Schema::create('pembayarans', function (Blueprint $table) {
+            $table->uuid('id')->primary(); // UUID agar sesuai dengan pesanans.id
+            $table->uuid('id_pesanan');    // FK ke pesanans.id
+            $table->date('tanggal_bayar');
+            $table->enum('metode_bayar', ['Transfer_Bank', 'E_Wallet', 'COD']);
+            $table->text('bukti_transfer')->nullable();
+            $table->enum('status_verifikasi', ['Menunggu', 'Diterima'])->default('Menunggu');
             $table->timestamps();
 
-            $table->foreign('Id_Pesanan')->references('Id_Pesanan')->on('pesanan')->onDelete('cascade');
+            $table->foreign('id_pesanan')->references('id')->on('pesanans')->onDelete('cascade');
         });
     }
 
     public function down(): void {
-        Schema::dropIfExists('pembayaran');
+        Schema::dropIfExists('pembayarans');
     }
 };
