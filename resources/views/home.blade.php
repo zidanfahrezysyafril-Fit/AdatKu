@@ -7,22 +7,48 @@
   <title>AdatKu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      font-family: 'Poppins', monospace, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      font-family: 'Poppins', sans-serif;
     }
-
     .logo-font {
       font-family: 'Perfecto Kaligrafi', 'Great Vibes', cursive;
     }
+    @keyframes slide {
+      0%, 20% { transform: translateX(0); }
+      25%, 45% { transform: translateX(-25%); }
+      50%, 70% { transform: translateX(-50%); }
+      75%, 95% { transform: translateX(-75%); }
+      100% { transform: translateX(0); }
+    }
+    .animate-slide { animation: slide 12s infinite ease-in-out; }
   </style>
 </head>
 
 <body class="bg-[rgba(255,242,213,0.08)] text-gray-900">
+
+  @if (session('success') || session('error'))
+    <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
+         class="fixed left-1/2 -translate-x-1/2 top-20 z-[9999]">
+      <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
+                  backdrop-blur-md border border-[#fff3b0]/40
+                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+        <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          @if (session('success'))
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          @else
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          @endif
+        </svg>
+        <span>{{ session('success') ?? session('error') }}</span>
+      </div>
+    </div>
+  @endif
+
   <header class="sticky top-0 z-50 bg-opacity-1 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -161,17 +187,6 @@
     </section>
   </main>
 
-  <style>
-    @keyframes slide {
-      0%, 20% { transform: translateX(0); }
-      25%, 45% { transform: translateX(-25%); }
-      50%, 70% { transform: translateX(-50%); }
-      75%, 95% { transform: translateX(-75%); }
-      100% { transform: translateX(0); }
-    }
-    .animate-slide { animation: slide 12s infinite ease-in-out; }
-  </style>
-
   <footer class="bg-[#3d2630] text-[wheat] text-center py-6 mt-10">
     <p class="text-lg">&copy; 2025 AdatKu. All rights reserved.</p>
     <div class="flex justify-center mt-4 gap-4">
@@ -186,10 +201,13 @@
 
   <div class="fixed left-5 bottom-5 z-50">
     <a href="{{ route('auth') }}"
-      class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:from-[#f8e48c] hover:to-[#e0a100] transition font-medium">
+      class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+             text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl
+             hover:from-[#f8e48c] hover:to-[#e0a100] transition font-medium">
       Daftarkan jasa MUA kamu di sini
     </a>
   </div>
 
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>

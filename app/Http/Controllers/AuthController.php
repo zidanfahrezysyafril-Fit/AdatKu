@@ -23,7 +23,9 @@ class AuthController extends Controller
         ]);
 
         if (session()->has('login_attempts') && session('login_attempts') >= 5) {
-            return back()->with('error', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 1 menit.')->withInput();
+            return back()->withErrors([
+                'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam 1 menit.'
+            ]);
         }
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
@@ -33,7 +35,9 @@ class AuthController extends Controller
         }
 
         session()->increment('login_attempts', 1);
-        return back()->with('error', 'Email atau password salah.')->withInput();
+        throw ValidationException::withMessages([
+            'email' => 'Email atau password salah.'
+        ]);
     }
 
     public function showRegister()
