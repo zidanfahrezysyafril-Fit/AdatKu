@@ -55,11 +55,20 @@
 
     <div class="min-h-screen flex flex-col">
         <header class="bg-white shadow-md p-4 flex justify-between items-center">
+<<<<<<< HEAD
             <h1
                 class="font-bold text-xl bg-gradient-to-r from-[#f8e17a] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
                 MUA Panel
             </h1>
             <a href="/" class="text-gray-600 hover:text-[#eab308] font-medium transition">Dashboard</a>
+=======
+            <h1 class="font-bold text-xl text-pink-600">MUA Panel</h1>
+            <a href="/" class="text-gray-600 hover:text-pink-600">Dashboard</a>
+            <a href="{{ route('profile.show') }}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray100 transition">
+                Profil
+            </a>
+>>>>>>> 73b16e9b9ff43d8aff68f9f4c904bd1b0efbcfc8
         </header>
 
         <main class="flex-1 container mx-auto p-6">
