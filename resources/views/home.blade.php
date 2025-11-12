@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AdatKu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -72,14 +72,45 @@
           Sign In
         </a>
         @endguest
+
         @auth
-        <form action="{{ route('logout') }}" method="POST" class="inline">
-          @csrf
-          <button type="submit"
-            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
-            Logout
+        @php
+          $user = auth()->user();
+          $avatar = $user->avatar
+              ? asset('storage/'.$user->avatar)
+              : asset('default-avatar.png');
+        @endphp
+
+        <div x-data="{ open:false }" class="relative">
+          <button @click="open = !open"
+                  class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
+            <img src="{{ $avatar }}" alt="Profile"
+                 class="w-full h-full object-cover"
+                 onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
           </button>
-        </form>
+
+          <div x-show="open" x-transition @click.outside="open=false"
+               class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
+            <div class="px-4 py-3 border-b">
+              <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
+              <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+            </div>
+            <ul class="py-1 text-sm">
+              <li>
+                <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-50">Profil Saya</a>
+              </li>
+              <li class="border-t">
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <button type="submit"
+                          class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
+                    Logout
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
         @endauth
       </div>
     </div>
