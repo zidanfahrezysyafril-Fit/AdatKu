@@ -120,7 +120,7 @@
                 dashboard: `<h2 class="text-2xl font-bold mb-4">Pilih Mua yang tertera disini</h2>
                             <div class="flex gap-6">
                             <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                                <img src="https://pbs.twimg.com/profile_images/1978582245096165376/l-CxaLRm.jpg" 
+                                <img src="" 
                                     alt="Mitia" 
                                     class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='mua'">
                                 <div class="p-3 text-center">
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                                <img src="data:image/jpeg;base64,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" 
+                                <img src="" 
                                     alt="MUA Kedua" 
                                     class="cursor-pointer w-full h-64 object-cover rounded-lg">
                                 <div class="p-3 text-center">
@@ -136,7 +136,7 @@
                                 </div>
                             </div>
                             <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                                <img src="ilham.jpg" 
+                                <img src="" 
                                     alt="MUA Kedua" 
                                     class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='https://www.instagram.com/ilhamfad1llah?igsh=bHJ1Mjg1eTFrb2F6'">
                                 <div class="p-3 text-center">

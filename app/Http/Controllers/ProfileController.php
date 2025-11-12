@@ -22,7 +22,7 @@ class ProfileController extends Controller
         $mua = auth::mua();
         $mua->update(['name' => $request->name]);
         if ($request->hasFile('profile')) {
-            // hapus file lama
+        
             if ($mua->file) {
                 Storage::delete($mua->file->path);
                 $mua->file->delete();
