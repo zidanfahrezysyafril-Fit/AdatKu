@@ -30,7 +30,6 @@ class ProfileController extends Controller
             'name' => 'nullable|string|max:100',
             'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-<<<<<<< HEAD
         $mua = auth::mua();
         $mua->update(['name' => $request->name]);
         if ($request->hasFile('profile')) {
@@ -51,13 +50,11 @@ class ProfileController extends Controller
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
             ]);
-=======
 
         $user = Auth::user();
 
         if ($request->filled('name')) {
             $user->name = $request->name;
->>>>>>> d1e294adf4292a74ba209b94f048c4b5d640057f
         }
 
         if ($request->hasFile('profile')) {
@@ -76,4 +73,5 @@ class ProfileController extends Controller
         return redirect()->route('profile.show')
             ->with('success', 'Profile berhasil diperbarui');
     }
+}
 }
