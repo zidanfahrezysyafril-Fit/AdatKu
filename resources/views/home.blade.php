@@ -63,7 +63,7 @@
         @auth
         <a href="{{ ('mua') }}" class="hover:text-[#eab308]">Daftar MUA</a>
         @endauth
-        <a href="#" class="hover:text-[#eab308]">Hubungi Kami</a>
+        <a href="{{ ('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
       </nav>
       <div class="flex items-center gap-3">
         @guest

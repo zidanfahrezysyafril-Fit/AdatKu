@@ -23,6 +23,10 @@ Route::get('mua', function () {
     return view('menudpn.mua');
 })->name('mua');
 
+Route::get('hubungikami', function () {
+    return view('menudpn.hubungikami');
+})->name('hubungikami');
+
 // AUTH ROUTES
 Route::get('login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login.post');
