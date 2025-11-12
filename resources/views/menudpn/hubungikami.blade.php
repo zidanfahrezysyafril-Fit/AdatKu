@@ -112,9 +112,9 @@
       </div>
     </div>
   </section>
-    <!-- Konten -->
+    
     <main class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-10">
-        <!-- Formulir -->
+     
         <section class="md:col-span-2">
             <p class="text-slate-600 mb-2">
                 Hubungi kami untuk kasus apapun yang berhubungan di dalam website AdatKU ini.
@@ -156,14 +156,19 @@
                 </div>
 
                 <button type="submit"
+<<<<<<< HEAD
+                class="px-5 py-3 text-white font-medium rounded-xl shadow-md bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500 hover:opacity-90 transition">
+                kirim keluhan
+            </button>
+=======
                     class="px-5 py-3 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-black rounded-xl hover:bg-[#3d2630] transition font-medium shadow">
                     kirim keluhan
                 </button>
+>>>>>>> c1ac103379dd8439165f51df7483edc0475a88b3
 
             </form>
         </section>
 
-        <!-- Info Perusahaan -->
     <aside class="md:pl-6">
     <h2 class="text-xl font-semibold mb-4">Kontak Kami</h2>
     <ul class="space-y-3 text-slate-700">
@@ -171,7 +176,7 @@
             <span>📍</span>
             <span>
                 Adatku<br>
-                <!-- Tambahkan link Instagram di sini -->
+            
                 <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl "
                    target="_blank"
                    class="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium">
@@ -185,8 +190,13 @@
 
         <li class="flex items-center gap-3">
             <span>✉️</span>
+<<<<<<< HEAD
+            <a href="mailto:adatku11@gmail.com" class="hover:underline">
+                adatku11@gmail.com
+=======
             <a href="#" class="hover:underline">
                 AdatKU@gmail.com
+>>>>>>> c1ac103379dd8439165f51df7483edc0475a88b3
             </a>
         </li>
     </ul>

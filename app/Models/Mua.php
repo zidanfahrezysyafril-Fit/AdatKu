@@ -11,7 +11,7 @@ class Mua extends Model
 {
     use SoftDeletes, HasUuids;
     protected $table = 'muas';
-    public $incrementing = false;        // UUID bukan auto increment
+    public $incrementing = false;      
     protected $keyType = 'string';
     protected $fillable = [
         'user_id',
@@ -28,7 +28,6 @@ class Mua extends Model
     {
         parent::boot();
 
-        // Generate UUID otomatis saat create
         static::creating(function ($model) {
             if (empty($model->{$model->getKeyName()})) {
                 $model->{$model->getKeyName()} = (string) Str::uuid();
