@@ -75,7 +75,7 @@ class MuaController extends Controller
             abort(403);
         }
 
-        // === BLOK VALIDASI (yang baru) ===
+
         $data = $request->validate([
             'nama_usaha' => ['required', 'string', 'max:100'],
             'kontak_wa'  => [
@@ -108,9 +108,7 @@ class MuaController extends Controller
     }
 
 
-    /**
-     * Hapus profil MUA
-     */
+    /*** Hapus profil MUA*/
     public function destroy($id)
     {
         $mua = Mua::findOrFail($id);
@@ -124,7 +122,7 @@ class MuaController extends Controller
 
         if ($mua) {
         } else {
-            $data['user_id'] = auth::id();   // pertama kali buat
+            $data['user_id'] = auth::id();
             $mua = Mua::create($data);
         }
 

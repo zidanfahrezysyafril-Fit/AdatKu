@@ -55,8 +55,6 @@
       <div class="px-6 py-4 border-b border-white/10">
         <h2 class="text-base font-semibold tracking-wide text-white/90">MUA Panel</h2>
       </div>
-
-      <!-- NAV -->
       <nav class="flex-1 px-3 py-4 text-sm space-y-1">
         <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
                   hover:bg-white/10 transition
@@ -90,7 +88,7 @@
               Profil MUA
             </a>
             <a href="#" class="block px-3 py-2 rounded-lg hover:bg-white/10">Katalog</a>
-            <a href="#" class="block px-3 py-2 rounded-lg hover:bg-white/10">Pesanan</a>
+            <a href="#" class="block px-3 py-2 rounded-lg hover:bg-white/10">Transaksi</a>
           </div>
         </div>
       </nav>
@@ -101,16 +99,10 @@
     </div>
   </aside>
 
-  <!-- PAGE CONTENT WRAPPER -->
-  <main class="pt-16 lg:pl-72"> <!-- penting: beri padding kiri sebesar lebar sidebar -->
+  {{-- konten --}}
+  <main class="pt-16 lg:pl-72">
     <div class="max-w-5xl mx-auto px-4 py-8">
-      <!-- … taruh seluruh konten form kamu di sini (bagian Media, Informasi Utama, Sosial Media, dll) … -->
-
-
-      <!-- MAIN CONTENT -->
       <main class="flex-1 p-8 bg-[#fff9f7] min-h-screen overflow-y-auto">
-
-        <!-- KARTU STATISTIK -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-9">
           <div class="rounded-2xl bg-white p-6 shadow hover:shadow-md transition border border-rose-50">
             <p class="text-sm text-slate-500">Total Baju Adat</p>
@@ -125,8 +117,6 @@
             <h2 class="mt-2 text-4xl font-bold text-fuchsia-600">{{ number_format($totalPelamin ?? 0) }}</h2>
           </div>
         </div>
-
-        <!-- PANEL AKSI UTAMA -->
         <section class="mt-10">
           <h2 class="text-xl font-semibold text-rose-700 mb-4">Atur Katalog MUA Anda</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

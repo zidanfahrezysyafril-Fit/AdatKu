@@ -102,11 +102,8 @@
     </aside>
 
     <!-- PAGE CONTENT WRAPPER -->
-    <main class="pt-16 lg:pl-72"> <!-- penting: beri padding kiri sebesar lebar sidebar -->
-        <div class="max-w-5xl mx-auto px-4 py-8">
-            <!-- … taruh seluruh konten form kamu di sini (bagian Media, Informasi Utama, Sosial Media, dll) … -->
-
-
+    <main class="pt-16 lg:pl-72">
+        <div class="max-8xl mx-auto px-8 py-8">
             <!-- MAIN CONTENT -->
             <main class="flex-1 p-8 bg-[#fff9f7] min-h-screen overflow-y-auto">
                 <div class="max-w-4xl mx-auto">
@@ -119,32 +116,40 @@
                             </div>
                         @endif
 
-                        <div class="flex flex-col md:flex-row gap-6 items-start">
-                            <div class="w-32 h-32 rounded-xl overflow-hidden border bg-slate-100">
-                                <img src="{{ ($mua && $mua->foto) ? asset('storage/' . $mua->foto) : 'https://placehold.co/200x200?text=Belum+Ada' }}"
-                                    alt="Foto MUA" class="object-cover w-full h-full">
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-rose-700">{{ $mua->nama_usaha ?? 'Belum diisi' }}</h3>
-                                <p class="text-slate-600 text-sm mt-1">WA: {{ $mua->kontak_wa ?? '-' }}</p>
-                                <p class="text-slate-600 text-sm">Alamat: {{ $mua->alamat ?? '-' }}</p>
+                        <!-- FOTO | NAMA & DESKRIPSI -->
+                        <div class="flex flex-col md:flex-row items-start gap-6">
+                            <figure
+                                class="shrink-0 w-28 md:w-36 aspect-[3/4] rounded-xl overflow-hidden border bg-slate-100">
+                                <img src="{{ ($mua && $mua->foto) ? asset('storage/' . $mua->foto) : 'https://placehold.co/240x320?text=Belum+Ada' }}"
+                                    alt="Foto MUA" class="w-full h-full object-cover">
+                            </figure>
+
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-2xl md:text-3xl font-bold text-rose-700 leading-tight truncate">
+                                    {{ $mua->nama_usaha ?? 'Belum diisi' }}
+                                </h3>
+                                <p class="mt-2 text-slate-700 leading-relaxed">
+                                    {{ $mua->deskripsi ?? 'Belum ada deskripsi yang diisi.' }}
+                                </p>
                             </div>
                         </div>
+
 
                         <hr class="my-4 border-rose-100">
 
                         <div>
-                            <h4 class="text-lg font-semibold text-rose-700 mb-2">Deskripsi Singkat</h4>
-                            <p class="text-slate-700 leading-relaxed">
-                                {{ $mua->deskripsi ?? 'Belum ada deskripsi yang diisi.' }}
-                            </p>
+                            <h4 class="font-semibold text-rose-700 mb-2">Informasi Kontak</h4>
+                            <p class="text-rose-600 text-sm mt-1">WA: {{ $mua->kontak_wa ?? '-' }}</p>
+                            <p class="text-rose-600 text-sm">Alamat: {{ $mua->alamat ?? '-' }}</p>
                         </div>
 
                         <div class="grid md:grid-cols-2 gap-4 mt-4">
                             <div>
                                 <h4 class="font-semibold text-rose-700 mb-2">Instagram</h4>
-                                <a href="{{ $mua->instagram ?? '#' }}" target="_blank"
-                                    class="text-rose-600 hover:underline">{{ $mua->instagram ?? 'Belum diisi' }}</a>
+                                <a href="{{ $mua->instagram ? 'https://instagram.com/' . ltrim($mua->instagram, '@') : '#' }}"
+                                    target="_blank" class="text-rose-600 hover:underline">
+                                    {{ $mua->instagram ?? 'Belum diisi' }}
+                                </a>
                             </div>
                             <div>
                                 <h4 class="font-semibold text-rose-700 mb-2">TikTok</h4>
