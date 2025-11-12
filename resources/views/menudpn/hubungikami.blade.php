@@ -156,7 +156,7 @@
                 </div>
 
                 <button type="submit"
-                    class="px-5 py-3 bg-[rgba(255,178,12,0.15)] text-black rounded-xl hover:bg-[rgba(255,242,213,0.08)] transition font-medium shadow">
+                    class="px-5 py-3 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-black rounded-xl hover:bg-[#3d2630] transition font-medium shadow">
                     kirim keluhan
                 </button>
 
@@ -185,7 +185,7 @@
 
         <li class="flex items-center gap-3">
             <span>✉️</span>
-            <a href="mailto:AdatKU@gmail.com" class="hover:underline">
+            <a href="#" class="hover:underline">
                 AdatKU@gmail.com
             </a>
         </li>
