@@ -4,77 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Models\Mua;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-
-
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class MuaController extends Controller
 {
-    /**
-     * Tampilkan profil MUA milik user login
-     */
-    public function index()
+    public function __construct()
     {
-        $mua = Mua::where('user_id', auth::id())->first(); // bisa null jika belum buat profil
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $user = \Illuminate\Support\Facades\Auth::user();
+            if (!$user) abort(401);
+
+            $role = strtolower(trim($user->role ?? ''));           
+            if (!in_array($role, ['mua', 'admin'], true)) {     
+                abort(403, 'Akses khusus MUA');
+            }
+            return $next($request);
+        });
+    }
+
+    public function index(): View
+    {
+        $mua = Mua::where('user_id', Auth::id())->first();
         return view('profilemua.index', compact('mua'));
     }
 
-    /**
-     * Tampilkan form create profil MUA
-     */
-    public function create()
+    public function create(): View|RedirectResponse
     {
+        if (Auth::user()->mua) {
+            return redirect()->route('profilemua.edit');
+        }
         return view('profilemua.create');
     }
 
-    /**
-     * Simpan profil MUA baru
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'nama_usaha' => 'required|string|max:100',
-            'kontak_wa' => 'required|string|max:20|unique:muas,kontak_wa',
-            'alamat' => 'nullable|string',
-            'deskripsi' => 'nullable|string',
-            'foto' => 'nullable|image|max:2048',
-        ]);
-
-        $data = $request->only(['nama_usaha', 'kontak_wa', 'alamat', 'deskripsi', 'instagram', 'tiktok',]);
-        $data['user_id'] = auth::id();
-
-        // Upload foto jika ada
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('muas', 'public');
-        }
-
-        Mua::create($data);
-
-        return redirect()->route('panelmua.index')->with('success', 'Profil MUA berhasil dibuat!');
-    }
-
-    /**
-     * Tampilkan form edit profil MUA
-     */
-    public function edit($id)
-    {
-        $mua = Mua::findOrFail($id);
-        return view('profilemua.edit', compact('mua'));
-    }
-
-    /**
-     * Update profil MUA
-     */
-    public function update(Request $request, $id)
-    {
-        $mua = Mua::findOrFail($id);
-
-        if ($mua->user_id !== Auth::id()) {
-            abort(403);
-        }
-
+        $existing = Auth::user()->mua;
 
         $data = $request->validate([
             'nama_usaha' => ['required', 'string', 'max:100'],
@@ -83,7 +54,7 @@ class MuaController extends Controller
                 'string',
                 'max:20',
                 Rule::unique('muas', 'kontak_wa')
-                    ->ignore($mua->id, 'id')
+                    ->ignore($existing?->id)
                     ->whereNull('deleted_at'),
             ],
             'alamat'     => ['nullable', 'string'],
@@ -93,8 +64,41 @@ class MuaController extends Controller
             'foto'       => ['nullable', 'image', 'max:2048'],
         ]);
 
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('muas', 'public');
+        }
+        $data['user_id'] = Auth::id();
 
-        // Upload foto jika ada
+        Mua::updateOrCreate(['user_id' => Auth::id()], $data);
+
+        return redirect()->route('mua.panel')->with('success', 'Profil MUA tersimpan.');
+    }
+
+    public function edit()
+    {
+        $mua = Mua::where('user_id', Auth::id())->first();
+
+        if (!$mua) {
+            abort(404, 'Data MUA tidak ditemukan.');
+        }
+
+        return view('profilemua.edit', compact('mua'));
+    }
+
+    public function update(Request $request): RedirectResponse
+    {
+        $mua = Mua::where('user_id', Auth::id())->firstOrFail();
+
+        $data = $request->validate([
+            'nama_usaha' => ['required', 'string', 'max:100'],
+            'kontak_wa'  => ['required', 'string', 'max:20', Rule::unique('muas', 'kontak_wa')->ignore($mua->id)],
+            'alamat'     => ['nullable', 'string'],
+            'deskripsi'  => ['nullable', 'string'],
+            'instagram'  => ['nullable', 'string', 'max:100'],
+            'tiktok'     => ['nullable', 'string', 'max:100'],
+            'foto'       => ['nullable', 'image', 'max:2048'],
+        ]);
+
         if ($request->hasFile('foto')) {
             if ($mua->foto && Storage::disk('public')->exists($mua->foto)) {
                 Storage::disk('public')->delete($mua->foto);
@@ -104,28 +108,79 @@ class MuaController extends Controller
 
         $mua->update($data);
 
-        return redirect()->route('panelmua.index')->with('success', 'Profil MUA berhasil diperbarui!');
+        return redirect()->route('mua.panel')->with('success', 'Profil MUA berhasil diperbarui.');
     }
-
-
-    /*** Hapus profil MUA*/
-    public function destroy($id)
+    public function dashboard()
     {
-        $mua = Mua::findOrFail($id);
+        $userId = auth::id();
+        $mua = \App\Models\Mua::where('user_id', $userId)->first();
+        $tblLayanan = null;
+        if (Schema::hasTable('layanans')) $tblLayanan = 'layanans';
+        elseif (Schema::hasTable('layanan')) $tblLayanan = 'layanan';
+        elseif (Schema::hasTable('layanan_items')) $tblLayanan = 'layanan_items';
 
-        // Hapus foto jika ada
-        if ($mua->foto && Storage::disk('public')->exists($mua->foto)) {
-            Storage::disk('public')->delete($mua->foto);
+        $totalBaju = $totalMakeup = $totalPelamin = 0;
+
+        if ($tblLayanan && $mua) {
+            $totalBaju    = DB::table($tblLayanan)->where('mua_id', $mua->id)->where('kategori', 'baju')->count();
+            $totalMakeup  = DB::table($tblLayanan)->where('mua_id', $mua->id)->where('kategori', 'makeup')->count();
+            $totalPelamin = DB::table($tblLayanan)->where('mua_id', $mua->id)->where('kategori', 'pelamin')->count();
         }
+        $tblPesanan = Schema::hasTable('pesanan') ? 'pesanan' : (Schema::hasTable('orders') ? 'orders' : null);
 
-        $mua->delete();
+        $totalPesanan = $pending = $proses = $selesai = 0;
+        $revenueBulanIni = 0;
+        $labels = [];
+        $series = [];
 
-        if ($mua) {
+        if ($tblPesanan && $mua) {
+            $totalPesanan = DB::table($tblPesanan)->where('mua_id', $mua->id)->count();
+            $pending      = DB::table($tblPesanan)->where('mua_id', $mua->id)->where('status', 'pending')->count();
+            $proses       = DB::table($tblPesanan)->where('mua_id', $mua->id)->where('status', 'proses')->count();
+            $selesai      = DB::table($tblPesanan)->where('mua_id', $mua->id)->where('status', 'selesai')->count();
+
+            $revenueBulanIni = DB::table($tblPesanan)
+                ->where('mua_id', $mua->id)
+                ->where('status', 'selesai')
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->sum('total_harga');
+
+            for ($i = 6; $i >= 0; $i--) {
+                $tgl = now()->subDays($i)->toDateString();
+                $labels[] = \Carbon\Carbon::parse($tgl)->format('d M');
+                $series[] = DB::table($tblPesanan)
+                    ->where('mua_id', $mua->id)
+                    ->whereDate('created_at', $tgl)
+                    ->count();
+            }
+
+            $pesananTerbaru = DB::table($tblPesanan)
+                ->where('mua_id', $mua->id)
+                ->latest()
+                ->take(6)
+                ->get();
         } else {
-            $data['user_id'] = auth::id();
-            $mua = Mua::create($data);
+            for ($i = 6; $i >= 0; $i--) {
+                $labels[] = now()->subDays($i)->format('d M');
+                $series[] = 0;
+            }
+            $pesananTerbaru = collect();
         }
 
-        return back()->with('success', 'Profil MUA berhasil disimpan.');
+        return view('dashboard', compact(
+            'mua',
+            'totalBaju',
+            'totalMakeup',
+            'totalPelamin',
+            'totalPesanan',
+            'pending',
+            'proses',
+            'selesai',
+            'revenueBulanIni',
+            'labels',
+            'series',
+            'pesananTerbaru'
+        ));
     }
 }

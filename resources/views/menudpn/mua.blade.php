@@ -38,8 +38,8 @@
             </div>
             <nav class="hidden md:flex items-center gap-6 text-[18px] text-[#b48a00]">
                 <a href="{{ 'home' }}" class="hover:text-[#eab308]">Beranda</a>
-                <a href="/" class="hover:text-[#eab308]">Daftar MUA</a>
-                <a href="#" class="hover:text-[#eab308]">Hubungi Kami</a>
+                <a href="#" class="hover:text-[#eab308]">Daftar MUA</a>
+                <a href="{{ ('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
             </nav>
             <div class="flex items-center gap-3">
                 @guest
@@ -49,13 +49,43 @@
                     </a>
                 @endguest
                 @auth
-                    <form action="{{ route('logout') }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit"
-                            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
-                            Logout
+                    @php
+                        $user = auth()->user();
+                        $avatar = $user->avatar
+                            ? asset('storage/' . $user->avatar)
+                            : asset('default-avatar.png');
+                      @endphp
+
+                    <div x-data="{ open:false }" class="relative">
+                        <button @click="open = !open"
+                            class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
+                            <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
+                                onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
                         </button>
-                    </form>
+
+                        <div x-show="open" x-transition @click.outside="open=false"
+                            class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
+                            <div class="px-4 py-3 border-b">
+                                <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
+                                <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                            </div>
+                            <ul class="py-1 text-sm">
+                                <li>
+                                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-50">Profil
+                                        Saya</a>
+                                </li>
+                                <li class="border-t">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit"
+                                            class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
+                                            Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 @endauth
             </div>
         </div>
@@ -67,12 +97,14 @@
         <div
             class="absolute inset-0 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black/30 via-black/20 to-black/30">
             <h1 class="text-5xl md:text-6xl font-semibold mb-3">
-                <span class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
+                <span
+                    class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
                     Selamat Datang di <span class="logo-font text-6xl md:text-7xl">AdatKu</span>
                 </span>
             </h1>
             <p class="text-lg md:text-xl w-11/12 md:w-2/5">
-                <span class="bg-gradient-to-r from-[#fff3b0] via-[#f5d547] to-[#d4a017] bg-clip-text text-transparent drop-shadow-md">
+                <span
+                    class="bg-gradient-to-r from-[#fff3b0] via-[#f5d547] to-[#d4a017] bg-clip-text text-transparent drop-shadow-md">
                     Temukan keindahan budaya dan tradisi melalui koleksi busana adat, rias, dan pelaminan terbaik.
                 </span>
             </p>
@@ -137,7 +169,7 @@
                             </div>
                             <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
                                 <img src="" 
-                                    alt="MUA Kedua" 
+                                    alt="MUA Ketiga" 
                                     class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='https://www.instagram.com/ilhamfad1llah?igsh=bHJ1Mjg1eTFrb2F6'">
                                 <div class="p-3 text-center">
                                 <h3 class="text-lg font-semibold text-gray-800">Ilham Fadillah</h3>
@@ -150,7 +182,7 @@
 
             contentArea.innerHTML = contentMap[menu] || `<p>Konten tidak tersedia.</p>`;
 
- 
+
             document.querySelectorAll('nav button').forEach(btn => {
                 btn.classList.remove('bg-gray-300', 'font-bold');
             });

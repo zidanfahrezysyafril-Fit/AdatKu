@@ -3,39 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Mua extends Model
 {
-    use SoftDeletes, HasUuids;
-    protected $table = 'muas';
-    public $incrementing = false;      
+    use HasUuids, SoftDeletes;
+
+    public $incrementing = false;
     protected $keyType = 'string';
+
     protected $fillable = [
         'user_id',
         'nama_usaha',
         'kontak_wa',
-        'deskripsi',
         'alamat',
+        'deskripsi',
         'instagram',
         'tiktok',
-        'foto',
+        'foto'
     ];
 
-    protected static function boot()
+    public function user()
     {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
+        return $this->belongsTo(User::class);
     }
-    public function file()
+
+    public function layanan()
     {
-        return $this->morphOne(File::class, 'fileable');
+        return $this->hasMany(Layanan::class, 'mua_id');
     }
 }

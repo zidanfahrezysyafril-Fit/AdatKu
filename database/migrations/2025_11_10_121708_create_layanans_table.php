@@ -5,19 +5,25 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
-        Schema::create('layanans', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('id_mua');
-            $table->string('nama_layanan');
-            $table->decimal('harga', 15, 2)->nullable();
-            $table->timestamps();
+    public function up(): void
+    {
+        Schema::create('layanans', function (Blueprint $t) {
+            $t->uuid('id')->primary();
+            $t->uuid('mua_id');                         
+            $t->string('nama', 120);
+            $t->unsignedBigInteger('harga')->default(0);
+            $t->string('kategori', 40)->nullable();    
+            $t->text('deskripsi')->nullable();
+            $t->string('foto', 255)->nullable();
+            $t->timestamps();
 
-            $table->foreign('id_mua')->references('id')->on('muas')->onDelete('cascade');
+            $t->foreign('mua_id')->references('id')->on('muas')->cascadeOnDelete();
+            $t->index(['mua_id', 'kategori']);
         });
     }
 
-    public function down(): void {
+    public function down(): void
+    {
         Schema::dropIfExists('layanans');
     }
 };

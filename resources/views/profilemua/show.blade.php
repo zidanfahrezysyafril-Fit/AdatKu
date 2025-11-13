@@ -34,12 +34,12 @@
             </div>
 
             <div class="flex gap-3 pt-4">
-                <a href="{{ route('panelmua.edit', $mua->id) }}"
+                <a href="{{ route('profilemua.edit', $mua->id) }}"
                     class="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition">
                     Edit Profil
                 </a>
 
-                <form action="{{ route('panelmua.destroy', $mua->id) }}" method="POST"
+                <form action="{{ route('profilemua.destroy', $mua->id) }}" method="POST"
                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus profil ini?')">
                     @csrf
                     @method('DELETE')

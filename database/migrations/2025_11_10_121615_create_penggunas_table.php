@@ -12,8 +12,6 @@ return new class extends Migration {
             $table->string('nama', 50);
             $table->string('email', 50)->unique();
             $table->string('no_wa', 50);
-            $table->string('password', 255);
-            $table->enum('role', ['Pengguna', 'MUA', 'Admin'])->default('Pengguna');
             $table->timestamps();
         });
     }

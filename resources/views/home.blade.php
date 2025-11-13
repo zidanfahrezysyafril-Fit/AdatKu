@@ -6,24 +6,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AdatKu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
     }
+
     .logo-font {
       font-family: 'Perfecto Kaligrafi', 'Great Vibes', cursive;
     }
+
     @keyframes slide {
-      0%, 20% { transform: translateX(0); }
-      25%, 45% { transform: translateX(-25%); }
-      50%, 70% { transform: translateX(-50%); }
-      75%, 95% { transform: translateX(-75%); }
-      100% { transform: translateX(0); }
+
+      0%,
+      20% {
+        transform: translateX(0);
+      }
+
+      25%,
+      45% {
+        transform: translateX(-25%);
+      }
+
+      50%,
+      70% {
+        transform: translateX(-50%);
+      }
+
+      75%,
+      95% {
+        transform: translateX(-75%);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
     }
-    .animate-slide { animation: slide 12s infinite ease-in-out; }
+
+    .animate-slide {
+      animation: slide 12s infinite ease-in-out;
+    }
   </style>
 </head>
 
@@ -31,17 +56,17 @@
 
   @if (session('success') || session('error'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
-         class="fixed left-1/2 -translate-x-1/2 top-20 z-[9999]">
+      class="fixed left-1/2 -translate-x-1/2 top-20 z-[9999]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                  backdrop-blur-md border border-[#fff3b0]/40
-                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                    backdrop-blur-md border border-[#fff3b0]/40
+                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           @else
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           @endif
         </svg>
         <span>{{ session('success') ?? session('error') }}</span>
@@ -53,72 +78,70 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <a href="/" class="flex items-center gap-3">
-          <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
-            class="w-14 h-14 rounded-full object-cover shadow-md">
-          <h1 class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">AdatKu</h1>
+          <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu" class="w-14 h-14 rounded-full object-cover shadow-md">
+          <h1
+            class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
+            AdatKu</h1>
         </a>
       </div>
       <nav class="hidden md:flex items-center gap-6 text-[18px] text-[#b48a00]">
         <a href="/" class="hover:text-[#eab308]">Beranda</a>
         @auth
-        <a href="{{ ('mua') }}" class="hover:text-[#eab308]">Daftar MUA</a>
+          <a href="{{ ('daftarmua') }}" class="hover:text-[#eab308]">Daftar MUA</a>
         @endauth
         <a href="{{ ('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
       </nav>
       <div class="flex items-center gap-3">
         @guest
-        <a href="{{ route('auth') }}"
-          class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
-          Sign In
-        </a>
+          <a href="{{ route('login') }}"
+            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
+            Sign In
+          </a>
         @endguest
 
         @auth
-        @php
-          $user = auth()->user();
-          $avatar = $user->avatar
-              ? asset('storage/'.$user->avatar)
+          @php
+            $user = auth()->user();
+            $avatar = $user->avatar
+              ? asset('storage/' . $user->avatar)
               : asset('default-avatar.png');
-        @endphp
+          @endphp
 
-        <div x-data="{ open:false }" class="relative">
-          <button @click="open = !open"
-                  class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
-            <img src="{{ $avatar }}" alt="Profile"
-                 class="w-full h-full object-cover"
-                 onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
-          </button>
+          <div x-data="{ open:false }" class="relative">
+            <button @click="open = !open"
+              class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
+              <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
+                onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
+            </button>
 
-          <div x-show="open" x-transition @click.outside="open=false"
-               class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
-            <div class="px-4 py-3 border-b">
-              <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
-              <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+            <div x-show="open" x-transition @click.outside="open=false"
+              class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
+              <div class="px-4 py-3 border-b">
+                <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
+                <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+              </div>
+              <ul class="py-1 text-sm">
+                <li>
+                  <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-50">Profil Saya</a>
+                </li>
+                <li class="border-t">
+                  <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
+                      Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
             </div>
-            <ul class="py-1 text-sm">
-              <li>
-                <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-50">Profil Saya</a>
-              </li>
-              <li class="border-t">
-                <form method="POST" action="{{ route('logout') }}">
-                  @csrf
-                  <button type="submit"
-                          class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
-                    Logout
-                  </button>
-                </form>
-              </li>
-            </ul>
           </div>
-        </div>
         @endauth
       </div>
     </div>
   </header>
 
   <section class="relative">
-    <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu"
-      class="w-full h-[580px] object-cover brightness-75">
+    <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
     <div
       class="absolute inset-0 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black/30 via-black/20 to-black/30">
 
@@ -231,8 +254,7 @@
   </footer>
 
   <div class="fixed left-5 bottom-5 z-50">
-    <a href="{{ route('auth') }}"
-      class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+    <a href="{{ route('login') }}" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
              text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl
              hover:from-[#f8e48c] hover:to-[#e0a100] transition font-medium">
       Daftarkan jasa MUA kamu di sini
@@ -241,4 +263,5 @@
 
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
+
 </html>

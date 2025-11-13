@@ -7,23 +7,48 @@
   <title>AdatKu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
     }
+
     .logo-font {
       font-family: 'Perfecto Kaligrafi', 'Great Vibes', cursive;
     }
+
     @keyframes slide {
-      0%, 20% { transform: translateX(0); }
-      25%, 45% { transform: translateX(-25%); }
-      50%, 70% { transform: translateX(-50%); }
-      75%, 95% { transform: translateX(-75%); }
-      100% { transform: translateX(0); }
+
+      0%,
+      20% {
+        transform: translateX(0);
+      }
+
+      25%,
+      45% {
+        transform: translateX(-25%);
+      }
+
+      50%,
+      70% {
+        transform: translateX(-50%);
+      }
+
+      75%,
+      95% {
+        transform: translateX(-75%);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
     }
-    .animate-slide { animation: slide 12s infinite ease-in-out; }
+
+    .animate-slide {
+      animation: slide 12s infinite ease-in-out;
+    }
   </style>
 </head>
 
@@ -31,17 +56,17 @@
 
   @if (session('success') || session('error'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
-         class="fixed left-1/2 -translate-x-1/2 top-20 z-[9999]">
+      class="fixed left-1/2 -translate-x-1/2 top-20 z-[9999]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                  backdrop-blur-md border border-[#fff3b0]/40
-                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                          backdrop-blur-md border border-[#fff3b0]/40
+                          @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                          @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           @else
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           @endif
         </svg>
         <span>{{ session('success') ?? session('error') }}</span>
@@ -53,41 +78,69 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <a href="/" class="flex items-center gap-3">
-          <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
-            class="w-14 h-14 rounded-full object-cover shadow-md">
-          <h1 class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">AdatKu</h1>
+          <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu" class="w-14 h-14 rounded-full object-cover shadow-md">
+          <h1
+            class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
+            AdatKu</h1>
         </a>
       </div>
       <nav class="hidden md:flex items-center gap-6 text-[18px] text-[#b48a00]">
         <a href="/" class="hover:text-[#eab308]">Beranda</a>
         @auth
-        <a href="{{ ('mua') }}" class="hover:text-[#eab308]">Daftar MUA</a>
+          <a href="{{ ('daftarmua') }}" class="hover:text-[#eab308]">Daftar MUA</a>
         @endauth
         <a href="{{ ('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
       </nav>
       <div class="flex items-center gap-3">
         @guest
-        <a href="{{ route('auth') }}"
-          class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
-          Sign In
-        </a>
+          <a href="{{ route('auth') }}"
+            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
+            Sign In
+          </a>
         @endguest
         @auth
-        <form action="{{ route('logout') }}" method="POST" class="inline">
-          @csrf
-          <button type="submit"
-            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
-            Logout
-          </button>
-        </form>
+          @php
+            $user = auth()->user();
+            $avatar = $user->avatar
+              ? asset('storage/' . $user->avatar)
+              : asset('default-avatar.png');
+          @endphp
+
+          <div x-data="{ open:false }" class="relative">
+            <button @click="open = !open"
+              class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
+              <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
+                onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
+            </button>
+
+            <div x-show="open" x-transition @click.outside="open=false"
+              class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
+              <div class="px-4 py-3 border-b">
+                <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
+                <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+              </div>
+              <ul class="py-1 text-sm">
+                <li>
+                  <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-50">Profil Saya</a>
+                </li>
+                <li class="border-t">
+                  <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
+                      Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          </div>
         @endauth
       </div>
     </div>
   </header>
 
   <section class="relative">
-    <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu"
-      class="w-full h-[580px] object-cover brightness-75">
+    <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
     <div
       class="absolute inset-0 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black/30 via-black/20 to-black/30">
 
@@ -112,93 +165,80 @@
       </div>
     </div>
   </section>
-    
-    <main class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-10">
-     
-        <section class="md:col-span-2">
-            <p class="text-slate-600 mb-2">
-                Hubungi kami untuk kasus apapun yang berhubungan di dalam website AdatKU ini.
-            </p>
-            <p class="text-slate-600 mb-6">
-                Kami akan secepatnya dan sebisa mungkin membantu Anda.
-            </p>
 
-            <form onsubmit="alert('Form ini masih statis ya — sambungkan ke backend kalau mau berfungsi.'); return false;" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm mb-1 font-medium">Nama *</label>
-                        <input type="text" name="nama" required
-                               class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
-                    </div>
-                    <div>
-                        <label class="block text-sm mb-1 font-medium">Nomor Telepon</label>
-                        <input type="tel" name="telepon" value="+62"
-                               class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
-                    </div>
-                </div>
+  <main class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-10">
 
-                <div>
-                    <label class="block text-sm mb-1 font-medium">Email *</label>
-                    <input type="email" name="email" required
-                           class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
-                </div>
+    <section class="md:col-span-2">
+      <p class="text-slate-600 mb-2">
+        Hubungi kami untuk kasus apapun yang berhubungan di dalam website AdatKU ini.
+      </p>
+      <p class="text-slate-600 mb-6">
+        Kami akan secepatnya dan sebisa mungkin membantu Anda.
+      </p>
 
-                <div>
-                    <label class="block text-sm mb-1 font-medium">Subjek *</label>
-                    <input type="text" name="subject" required
-                           class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
-                </div>
+      <form onsubmit="alert('Form ini masih statis ya — sambungkan ke backend kalau mau berfungsi.'); return false;"
+        class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm mb-1 font-medium">Nama *</label>
+            <input type="text" name="nama" required
+              class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
+          </div>
+          <div>
+            <label class="block text-sm mb-1 font-medium">Nomor Telepon</label>
+            <input type="tel" name="telepon" value="+62"
+              class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
+          </div>
+        </div>
 
-                <div>
-                    <label class="block text-sm mb-1 font-medium">Pertanyaan *</label>
-                    <textarea name="pesan" rows="5" required
-                              class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400"></textarea>
-                </div>
+        <div>
+          <label class="block text-sm mb-1 font-medium">Email *</label>
+          <input type="email" name="email" required
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
+        </div>
 
-                <button type="submit"
-<<<<<<< HEAD
-                class="px-5 py-3 text-white font-medium rounded-xl shadow-md bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500 hover:opacity-90 transition">
-                kirim keluhan
-            </button>
-=======
-                    class="px-5 py-3 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-black rounded-xl hover:bg-[#3d2630] transition font-medium shadow">
-                    kirim keluhan
-                </button>
->>>>>>> c1ac103379dd8439165f51df7483edc0475a88b3
+        <div>
+          <label class="block text-sm mb-1 font-medium">Subjek *</label>
+          <input type="text" name="subject" required
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400">
+        </div>
 
-            </form>
-        </section>
+        <div>
+          <label class="block text-sm mb-1 font-medium">Pertanyaan *</label>
+          <textarea name="pesan" rows="5" required
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-400"></textarea>
+        </div>
+
+        <button type="submit"
+          class="px-5 py-3 text-white font-medium rounded-xl shadow-md bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500 hover:opacity-90 transition">
+          kirim keluhan
+        </button </form>
+    </section>
 
     <aside class="md:pl-6">
-    <h2 class="text-xl font-semibold mb-4">Kontak Kami</h2>
-    <ul class="space-y-3 text-slate-700">
+      <h2 class="text-xl font-semibold mb-4">Kontak Kami</h2>
+      <ul class="space-y-3 text-slate-700">
         <li class="flex items-start gap-3">
-            <span>📍</span>
-            <span>
-                Adatku<br>
-            
-                <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl "
-                   target="_blank"
-                   class="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
-                        <path d="M7 2C6.45 2 6 2.45 6 3V5H5C3.34 5 2 6.34 2 8V19C2 20.66 3.34 22 5 22H19C20.66 22 22 20.66 22 19V8C22 6.34 20.66 5 19 5H18V3C18 2.45 17.55 2 17 2H7ZM12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8Z"/>
-                    </svg>
-                    @AdatKU.id
-                </a>
-            </span>
+          <span>📍</span>
+          <span>
+            Adatku<br>
+
+            <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl " target="_blank"
+              class="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                <path
+                  d="M7 2C6.45 2 6 2.45 6 3V5H5C3.34 5 2 6.34 2 8V19C2 20.66 3.34 22 5 22H19C20.66 22 22 20.66 22 19V8C22 6.34 20.66 5 19 5H18V3C18 2.45 17.55 2 17 2H7ZM12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8Z" />
+              </svg>
+              @AdatKU.id
+            </a>
+          </span>
         </li>
 
         <li class="flex items-center gap-3">
-            <span>✉️</span>
-<<<<<<< HEAD
-            <a href="mailto:adatku11@gmail.com" class="hover:underline">
-                adatku11@gmail.com
-=======
-            <a href="#" class="hover:underline">
-                AdatKU@gmail.com
->>>>>>> c1ac103379dd8439165f51df7483edc0475a88b3
-            </a>
+          <span>✉️</span>
+          <a href="mailto:adatku11@gmail.com" class="hover:underline">
+            adatku11@gmail.com
+            <a href="#" class="hover:underline"></a>
         </li>
-    </ul>
-</aside>
-
+      </ul>
+    </aside>
