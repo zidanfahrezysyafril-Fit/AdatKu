@@ -36,8 +36,8 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':mua'])->gro
 
     Route::get('/profilemua/create', [MuaController::class, 'create'])->name('profilemua.create');
     Route::post('/profilemua',        [MuaController::class, 'store'])->name('profilemua.store');
-    Route::get('/profilemua/edit',    [MuaController::class, 'edit'])->name('profilemua.edit');   // tanpa {id}
-    Route::put('/profilemua',         [MuaController::class, 'update'])->name('profilemua.update'); // PUT ke /profilemua
+    Route::get('/profilemua/edit',    [MuaController::class, 'edit'])->name('profilemua.edit'); 
+    Route::put('/profilemua',         [MuaController::class, 'update'])->name('profilemua.update');
 
     Route::prefix('panelmua')->name('panelmua.')->group(function () {
         Route::resource('layanan', LayananController::class)->except('show');

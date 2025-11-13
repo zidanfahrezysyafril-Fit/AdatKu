@@ -90,6 +90,7 @@
           <a href="{{ ('daftarmua') }}" class="hover:text-[#eab308]">Daftar MUA</a>
         @endauth
         <a href="{{ ('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
+          <a href="{{ ('dashboard') }}" class="hover:text-[#eab308]">Dashboard</a>
       </nav>
       <div class="flex items-center gap-3">
         @guest
