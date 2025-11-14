@@ -36,12 +36,9 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':mua'])->gro
 
     Route::get('/profilemua/create', [MuaController::class, 'create'])->name('profilemua.create');
     Route::post('/profilemua',        [MuaController::class, 'store'])->name('profilemua.store');
-    Route::get('/profilemua/edit',    [MuaController::class, 'edit'])->name('profilemua.edit'); 
+    Route::get('/profilemua/edit',    [MuaController::class, 'edit'])->name('profilemua.edit');
     Route::put('/profilemua',         [MuaController::class, 'update'])->name('profilemua.update');
 
-    Route::prefix('panelmua')->name('panelmua.')->group(function () {
-        Route::resource('layanan', LayananController::class)->except('show');
-    });
 });
 
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':pengguna'])->group(function () {
@@ -59,3 +56,33 @@ Route::get('/mua/{id}', function (string $id) {
 })->name('public.mua.show');
 
 Route::get('/mua', [MuaController::class, 'index'])->name('mua.list');
+
+Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
+
+    Route::prefix('panelmua')->name('panelmua.')->group(function () {
+
+        // INDEX: GET /panelmua/layanan
+        Route::get('/layanan', [LayananController::class, 'index'])
+            ->name('layanan.index');
+
+        // FORM CREATE: GET /panelmua/layanan/create
+        Route::get('/layanan/create', [LayananController::class, 'create'])
+            ->name('layanan.create');
+
+        // STORE: POST /panelmua/layanan
+        Route::post('/layanan', [LayananController::class, 'store'])
+            ->name('layanan.store');
+
+        // EDIT: GET /panelmua/layanan/{id}/edit
+        Route::get('/layanan/{layanan}/edit', [LayananController::class, 'edit'])
+            ->name('layanan.edit');
+
+        // UPDATE: PUT /panelmua/layanan/{id}
+        Route::put('/layanan/{layanan}', [LayananController::class, 'update'])
+            ->name('layanan.update');
+
+        // DELETE: DELETE /panelmua/layanan/{id}
+        Route::delete('/layanan/{layanan}', [LayananController::class, 'destroy'])
+            ->name('layanan.destroy');
+    });
+});
