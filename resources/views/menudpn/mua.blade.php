@@ -112,23 +112,51 @@
     </section>
 
     <main class="max-w-9xl mx-auto px-6 py-10 flex space-x-6">
+        <!-- SIDEBAR -->
         <aside class="w-60 bg-white shadow-md rounded-md border border-gray-200 flex flex-col">
             <div class="p-4 text-2xl font-bold border-b border-gray-300">
                 Pilih
             </div>
             <nav class="flex-1 overflow-auto p-4 space-y-2 text-gray-700">
-                <button class="block w-full text-left py-2 px-3 rounded hover:bg-gray-200 transition"
-                    onclick="showContent('dashboard')" id="menu-dashboard">Dashboard</button>
-                <button class="block w-full text-left py-2 px-3 rounded hover:bg-gray-200 transition"
-                    onclick="showContent('mua')" id="menu-mua">MUA</button>
+                <span class="block w-full text-left py-2 px-3 rounded bg-gray-200 font-bold">
+                    Daftar MUA
+                </span>
             </nav>
         </aside>
 
-        <!-- Konten Menu -->
-        <section class="flex-1 bg-white rounded-md shadow-md border p-6 min-h-[300px]" id="content-area">
-            <p class="text-gray-600 text-lg leading-relaxed">
-                Pilih menu dari daftar di sebelah kiri untuk menampilkan isi disini.
-            </p>
+        <!-- KONTEN DAFTAR MUA -->
+        <section class="flex-1 bg-white rounded-md shadow-md border p-6 min-h-[300px]">
+            <h2 class="text-2xl font-bold mb-4">Pilih MUA Terdaftar</h2>
+
+            @if ($muas->isEmpty())
+                <p class="text-gray-500">Belum ada MUA yang mendaftar.</p>
+            @else
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach ($muas as $mua)
+                        <a href="{{ route('public.mua.show', $mua->id) }}"
+                            class="w-full bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100">
+                            <img src="{{ $mua->foto ? asset('storage/' . $mua->foto) : 'https://placehold.co/400x400?text=MUA' }}"
+                                alt="{{ $mua->nama_usaha }}" class="cursor-pointer w-full h-64 object-cover">
+
+                            <div class="p-3 text-center">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    {{ $mua->nama_usaha }}
+                                </h3>
+                                @if ($mua->deskripsi)
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        {{ \Illuminate\Support\Str::limit($mua->deskripsi, 70) }}
+                                    </p>
+                                @endif
+                                @if ($mua->alamat)
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        📍 {{ $mua->alamat }}
+                                    </p>
+                                @endif
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            @endif
         </section>
     </main>
 
@@ -144,55 +172,8 @@
                     class="w-10 h-10 rounded-full hover:scale-110 transition"></a>
         </div>
     </footer>
-
-    <script>
-        function showContent(menu) {
-            const contentArea = document.getElementById('content-area');
-            const contentMap = {
-                dashboard: `<h2 class="text-2xl font-bold mb-4">Pilih Mua yang tertera disini</h2>
-                            <div class="flex gap-6">
-                            <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                                <img src="" 
-                                    alt="Mitia" 
-                                    class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='mua'">
-                                <div class="p-3 text-center">
-                                <h3 class="text-lg font-semibold text-gray-800">Mythia Batford</h3>
-                                </div>
-                            </div>
-                            <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                                <img src="" 
-                                    alt="MUA Kedua" 
-                                    class="cursor-pointer w-full h-64 object-cover rounded-lg">
-                                <div class="p-3 text-center">
-                                <h3 class="text-lg font-semibold text-gray-800">Maysa</h3>
-                                </div>
-                            </div>
-                            <div class="w-64 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                                <img src="" 
-                                    alt="MUA Ketiga" 
-                                    class="cursor-pointer w-full h-64 object-cover rounded-lg" onclick="location.href='https://www.instagram.com/ilhamfad1llah?igsh=bHJ1Mjg1eTFrb2F6'">
-                                <div class="p-3 text-center">
-                                <h3 class="text-lg font-semibold text-gray-800">Ilham Fadillah</h3>
-                                </div>
-                            </div>
-                            </div>`,
-                mua: `<h2 class="text-2xl font-bold mb-4">Anggota</h2><p>Profil MUA yang terdaftar.</p>`,
-                kegiatan: `<h2 class="text-2xl font-bold mb-4">Kegiatan</h2><p>Informasi kegiatan MUA terbaru.</p>`
-            };
-
-            contentArea.innerHTML = contentMap[menu] || `<p>Konten tidak tersedia.</p>`;
-
-
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('bg-gray-300', 'font-bold');
-            });
-            const activeBtn = document.getElementById(`menu-${menu}`);
-            if (activeBtn) {
-                activeBtn.classList.add('bg-gray-300', 'font-bold');
-            }
-        }
-    </script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 </body>
 
 </html>
