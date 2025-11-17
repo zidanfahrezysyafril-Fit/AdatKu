@@ -77,3 +77,12 @@ Route::get('/daftarmua', [PublicMuaController::class, 'index'])
 Route::get('/daftarmua/{mua}', [PublicMuaController::class, 'show'])
     ->name('public.mua.show');
 Route::get('/dashboard_a', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+Route::get('/users', [PenggunaController::class, 'index'])->name('users.index');
+
+
+Route::get('/users/create', [PenggunaController::class, 'create'])->name('users.create');
+Route::post('/users', [PenggunaController::class, 'store'])->name('users.store');
+Route::get('/users/{user}/edit', [PenggunaController::class, 'edit'])->name('users.edit');
+Route::put('/users/{user}', [PenggunaController::class, 'update'])->name('users.update');
+Route::delete('/users/{user}', [PenggunaController::class, 'destroy'])->name('users.destroy');
