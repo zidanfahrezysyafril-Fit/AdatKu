@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PublicMuaController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', fn() => view('home'))->name('landing');
 Route::get('/home', fn() => view('home'))->name('home');
@@ -75,3 +76,4 @@ Route::get('/daftarmua', [PublicMuaController::class, 'index'])
 // Halaman detail satu MUA + layanan
 Route::get('/daftarmua/{mua}', [PublicMuaController::class, 'show'])
     ->name('public.mua.show');
+Route::get('/dashboard_a', [DashboardController::class, 'index'])->name('admin.dashboard');
