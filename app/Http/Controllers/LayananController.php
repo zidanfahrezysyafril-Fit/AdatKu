@@ -36,7 +36,7 @@ class LayananController extends Controller
         $mua = Auth::user()->mua;
         abort_unless((bool) $mua, 404);
 
-        $kategori = request('k'); // makeup / baju / pelamin / null
+        $kategori = request('k');
 
         $query = Layanan::where('mua_id', $mua->id);
 
