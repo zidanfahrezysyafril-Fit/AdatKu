@@ -51,7 +51,6 @@ class AuthController extends Controller
             }
             return redirect()->route('dashboard');
             }
-
         // Jika gagal login
         session()->increment('login_attempts', 1);
         throw ValidationException::withMessages([

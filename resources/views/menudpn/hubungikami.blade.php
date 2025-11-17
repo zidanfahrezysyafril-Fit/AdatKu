@@ -94,7 +94,7 @@
       </nav>
       <div class="flex items-center gap-3">
         @guest
-          <a href="{{ route('auth') }}"
+          <a href="{{ route('pengguna.home') }}"
             class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
             Sign In
           </a>
