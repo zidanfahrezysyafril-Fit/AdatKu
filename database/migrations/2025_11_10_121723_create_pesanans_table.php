@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void {
         Schema::create('pesanans', function (Blueprint $table) {
-            $table->uuid('id')->primary(); // primary key UUID
-            $table->uuid('id_pengguna');   // FK ke penggunas.id
-            $table->uuid('id_layanan');    // FK ke layanans.id
+            $table->uuid('id')->primary();
+            $table->uuid('id_pengguna');   
+            $table->uuid('id_layanan');    
             $table->date('tanggal_booking');
             $table->text('alamat');
             $table->decimal('total_harga', 12, 2);

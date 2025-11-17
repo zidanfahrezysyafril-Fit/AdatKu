@@ -7,8 +7,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PublicMuaController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Models\Pesanan;
 
 Route::get('/', fn() => view('home'))->name('landing');
 Route::get('/home', fn() => view('home'))->name('home');
@@ -37,6 +39,10 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':mua'])->gro
     Route::post('/profilemua',        [MuaController::class, 'store'])->name('profilemua.store');
     Route::get('/profilemua/edit',    [MuaController::class, 'edit'])->name('profilemua.edit');
     Route::put('/profilemua',         [MuaController::class, 'update'])->name('profilemua.update');
+});
+
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':mua'])->group(function () {
+    Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan');
 });
 
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':pengguna'])->group(function () {

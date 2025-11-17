@@ -51,4 +51,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Mua::class);
     }
+    public function pesanan()
+    {
+        return $this->hasMany(\App\Models\Pesanan::class);
+    }
 }
