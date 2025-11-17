@@ -76,10 +76,12 @@ Route::get('/daftarmua', [PublicMuaController::class, 'index'])
 // Halaman detail satu MUA + layanan
 Route::get('/daftarmua/{mua}', [PublicMuaController::class, 'show'])
     ->name('public.mua.show');
-Route::get('/dashboard_a', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+Route::get('/dashboard_a', [DashboardController::class, 'index'])
+    ->name('admin.dashboard')
+    ->middleware(['auth', CheckRole::class . ':admin']);
 
 Route::get('/users', [PenggunaController::class, 'index'])->name('users.index');
-
 
 Route::get('/users/create', [PenggunaController::class, 'create'])->name('users.create');
 Route::post('/users', [PenggunaController::class, 'store'])->name('users.store');
