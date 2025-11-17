@@ -39,15 +39,6 @@
             class="px-4 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
             Kelola Users
         </a>
-
-        <button
-            class="px-4 py-2 rounded-xl text-white bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500 hover:opacity-90">
-            Tambah Katalog
-        </button>
-
-        <button class="px-4 py-2 rounded-xl bg-slate-800 text-white hover:bg-slate-900">
-            Laporan Bulanan
-        </button>
     </div>
 
     {{-- SECTION: tabel user yang jadi MUA --}}

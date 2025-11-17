@@ -14,12 +14,15 @@ class CheckRole
             abort(401);
         }
 
-        $userRole = strtolower((string) $user->role);   // "MUA" -> "mua"
-        $roles    = array_map('strtolower', $roles);    // ["mua","admin"] -> lower semua
+        $userRole = strtolower((string) $user->role);
+        $roles    = array_map('strtolower', $roles);
 
-        // izinkan admin juga walau tidak disebut eksplisit
+        // jika bukan role yang diperbolehkan dan bukan admin
         if (!in_array($userRole, $roles, true) && $userRole !== 'admin') {
-            abort(403, 'Akses khusus MUA');
+
+            $needed = strtoupper($roles[0] ?? 'USER');
+
+            abort(403, "Akses khusus {$needed}");
         }
 
         return $next($request);
