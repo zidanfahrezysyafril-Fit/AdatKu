@@ -6,7 +6,6 @@
 
 @section('content')
 
-    {{-- SECTION: info singkat --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div class="bg-white border border-rose-100 rounded-2xl p-5">
             <p class="text-sm text-slate-500">Total User Terdaftar</p>
@@ -33,7 +32,6 @@
         </div>
     </div>
 
-    {{-- SECTION: tombol aksi --}}
     <div class="bg-white border border-rose-100 rounded-2xl p-5 flex flex-wrap gap-3 mb-6">
         <a href="{{ route('admin.dashboard') ?? '#' }}"
             class="px-4 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
@@ -41,7 +39,6 @@
         </a>
     </div>
 
-    {{-- SECTION: tabel user yang jadi MUA --}}
     <div class="bg-white border border-rose-100 rounded-2xl overflow-hidden">
         <div class="p-4 border-b border-rose-100 flex items-center justify-between">
             <h3 class="font-semibold">Daftar User yang Menjadi MUA</h3>

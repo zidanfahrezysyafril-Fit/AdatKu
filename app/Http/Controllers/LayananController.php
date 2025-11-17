@@ -20,8 +20,6 @@ class LayananController extends Controller
             if (!$user) {
                 abort(401);
             }
-
-            // role di DB: Pengguna, MUA, Admin
             $role = strtolower(trim($user->role ?? ''));
             if (!in_array($role, ['mua', 'admin'], true)) {
                 abort(403, 'Akses khusus MUA');
@@ -57,7 +55,7 @@ class LayananController extends Controller
     {
         abort_unless((bool) Auth::user()->mua, 404);
 
-        $item = null; // supaya partial form bisa pakai $item?->...
+        $item = null;
         return view('layanan.create', compact('item'));
     }
 

@@ -9,7 +9,6 @@
 
 <body class="bg-[rgba(255,242,213,0.08)] text-gray-900">
 
-    <!-- NAVBAR SEDERHANA -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="{{ route('public.mua.index') }}" class="text-amber-700 font-semibold">
@@ -21,7 +20,6 @@
 
     <main class="max-w-6xl mx-auto px-6 py-10 space-y-10">
 
-        {{-- PROFIL MUA --}}
         <section class="bg-white rounded-2xl shadow-md p-6 flex flex-col md:flex-row gap-6">
             <div class="w-full md:w-60">
                 <img src="{{ $mua->foto ? asset('storage/' . $mua->foto) : 'https://placehold.co/400x400?text=MUA' }}"
@@ -91,9 +89,15 @@
                                         {{ \Illuminate\Support\Str::limit($item->deskripsi, 100) }}
                                     </p>
                                 @endif
+                                @foreach ($mua->layanan as $layanan)
                                 <p class="mt-3 font-bold text-rose-600">
                                     Rp {{ number_format($item->harga, 0, ',', '.') }}
                                 </p>
+                                <a href="{{ route('pengguna.pesanan.create', $layanan->id) }}"
+                                    class="inline-flex items-center px-4 py-2 rounded-xl bg-rose-600 text-white text-sm font-medium hover:bg-rose-700">
+                                    Pesan Layanan Ini
+                                </a>
+                                 @endforeach
                             </div>
                         </div>
                     @endforeach

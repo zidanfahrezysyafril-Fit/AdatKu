@@ -1,16 +1,17 @@
 <?php
 
+use App\Models\Pesanan;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MuaController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PesananController;
-use App\Http\Controllers\PublicMuaController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Models\Pesanan;
+use App\Http\Controllers\PublicMuaController;
+
 
 Route::get('/', fn() => view('home'))->name('landing');
 Route::get('/home', fn() => view('home'))->name('home');
@@ -41,10 +42,6 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':mua'])->gro
     Route::put('/profilemua',         [MuaController::class, 'update'])->name('profilemua.update');
 });
 
-Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':mua'])->group(function () {
-    Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan');
-});
-
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':pengguna'])->group(function () {
     Route::get('/pengguna/home', [PenggunaController::class, 'index'])->name('pengguna.home');
 });
@@ -72,14 +69,15 @@ Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
 
         Route::delete('/layanan/{layanan}', [LayananController::class, 'destroy'])
             ->name('layanan.destroy');
+
+        Route::get('/pesanan', [PesananController::class, 'indexMua'])
+            ->name('pesanan.index');
     });
 });
 
-// Halaman daftar MUA (user depan)
 Route::get('/daftarmua', [PublicMuaController::class, 'index'])
     ->name('public.mua.index');
 
-// Halaman detail satu MUA + layanan
 Route::get('/daftarmua/{mua}', [PublicMuaController::class, 'show'])
     ->name('public.mua.show');
 
@@ -94,3 +92,35 @@ Route::post('/users', [PenggunaController::class, 'store'])->name('users.store')
 Route::get('/users/{user}/edit', [PenggunaController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [PenggunaController::class, 'update'])->name('users.update');
 Route::delete('/users/{user}', [PenggunaController::class, 'destroy'])->name('users.destroy');
+
+Route::middleware(['auth', CheckRole::class . ':pengguna'])->group(function () {
+    Route::get('/pesanan', [PesananController::class, 'indexUser'])
+        ->name('pengguna.pesanan.index');
+
+    Route::get('/pesanan/create/{layanan}', [PesananController::class, 'createUser'])
+        ->name('pengguna.pesanan.create');
+
+    Route::post('/pesanan/{layanan}', [PesananController::class, 'storeUser'])
+        ->name('pengguna.store');
+
+    Route::get('/pesanan/{pesanan}', [PesananController::class, 'showUser'])
+        ->name('pengguna.show');
+
+    Route::delete('/pesanan/{pesanan}', [PesananController::class, 'destroyUser'])
+        ->name('pengguna.destroy');
+});
+
+Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
+
+    Route::prefix('panelmua')->name('panelmua.')->group(function () {
+
+        Route::get('/pesanan', [PesananController::class, 'indexMua'])
+            ->name('pesanan.index');
+
+        Route::patch('/pesanan/{pesanan}/status', [PesananController::class, 'updateStatusMua'])
+            ->name('pesanan.updateStatus');
+
+        Route::delete('/pesanan/{pesanan}', [PesananController::class, 'destroyMua'])
+            ->name('pesanan.destroy');
+    });
+});

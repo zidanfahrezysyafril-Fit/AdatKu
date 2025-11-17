@@ -4,7 +4,6 @@
 @section('content')
     <div class="max-w-6xl mx-auto">
 
-        {{-- FLASH MESSAGE --}}
         @if(session('success'))
             <div x-data="{ show:true }" x-show="show" x-init="setTimeout(()=>show=false, 3500)"
                 class="mb-4 flex items-center justify-between px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm">
@@ -13,7 +12,6 @@
             </div>
         @endif
 
-        {{-- HEADER --}}
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
             <div>
                 <h2 class="text-2xl font-bold text-rose-700">Layanan Kamu</h2>
@@ -29,7 +27,6 @@
             </a>
         </div>
 
-        {{-- TAB FILTER --}}
         @php $k = $kategori; @endphp
         <div class="inline-flex items-center gap-1 rounded-xl bg-white shadow-sm ring-1 ring-slate-200 p-1 mb-6">
             <a href="{{ route('panelmua.layanan.index') }}" class="px-4 py-1.5 rounded-lg text-sm font-medium
@@ -53,7 +50,6 @@
             </a>
         </div>
 
-        {{-- GRID LAYANAN --}}
         @if($items->count())
             <div class="grid gap-5 md:grid-cols-3">
                 @foreach($items as $item)

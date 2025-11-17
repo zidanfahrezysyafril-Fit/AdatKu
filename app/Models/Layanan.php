@@ -9,7 +9,7 @@ class Layanan extends Model
 {
     use HasUuids;
 
-    protected $table = 'layanans'; // <- PENTING kalau tabelnya bukan "layanans"
+    protected $table = 'layanans';
     public $incrementing = false;
     protected $keyType = 'string';
 
@@ -18,5 +18,9 @@ class Layanan extends Model
     public function mua()
     {
         return $this->belongsTo(Mua::class, 'mua_id');
+    }
+    public function pesanans()
+    {
+        return $this->hasMany(Pesanan::class, 'id_layanan');
     }
 }

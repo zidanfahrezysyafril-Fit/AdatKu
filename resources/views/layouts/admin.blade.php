@@ -31,8 +31,6 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3z"/></svg>
           <span x-show="openSidebar">Dashboard</span>
         </a>
-
-        {{-- MENU USERS – sekarang sudah klik ke users.index --}}
         <a href="{{ route('users.index') }}"
            class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-rose-50 @if(request()->routeIs('users.*')) bg-rose-50 text-rose-700 @endif">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6Z"/></svg>

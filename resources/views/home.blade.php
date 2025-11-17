@@ -58,9 +58,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-20 z-[9999]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                    backdrop-blur-md border border-[#fff3b0]/40
-                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                          backdrop-blur-md border border-[#fff3b0]/40
+                          @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                          @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -107,6 +107,14 @@
               : asset('default-avatar.png');
           @endphp
 
+          {{-- 🔔 TOMBOL PESANAN UNTUK PENGGUNA --}}
+          @if ($user->role === 'Pengguna')
+            <a href="{{ route('pengguna.pesanan.index') }}"
+              class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 hover:bg-yellow-200 text-[#b48a00] font-semibold text-sm shadow-md">
+              📦 Pesanan Saya
+            </a>
+          @endif
+
           <div x-data="{ open:false }" class="relative">
             <button @click="open = !open"
               class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
@@ -137,6 +145,7 @@
           </div>
         @endauth
       </div>
+
     </div>
   </header>
 

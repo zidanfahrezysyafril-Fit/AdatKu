@@ -15,7 +15,6 @@ class PenggunaController extends Controller
 
     public function create()
     {
-        // form tambah user
         return view('user.create');
     }
 

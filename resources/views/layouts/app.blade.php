@@ -149,9 +149,9 @@
                         </div>
                     </div>
                 @endif
-                <a href="{{ route('pesanan') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                <a href="{{ route('panelmua.pesanan.index') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
                   hover:bg-white/10 transition
-                  {{ request()->routeIs('pesanan') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
+                  {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6 text-white/80 group-hover:text-white">
                         <path stroke-linecap="round" stroke-linejoin="round"

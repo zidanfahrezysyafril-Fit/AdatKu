@@ -12,8 +12,6 @@
                 {{ session('success') }}
             </div>
         @endif
-
-        {{-- User yang sedang login --}}
         <div class="bg-white rounded-2xl shadow-sm border border-rose-100 p-4 flex justify-between items-center">
             <div>
                 <p class="text-sm text-slate-500">User yang login sekarang</p>
@@ -25,7 +23,6 @@
             </span>
         </div>
 
-        {{-- Tabel semua users --}}
         <div class="bg-white rounded-2xl shadow-sm border border-rose-100 p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-slate-800">Daftar Semua Users</h2>
@@ -42,7 +39,6 @@
                             <th class="px-3 py-2 text-left border-b">Role</th>
                             <th class="px-3 py-2 text-left border-b">Dibuat</th>
 
-                            {{-- ➕ Tambahan kolom aksi --}}
                             <th class="px-3 py-2 text-center border-b">Aksi</th>
                         </tr>
                     </thead>
@@ -57,7 +53,6 @@
                                     {{ $user->created_at?->format('d M Y H:i') }}
                                 </td>
 
-                                {{-- ➕ Tambahan tombol Edit --}}
                                 <td class="px-3 py-2 border-b text-center">
                                     <a href="{{ route('users.edit', $user->id) }}"
                                        class="text-blue-600 hover:underline text-xs font-medium">

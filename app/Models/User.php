@@ -49,10 +49,11 @@ class User extends Authenticatable
     }
     public function mua()
     {
-        return $this->hasOne(\App\Models\Mua::class);
+        return $this->hasOne(Mua::class);
     }
-    public function pesanan()
+
+    public function pesananPengguna()
     {
-        return $this->hasMany(\App\Models\Pesanan::class);
+        return $this->hasMany(Pesanan::class, 'id_pengguna');
     }
 }

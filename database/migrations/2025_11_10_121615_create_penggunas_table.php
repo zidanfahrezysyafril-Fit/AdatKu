@@ -8,10 +8,10 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('penggunas', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('nama', 50);
-            $table->string('email', 50)->unique();
-            $table->string('no_wa', 50);
+            $table->id();
+            $table->string('nama');
+            $table->string('email')->unique();
+            $table->string('no_wa')->nullable();
             $table->timestamps();
         });
     }
