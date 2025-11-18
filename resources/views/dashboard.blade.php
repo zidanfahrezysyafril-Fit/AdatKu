@@ -44,19 +44,19 @@
           {{-- Total pesanan --}}
           <div class="rounded-xl border border-rose-50 bg-rose-50/40 px-4 py-3">
             <p class="text-xs text-slate-500 mb-1">Total Pesanan</p>
-            <p class="text-2xl font-semibold text-rose-700">{{ $totalPesanan }}</p>
+            <p class="text-2xl font-semibold text-rose-700"></p>
           </div>
 
           {{-- Pending / Belum Lunas --}}
           <div class="rounded-xl border border-amber-100 bg-amber-50/40 px-4 py-3">
             <p class="text-xs text-amber-600 mb-1">Pending</p>
-            <p class="text-2xl font-semibold text-amber-700">{{ $pendingCount }}</p>
+            <p class="text-2xl font-semibold text-amber-700"></p>
           </div>
 
           {{-- Lunas --}}
           <div class="rounded-xl border border-emerald-100 bg-emerald-50/40 px-4 py-3">
             <p class="text-xs text-emerald-600 mb-1">Lunas</p>
-            <p class="text-2xl font-semibold text-emerald-700">{{ $lunasCount }}</p>
+            <p class="text-2xl font-semibold text-emerald-700"></p>
           </div>
         </div>
       </div>
