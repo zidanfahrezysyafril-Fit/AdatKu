@@ -56,7 +56,7 @@ class LayananController extends Controller
         abort_unless((bool) Auth::user()->mua, 404);
 
         $item = null;
-        return view('layanan.create', compact('item'));
+        return view('panelmua.layanan.create', compact('item'));
     }
 
     public function store(Request $r): RedirectResponse

@@ -1,188 +1,149 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
-
 @section('content')
-  @php
-    $card = 'bg-white rounded-2xl ring-1 ring-slate-200 shadow-sm';
-    $kpi = 'text-3xl font-extrabold tracking-tight';
-  @endphp
+  <div class="h-[calc(100vh-7rem)] bg-[#fff9f7] overflow-hidden">
+    <div class="h-full px-6 md:px-10 py-6 space-y-6 overflow-hidden">
 
-  <div class="max-w-7xl mx-auto space-y-6">
 
-    <div class="{{ $card }} p-5 flex items-center justify-between">
-      <div>
-        <h2 class="text-xl font-semibold text-slate-800">
-          Halo, <span class="text-rose-600">{{ auth()->user()->name }}</span>
-        </h2>
-        <p class="text-slate-500 text-sm">Ringkasan aktivitas MUA kamu hari ini.</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <a href="{{ route('profilemua.edit') }}"
-          class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50">
-          Kelola Profil
-        </a>
-        <a href="{{ route('panelmua.layanan.create') }}"
-          class="px-4 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
-          Tambah Layanan
-        </a>
-      </div>
-    </div>
-
-    <div class="grid gap-4 md:grid-cols-4">
-      <div class="{{ $card }} p-5">
-        <p class="text-slate-500 text-sm">Total Baju Adat</p>
-        <p class="{{ $kpi }} text-rose-600">{{ $totalBaju ?? 0 }}</p>
-      </div>
-      <div class="{{ $card }} p-5">
-        <p class="text-slate-500 text-sm">Total Makeup</p>
-        <p class="{{ $kpi }} text-amber-600">{{ $totalMakeup ?? 0 }}</p>
-      </div>
-      <div class="{{ $card }} p-5">
-        <p class="text-slate-500 text-sm">Total Pelamin</p>
-        <p class="{{ $kpi }} text-violet-600">{{ $totalPelamin ?? 0 }}</p>
-      </div>
-      <div class="{{ $card }} p-5">
-        <p class="text-slate-500 text-sm">Pendapatan Bulan Ini</p>
-        <p class="{{ $kpi }} text-emerald-600">Rp {{ number_format($revenueBulanIni ?? 0, 0, ',', '.') }}</p>
-      </div>
-    </div>
-
-    <div class="grid gap-4 lg:grid-cols-3">
-      <div class="lg:col-span-1 {{ $card }} p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <p class="text-slate-600 font-medium">Total Pesanan</p>
-          <span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600">Semua</span>
-        </div>
-        <p class="text-4xl font-extrabold text-slate-800">{{ $totalPesanan ?? 0 }}</p>
-
-        <div class="grid grid-cols-3 gap-3 text-center">
-          <div class="rounded-xl border border-slate-200 p-3">
-            <p class="text-xs text-slate-500">Pending</p>
-            <p class="text-lg font-bold text-amber-600">{{ $pending ?? 0 }}</p>
-          </div>
-          <div class="rounded-xl border border-slate-200 p-3">
-            <p class="text-xs text-slate-500">Proses</p>
-            <p class="text-lg font-bold text-blue-600">{{ $proses ?? 0 }}</p>
-          </div>
-          <div class="rounded-xl border border-slate-200 p-3">
-            <p class="text-xs text-slate-500">Selesai</p>
-            <p class="text-lg font-bold text-emerald-600">{{ $selesai ?? 0 }}</p>
-          </div>
+      {{-- HEADER / WELCOME --}}
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.15em] text-rose-400 mb-1">
+            MUA Panel
+          </p>
+          <h1 class="text-2xl md:text-3xl font-semibold text-rose-700">
+            Halo, <span class="text-rose-500">{{ auth()->user()->name ?? 'MUA' }}</span>
+          </h1>
+          <p class="text-sm text-slate-500 mt-2">
+            Ringkasan singkat aktivitas MUA kamu hari ini.
+          </p>
         </div>
 
-        <div class="pt-2">
-          <a href="#" class="inline-flex items-center gap-2 text-sm text-rose-600 hover:underline">
-            Lihat semua pesanan
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+        <div class="flex items-center gap-3">
+          <a href="{{ route('profile.show') }}"
+            class="px-4 py-2 rounded-full border border-rose-200 text-sm text-rose-600 hover:bg-rose-50">
+            Kelola Profil
+          </a>
+          <a href="{{ route('panelmua.layanan.create') }}"
+            class="px-4 py-2 rounded-full bg-rose-600 text-sm text-white hover:bg-rose-700">
+            Tambah Layanan
           </a>
         </div>
       </div>
 
-      <div class="lg:col-span-2 {{ $card }} p-5">
-        <div class="flex items-center justify-between mb-2">
-          <p class="text-slate-700 font-medium">Pesanan 7 Hari Terakhir</p>
+      {{-- Kartu Ringkasan Pesanan --}}
+      <div class="bg-white rounded-2xl shadow border border-rose-100 p-6 mt-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-semibold text-rose-700">Ringkasan Pesanan</h2>
+          <a href="{{ route('panelmua.pesanan.index') }}" class="text-xs text-rose-500 hover:text-rose-600">
+            Lihat semua pesanan →
+          </a>
         </div>
-        <canvas id="ordersChart" height="110"></canvas>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {{-- Total pesanan --}}
+          <div class="rounded-xl border border-rose-50 bg-rose-50/40 px-4 py-3">
+            <p class="text-xs text-slate-500 mb-1">Total Pesanan</p>
+            <p class="text-2xl font-semibold text-rose-700">{{ $totalPesanan }}</p>
+          </div>
+
+          {{-- Pending / Belum Lunas --}}
+          <div class="rounded-xl border border-amber-100 bg-amber-50/40 px-4 py-3">
+            <p class="text-xs text-amber-600 mb-1">Pending</p>
+            <p class="text-2xl font-semibold text-amber-700">{{ $pendingCount }}</p>
+          </div>
+
+          {{-- Lunas --}}
+          <div class="rounded-xl border border-emerald-100 bg-emerald-50/40 px-4 py-3">
+            <p class="text-xs text-emerald-600 mb-1">Lunas</p>
+            <p class="text-2xl font-semibold text-emerald-700">{{ $lunasCount }}</p>
+          </div>
+        </div>
+      </div>
+
+      {{-- Pendapatan bulan ini --}}
+      <div class="bg-white rounded-2xl shadow-sm border border-rose-50 px-5 py-4 flex flex-col justify-between">
+        <p class="text-xs text-slate-400 mb-1">Pendapatan Bulan Ini</p>
+        <p class="text-2xl font-semibold text-emerald-600">
+          Rp {{ number_format($pendapatanBulanIni ?? 0, 0, ',', '.') }}
+        </p>
       </div>
     </div>
 
-    <div class="grid gap-4 lg:grid-cols-3">
-      <div class="lg:col-span-2 {{ $card }} p-5">
-        <div class="flex items-center justify-between mb-3">
-          <p class="text-slate-700 font-medium">Pesanan Terbaru</p>
+    {{-- ROW 2: RINGKASAN PESANAN + INFO SINGKAT --}}
+    <div class="grid gap-6 lg:grid-cols-3">
+      <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-rose-50 px-6 py-5">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-semibold text-rose-700">Ringkasan Pesanan</h2>
+            <p class="text-xs text-slate-500 mt-1">
+              Total pesanan yang sudah masuk.
+            </p>
+          </div>
+          <a href="{{ route('panelmua.pesanan.index') }}" class="text-xs text-rose-500 hover:text-rose-600">
+            Lihat semua pesanan &rarr;
+          </a>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-sm">
-            <thead class="text-left text-slate-500">
-              <tr>
-                <th class="py-2">Kode</th>
-                <th class="py-2">Pelanggan</th>
-                <th class="py-2">Tanggal</th>
-                <th class="py-2">Status</th>
-                <th class="py-2 text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100">
-              @forelse($pesananTerbaru as $p)
-                <tr class="hover:bg-slate-50">
-                  <td class="py-2 font-medium text-slate-700">#{{ $p->kode ?? $p->id }}</td>
-                  <td class="py-2">{{ $p->pelanggan->nama ?? '-' }}</td>
-                  <td class="py-2">{{ \Carbon\Carbon::parse($p->created_at)->format('d M Y') }}</td>
-                  <td class="py-2">
-                    @php
-                      $badge = [
-                        'pending' => 'bg-amber-50 text-amber-700 ring-amber-200',
-                        'proses' => 'bg-blue-50 text-blue-700 ring-blue-200',
-                        'selesai' => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-                      ][$p->status] ?? 'bg-slate-50 text-slate-700 ring-slate-200';
-                    @endphp
-                    <span class="px-2 py-0.5 rounded-lg text-xs ring-1 {{ $badge }}">{{ ucfirst($p->status) }}</span>
-                  </td>
-                  <td class="py-2 text-right">Rp {{ number_format($p->total_harga ?? 0, 0, ',', '.') }}</td>
-                </tr>
-              @empty
-                <tr>
-                  <td colspan="5" class="py-6 text-center text-slate-500">
-                    Belum ada pesanan.
-                  </td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
+        <div class="grid gap-4 md:grid-cols-4">
+          <div class="rounded-xl border border-slate-100 px-4 py-4">
+            <p class="text-xs text-slate-400 mb-1">Total Pesanan</p>
+            <p class="text-2xl font-semibold text-slate-800">
+              {{ $totalPesanan ?? 0 }}
+            </p>
+          </div>
+          <div class="rounded-xl border border-yellow-50 bg-yellow-50/60 px-4 py-4">
+            <p class="text-xs text-slate-500 mb-1">Pending</p>
+            <p class="text-xl font-semibold text-amber-600">
+              {{ $totalPending ?? 0 }}
+            </p>
+          </div>
+          <div class="rounded-xl border border-sky-50 bg-sky-50/70 px-4 py-4">
+            <p class="text-xs text-slate-500 mb-1">Proses</p>
+            <p class="text-xl font-semibold text-sky-600">
+              {{ $totalProses ?? 0 }}
+            </p>
+          </div>
+          <div class="rounded-xl border border-emerald-50 bg-emerald-50/70 px-4 py-4">
+            <p class="text-xs text-slate-500 mb-1">lunas</p>
+            <p class="text-xl font-semibold text-emerald-600">
+              {{ $totallunas ?? 0 }}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div class="{{ $card }} p-5 space-y-3">
-        <p class="text-slate-700 font-medium">Aksi Cepat</p>
-        <a href="{{ route('panelmua.layanan.index') }}"
-          class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50">
-          Kelola Layanan
-          <span class="text-slate-400">→</span>
-        </a>
-        <a href="{{ route('profilemua.edit') }}"
-          class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50">
-          Edit Profil MUA
-          <span class="text-slate-400">→</span>
-        </a>
-        <a href="#"
-          class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50">
-          Lihat Ulasan
-          <span class="text-slate-400">→</span>
-        </a>
+      {{-- Pesanan Terbaru (versi ringkas, tanpa chart) --}}
+      <div class="bg-white rounded-2xl shadow-sm border border-rose-50 px-6 py-5">
+        <h2 class="text-base font-semibold text-rose-700 mb-3">Pesanan Terbaru</h2>
+
+        @if(($pesananTerbaru ?? collect())->isEmpty())
+          <p class="text-xs text-slate-500">
+            Belum ada pesanan terbaru.
+          </p>
+        @else
+          <div class="space-y-3">
+            @foreach($pesananTerbaru as $pesanan)
+              <div class="border border-slate-100 rounded-xl px-3 py-2.5">
+                <p class="text-xs text-slate-400">
+                  {{ \Carbon\Carbon::parse($pesanan->tanggal_booking)->format('d M Y') }}
+                </p>
+                <p class="text-sm font-medium text-slate-800">
+                  {{ $pesanan->pengguna->name ?? 'Pengguna' }}
+                </p>
+                <p class="text-xs text-slate-500 flex justify-between mt-1">
+                  <span>{{ $pesanan->layanan->nama ?? '-' }}</span>
+                  <span class="font-semibold text-amber-600">
+                    Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
+                  </span>
+                </p>
+              </div>
+            @endforeach
+          </div>
+        @endif
       </div>
     </div>
 
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script>
-    const ctx = document.getElementById('ordersChart');
-    const labels = @json($labels ?? []);
-    const dataSeries = @json($series ?? []);
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Jumlah Pesanan',
-          data: dataSeries,
-          borderWidth: 2,
-          tension: .35
-        }]
-      },
-      options: {
-        plugins: { legend: { display: false } },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { precision: 0, stepSize: 1 }
-          }
-        }
-      }
-    });
-  </script>
+  </div>
 @endsection

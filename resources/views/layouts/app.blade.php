@@ -160,16 +160,16 @@
                     </svg>
                     <span>Pesanan</span>
                 </a>
-                 <a href="{{ route('mua.panel') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                 <a href="{{ route('panelmua.pembayaran.index') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
                   hover:bg-white/10 transition
-                  {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
+                  {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6 text-white/80 group-hover:text-white">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
                     </svg>
-                    <span>Transaksi</span>
+                    <span>Pembayaran</span>
                 </a>
             </nav>
             <div class="mt-auto p-4 border-t border-white/10 text-xs text-white/70">

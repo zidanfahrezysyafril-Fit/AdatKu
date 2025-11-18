@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PublicMuaController;
+use App\Http\Controllers\PembayaranController;
 
 
 Route::get('/', fn() => view('home'))->name('landing');
@@ -122,5 +123,23 @@ Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
 
         Route::delete('/pesanan/{pesanan}', [PesananController::class, 'destroyMua'])
             ->name('pesanan.destroy');
+
+        Route::get('/pesanan/{pesanan}/pembayaran/create', [PembayaranController::class, 'create'])
+            ->name('pembayaran.create');
+
+        Route::post('/pesanan/{pesanan}/pembayaran', [PembayaranController::class, 'store'])
+            ->name('pembayaran.store');
+
+        Route::get('/pembayaran/{pembayaran}', [PembayaranController::class, 'show'])
+            ->name('pembayaran.show');
+
+        Route::get('/pembayaran/{pembayaran}/edit', [PembayaranController::class, 'edit'])
+            ->name('pembayaran.edit');
+        
+        Route::put('/pembayaran/{pembayaran}', [PembayaranController::class, 'update'])
+            ->name('pembayaran.update');
+        
+        Route::get('/pembayaran', [PembayaranController::class, 'index'])
+            ->name('pembayaran.index');
     });
 });

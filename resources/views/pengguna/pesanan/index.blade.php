@@ -86,12 +86,17 @@
                             <p class="text-sm text-gray-500 mt-1">
                                 Status Pembayaran:
                                 <span class="font-semibold
-                            @if ($item->status_pembayaran === 'Lunas') text-green-600
-                            @elseif ($item->status_pembayaran === 'Belum_Lunas') text-red-600
-                            @else text-gray-600 @endif">
+                                    @if ($item->status_pembayaran === 'Lunas') text-green-600
+                                    @elseif ($item->status_pembayaran === 'Belum_Lunas') text-red-600
+                                    @else text-gray-600 @endif">
                                     {{ str_replace('_', ' ', $item->status_pembayaran) }}
                                 </span>
                             </p>
+                            <a href="{{ route('pengguna.show', $item->id) }}"
+                                class="inline-block mt-2 text-sm text-rose-500 hover:text-rose-700 hover:underline">
+                                detail pesanan
+                            </a>
+
                         </div>
                         <div class="text-right space-y-3">
                             <div>
@@ -102,7 +107,7 @@
                             </div>
                             @if ($waNumber && $item->status_pembayaran !== 'Dibatalkan')
                                 <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank" class="inline-flex items-center justify-center px-4 py-2 rounded-full
-                                      bg-[#e7f9f0] text-[#128C7E] text-xs font-semibold hover:bg-[#d3f3e3] transition">
+                                                  bg-[#e7f9f0] text-[#128C7E] text-xs font-semibold hover:bg-[#d3f3e3] transition">
                                     💬 Chat MUA via WhatsApp
                                 </a>
                             @endif
@@ -112,7 +117,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="px-4 py-2 rounded-full text-sm font-semibold
-                                               bg-rose-100 text-rose-700 hover:bg-rose-200 transition">
+                                                           bg-rose-100 text-rose-700 hover:bg-rose-200 transition">
                                         Batalkan Pesanan
                                     </button>
                                 </form>

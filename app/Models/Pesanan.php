@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Models\User;
 use App\Models\Layanan;
+use App\Models\Pembayaran;
 
 class Pesanan extends Model
 {
@@ -38,5 +39,9 @@ class Pesanan extends Model
     public function layanan()
     {
         return $this->belongsTo(Layanan::class, 'id_layanan');
+    }
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'id_pesanan');
     }
 }
