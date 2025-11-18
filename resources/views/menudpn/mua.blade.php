@@ -23,7 +23,6 @@
 
 <body class="bg-[rgba(255,242,213,0.08)] text-gray-900">
 
-    <!-- NAVBAR -->
     <header class="sticky top-0 z-50 bg-opacity-1 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -91,7 +90,6 @@
         </div>
     </header>
 
-    <!-- HERO -->
     <section class="relative">
         <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
         <div
@@ -112,7 +110,7 @@
     </section>
 
     <main class="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-6">
-        <!-- SIDEBAR -->
+      
         <aside class="lg:w-64 w-full">
             <div class="bg-white shadow-md rounded-2xl border border-yellow-200/70 px-5 py-6 sticky top-24 space-y-5">
                 <div>
@@ -142,9 +140,8 @@
             </div>
         </aside>
 
-        <!-- KONTEN DAFTAR MUA -->
         <section class="flex-1 bg-white rounded-2xl shadow-md border border-gray-200 px-6 py-6 min-h-[300px]">
-            <!-- BAR ATAS: JUMLAH & SEARCH -->
+           
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">Pilih MUA Terdaftar</h2>
@@ -174,7 +171,6 @@
                 </form>
             </div>
 
-            {{-- LIST MUA --}}
             @if ($muas->isEmpty())
                 <div class="border border-dashed border-gray-300 rounded-2xl py-10 px-4 text-center text-gray-500 text-sm">
                     Belum ada MUA yang mendaftar. Silakan kembali lagi nanti ya ✨
@@ -184,7 +180,7 @@
                     @foreach ($muas as $mua)
                         <a href="{{ route('public.mua.show', $mua->id) }}" class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden
                                        hover:shadow-xl hover:-translate-y-1 transition-transform duration-200 flex flex-col">
-                            <!-- FOTO -->
+                        
                             <div class="relative">
                                 <img src="{{ $mua->foto ? asset('storage/' . $mua->foto) : 'https://placehold.co/400x400?text=MUA' }}"
                                     alt="{{ $mua->nama_usaha }}" class="w-full h-56 object-cover">
@@ -196,7 +192,6 @@
                                 </span>
                             </div>
 
-                            <!-- INFO -->
                             <div class="p-4 flex flex-col flex-1">
                                 <h3
                                     class="text-base md:text-lg font-semibold text-gray-800 mb-1 truncate group-hover:text-[#c98a00]">
@@ -239,8 +234,6 @@
         </section>
     </main>
 
-
-    <!-- FOOTER -->
     <footer class="bg-[rgb(57,40,50)] text-[wheat] text-center py-6 mt-10">
         <p class="text-lg">&copy; 2025 AdatKu. All rights reserved.</p>
         <div class="flex justify-center mt-4 gap-4">
