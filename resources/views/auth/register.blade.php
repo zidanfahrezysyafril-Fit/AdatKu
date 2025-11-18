@@ -1,40 +1,172 @@
-@extends('layouts.auth')
-@section('content')
-<div class="bg-white/90 shadow-xl rounded-2xl p-6 space-y-3 border border-[#f5d547]/60 backdrop-blur-sm">
-    <h1 class="text-3xl font-bold text-center bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
-        Register
-    </h1>
+<!DOCTYPE html>
+<html lang="id">
 
-    <form method="POST" action="{{ route('register.post') }}" class="space-y-4">
-        @csrf
+<head>
+    <meta charset="UTF-8">
+    <title>Register - AdatKu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        <input type="text" name="name" placeholder="Nama Lengkap"
-            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
-            value="{{ old('name') }}" required>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
 
-        <input type="email" name="email" placeholder="Email"
-            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
-            value="{{ old('email') }}" required>
+        /* ANIMASI ORNAMEN */
+        @keyframes float-up {
+            0%   { transform: translateY(0); opacity: 0; }
+            10%  { opacity: 1; }
+            100% { transform: translateY(-140vh); opacity: 0; }
+        }
 
-        <input type="password" name="password" placeholder="Password"
-            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
-            required>
+        @keyframes float-down {
+            0%   { transform: translateY(0); opacity: 0; }
+            10%  { opacity: 1; }
+            100% { transform: translateY(140vh); opacity: 0; }
+        }
 
-        <input type="password" name="password_confirmation" placeholder="Konfirmasi Password"
-            class="border border-[#f8e48c] focus:border-[#eab308] focus:ring-1 focus:ring-[#f8e48c] bg-[rgba(255,255,255,0.85)] p-3 w-full rounded-lg placeholder:text-gray-500 text-gray-800"
-            required>
-        <button type="submit"
-            class="w-full bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition duration-300">
-            Daftar
-        </button>
-    </form>
+        .floating-icon {
+            position: fixed;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+            pointer-events: none;
+            z-index: 1;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
 
-    <p class="text-center text-sm text-gray-700">
-        Sudah punya akun?
-        <a href="{{ route('login') }}"
-            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent font-semibold hover:underline">
-            Login
-        </a>
-    </p>
-</div>
-@endsection
+        .from-bottom { bottom: -12vh; animation-name: float-up; }
+        .from-top    { top: -12vh;    animation-name: float-down; }
+
+        .icon-sm  { font-size: 18px; }
+        .icon-md  { font-size: 24px; }
+        .icon-lg  { font-size: 30px; }
+        .icon-xl  { font-size: 36px; }
+    </style>
+</head>
+
+<body class="relative min-h-screen bg-gradient-to-b from-[#fff7e1] via-[#f4d890] to-[#cfa043] overflow-hidden">
+
+    {{-- ORNAMEN NAIK DARI BAWAH --}}
+    <span class="floating-icon from-bottom icon-lg" style="left: 5%; animation-duration: 22s; animation-delay: 0s;">❖</span>
+    <span class="floating-icon from-bottom icon-xl" style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✿</span>
+    <span class="floating-icon from-bottom icon-md" style="left: 25%; animation-duration: 18s; animation-delay: 6s;">❋</span>
+    <span class="floating-icon from-bottom icon-lg" style="left: 35%; animation-duration: 25s; animation-delay: 1s;">✦</span>
+    <span class="floating-icon from-bottom icon-xl" style="left: 45%; animation-duration: 30s; animation-delay: 5s;">❁</span>
+    <span class="floating-icon from-bottom icon-md" style="left: 55%; animation-duration: 20s; animation-delay: 7s;">✥</span>
+    <span class="floating-icon from-bottom icon-lg" style="left: 65%; animation-duration: 26s; animation-delay: 2s;">◈</span>
+    <span class="floating-icon from-bottom icon-xl" style="left: 75%; animation-duration: 24s; animation-delay: 4s;">❂</span>
+    <span class="floating-icon from-bottom icon-md" style="left: 85%; animation-duration: 29s; animation-delay: 8s;">✺</span>
+
+    {{-- ORNAMEN TURUN DARI ATAS --}}
+    <span class="floating-icon from-top icon-lg" style="left: 12%; animation-duration: 26s; animation-delay: 1s;">❖</span>
+    <span class="floating-icon from-top icon-xl" style="left: 22%; animation-duration: 32s; animation-delay: 4s;">✿</span>
+    <span class="floating-icon from-top icon-md" style="left: 32%; animation-duration: 20s; animation-delay: 6s;">❋</span>
+    <span class="floating-icon from-top icon-lg" style="left: 52%; animation-duration: 28s; animation-delay: 2s;">✦</span>
+    <span class="floating-icon from-top icon-xl" style="left: 62%; animation-duration: 30s; animation-delay: 7s;">❁</span>
+    <span class="floating-icon from-top icon-md" style="left: 72%; animation-duration: 22s; animation-delay: 9s;">✥</span>
+    <span class="floating-icon from-top icon-lg" style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
+
+    {{-- KARTUN ADAT --}}
+    <img src="{{ asset('foto kartun2.jpg') }}" class="hidden md:block fixed left-10 bottom-0 h-[340px] object-contain z-10">
+    <img src="{{ asset('foto kartun2.jpg') }}" class="hidden md:block fixed right-10 bottom-0 h-[340px] object-contain z-10">
+
+    {{-- CARD REGISTER (PETAK BESAR) --}}
+    <div class="relative z-20 flex items-center justify-center min-h-screen px-4">
+        <div class="w-full max-w-4xl bg-[#fffdf7]/95 rounded-[32px]
+                    shadow-[0_25px_60px_rgba(190,143,43,0.35)]
+                    border border-[#f4ddab] backdrop-blur-sm overflow-hidden">
+
+            <div class="grid md:grid-cols-2">
+
+                {{-- KOLOM KIRI — FORM --}}
+                <div class="px-10 py-10 md:py-12 flex flex-col justify-center">
+
+                    {{-- LOGO --}}
+                    <div class="flex justify-center mb-6">
+                        <div class="flex items-center justify-center w-40 h-16 rounded-full border border-[#f4c970] bg-white shadow-md">
+                            <img src="{{ asset('logos3.jpg') }}" class="h-12 object-contain" alt="">
+                        </div>
+                    </div>
+
+                    {{-- TEKS ATAS --}}
+                    <div class="text-center mb-6">
+                        <h1 class="text-2xl font-bold text-[#d68e00]">AdatKu</h1>
+                        <p class="text-sm text-[#c2983a]">
+                            Buat akun untuk mulai menggunakan
+                            <span class="font-semibold text-[#e6a400]">AdatKu</span>
+                        </p>
+                    </div>
+
+                    {{-- JUDUL --}}
+                    <h2 class="text-center text-xl font-bold text-[#d68e00] mb-6">Daftar Akun</h2>
+
+                    {{-- FORM REGISTER --}}
+                    <form action="{{ route('register.post') }}" method="POST" class="space-y-4">
+                        @csrf
+
+                        <div>
+                            <label class="text-sm text-[#a98225] font-medium mb-1 block">Nama Lengkap</label>
+                            <input type="text" name="name" value="{{ old('name') }}" required
+                                   class="w-full px-3 py-3 bg-[#fffdf7] border border-[#efcd82] rounded-xl
+                                          focus:ring-2 focus:ring-[#f6c453] text-gray-800 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-[#a98225] font-medium mb-1 block">Email</label>
+                            <input type="email" name="email" value="{{ old('email') }}" required
+                                   class="w-full px-3 py-3 bg-[#fffdf7] border border-[#efcd82] rounded-xl
+                                          focus:ring-2 focus:ring-[#f6c453] text-gray-800 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-[#a98225] font-medium mb-1 block">Password</label>
+                            <input type="password" name="password" required
+                                   class="w-full px-3 py-3 bg-[#fffdf7] border border-[#efcd82] rounded-xl
+                                          focus:ring-2 focus:ring-[#f6c453] text-gray-800 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-[#a98225] font-medium mb-1 block">Konfirmasi Password</label>
+                            <input type="password" name="password_confirmation" required
+                                   class="w-full px-3 py-3 bg-[#fffdf7] border border-[#efcd82] rounded-xl
+                                          focus:ring-2 focus:ring-[#f6c453] text-gray-800 text-sm">
+                        </div>
+
+                        <button type="submit"
+                                class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
+                                       text-white font-semibold text-sm shadow-lg hover:brightness-110 transition">
+                            Daftar
+                        </button>
+                    </form>
+
+                    <p class="mt-5 text-center text-xs text-gray-700">
+                        Sudah punya akun?
+                        <a href="{{ route('login') }}" class="text-[#d68e00] font-semibold hover:underline">Login</a>
+                    </p>
+
+                    <p class="mt-6 text-center text-[10px] text-gray-500">
+                        © 2025 AdatKu. Semua hak dilindungi.
+                    </p>
+
+                </div>
+
+                {{-- KOLOM KANAN — TEKS --}}
+                <div class="hidden md:flex flex-col justify-center items-center bg-gradient-to-b from-[#fff8e1] to-[#f3cc75]">
+
+                    <div class="px-8 text-center">
+                        <h3 class="text-2xl font-bold text-[#c27b00] mb-3">
+                            Rayakan Adat dengan Cara Modern
+                        </h3>
+                        <p class="text-sm text-[#9b7b34] max-w-sm mx-auto">
+                            Temukan MUA, baju adat, dan layanan adat terbaik di daerahmu — cepat, mudah, dan modern.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
