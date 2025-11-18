@@ -38,9 +38,9 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':mua'])->gro
     Route::get('/muapanel', [MuaController::class, 'index'])->name('mua.panel');
 
     Route::get('/profilemua/create', [MuaController::class, 'create'])->name('profilemua.create');
-    Route::post('/profilemua',        [MuaController::class, 'store'])->name('profilemua.store');
-    Route::get('/profilemua/edit',    [MuaController::class, 'edit'])->name('profilemua.edit');
-    Route::put('/profilemua',         [MuaController::class, 'update'])->name('profilemua.update');
+    Route::post('/profilemua', [MuaController::class, 'store'])->name('profilemua.store');
+    Route::get('/profilemua/edit', [MuaController::class, 'edit'])->name('profilemua.edit');
+    Route::put('/profilemua', [MuaController::class, 'update'])->name('profilemua.update');
 });
 
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':pengguna'])->group(function () {
@@ -135,10 +135,10 @@ Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
 
         Route::get('/pembayaran/{pembayaran}/edit', [PembayaranController::class, 'edit'])
             ->name('pembayaran.edit');
-        
+
         Route::put('/pembayaran/{pembayaran}', [PembayaranController::class, 'update'])
             ->name('pembayaran.update');
-        
+
         Route::get('/pembayaran', [PembayaranController::class, 'index'])
             ->name('pembayaran.index');
     });
