@@ -144,7 +144,6 @@
 
         <!-- KONTEN DAFTAR MUA -->
         <section class="flex-1 bg-white rounded-2xl shadow-md border border-gray-200 px-6 py-6 min-h-[300px]">
-            <!-- BAR ATAS: JUMLAH & SEARCH -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">Pilih MUA Terdaftar</h2>
@@ -169,7 +168,7 @@
                         </button>
                     </div>
                     <p class="text-[11px] text-gray-400 mt-1">
-                        Contoh: “Tafisha”, “Siak Kecil”, “Duri”, dll.
+                        Contoh: “mytia”, “Siak Kecil”, “Duri”, dll.
                     </p>
                 </form>
             </div>

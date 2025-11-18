@@ -98,7 +98,7 @@ class PembayaranController extends Controller
         ]);
 
         return redirect()
-            ->route('pembayaran.index')
+            ->route('panelmua.pembayaran.index')
             ->with('success', 'Data pembayaran berhasil disimpan.');
     }
 

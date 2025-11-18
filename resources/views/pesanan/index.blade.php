@@ -67,7 +67,6 @@
                                     </span>
                                 </td>
 
-                                {{-- KOLOM AKSI --}}
                                 <td class="px-4 py-3 align-top">
                                     <div class="flex flex-col gap-2">
 
@@ -77,7 +76,6 @@
                                                 Input Pembayaran
                                             </a>
                                         @endif
-                                        {{-- FORM UBAH STATUS --}}
                                         <form action="{{ route('panelmua.pesanan.updateStatus', $pesanan->id) }}" method="POST"
                                             class="flex items-center gap-2">
                                             @csrf
@@ -102,7 +100,6 @@
                                             </button>
                                         </form>
 
-                                        {{-- FORM HAPUS --}}
                                         <form action="{{ route('panelmua.pesanan.destroy', $pesanan->id) }}" method="POST"
                                             onsubmit="return confirm('Yakin ingin menghapus pesanan ini?')">
                                             @csrf

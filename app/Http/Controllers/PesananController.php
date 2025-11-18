@@ -40,7 +40,7 @@ class PesananController extends Controller
         }
         $pesanan->status_pembayaran = 'Dibatalkan';
         $pesanan->save();
-        return redirect()->route('pesanan.index')
+        return redirect()->route('panelmua.pesanan.index')
             ->with('success', 'Pesanan berhasil dibatalkan.');
     }
     public function indexMua()
