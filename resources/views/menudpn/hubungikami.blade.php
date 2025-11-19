@@ -15,6 +15,14 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+      background-color: #fff9fb;
+      background-image:
+        linear-gradient(135deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
+        linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
+        linear-gradient(315deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
+        linear-gradient(45deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
+      background-size: 24px 24px;
+      background-position: 0 0, 0 12px, 12px -12px, -12px 0;
     }
 
     .logo-font {
@@ -22,24 +30,19 @@
     }
 
     @keyframes slide {
-
-      0%,
-      20% {
+      0%, 20% {
         transform: translateX(0);
       }
 
-      25%,
-      45% {
+      25%, 45% {
         transform: translateX(-25%);
       }
 
-      50%,
-      70% {
+      50%, 70% {
         transform: translateX(-50%);
       }
 
-      75%,
-      95% {
+      75%, 95% {
         transform: translateX(-75%);
       }
 
@@ -52,13 +55,11 @@
       animation: slide 12s infinite ease-in-out;
     }
 
-    /* TEKS RATA KIRI–KANAN */
     .justify-teks {
       text-align: justify;
       text-justify: inter-word;
     }
 
-    /* ICON PUTIH MELAYANG */
     .floating-icon {
       position: fixed;
       font-weight: bold;
@@ -79,7 +80,6 @@
       font-size: 38px;
     }
 
-    /* Naik dari bawah */
     @keyframes float-up {
       0% {
         transform: translateY(0);
@@ -103,7 +103,6 @@
       animation-iteration-count: infinite;
     }
 
-    /* Turun dari atas */
     @keyframes float-down {
       0% {
         transform: translateY(0);
@@ -247,7 +246,6 @@
 
   <main class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-10">
 
-    <!-- FORM KONTAK -->
     <section class="md:col-span-2">
       <p class="text-slate-600 mb-2 justify-teks">
         Hubungi kami untuk kasus apapun yang berhubungan di dalam website AdatKu ini.
@@ -296,7 +294,6 @@
       </form>
     </section>
 
-    <!-- INFO KONTAK -->
     <aside class="md:pl-6">
       <h2 class="text-xl font-semibold mb-4">Kontak Kami</h2>
       <ul class="space-y-3 text-slate-700">
@@ -326,7 +323,6 @@
 
   </main>
 
-  <!-- ORNAMEN ADAT NAIK DARI BAWAH -->
   <span class="floating-icon from-bottom icon-lg" style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">❖</span>
   <span class="floating-icon from-bottom icon-xl" style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✿</span>
   <span class="floating-icon from-bottom icon-md" style="left: 25%; animation-duration: 18s; animation-delay: 6s;">❋</span>
@@ -337,7 +333,6 @@
   <span class="floating-icon from-bottom icon-xl" style="left: 75%; animation-duration: 24s; animation-delay: 4s;">❂</span>
   <span class="floating-icon from-bottom icon-md" style="left: 85%; animation-duration: 29s; animation-delay: 8s;">✺</span>
 
-  <!-- ORNAMEN ADAT TURUN DARI ATAS -->
   <span class="floating-icon from-top icon-lg" style="left: 12%; animation-duration: 26s; animation-delay: 1s;">❖</span>
   <span class="floating-icon from-top icon-xl" style="left: 22%; animation-duration: 32s; animation-delay: 4s;">✿</span>
   <span class="floating-icon from-top icon-md" style="left: 32%; animation-duration: 20s; animation-delay: 6s;">❋</span>

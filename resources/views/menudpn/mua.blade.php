@@ -10,9 +10,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         body {
-            font-family: 'Poppins', monospace, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff9fb;
+            background-image:
+                linear-gradient(135deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
+                linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
+                linear-gradient(315deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
+                linear-gradient(45deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
+            background-size: 24px 24px;
+            background-position: 0 0, 0 12px, 12px -12px, -12px 0;
         }
 
         .logo-font {
@@ -35,29 +44,32 @@
                     </h1>
                 </a>
             </div>
+
             <nav class="hidden md:flex items-center gap-6 text-[18px] text-[#b48a00]">
                 <a href="{{ 'home' }}" class="hover:text-[#eab308]">Beranda</a>
                 <a href="#" class="hover:text-[#eab308]">Daftar MUA</a>
                 <a href="{{ ('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
             </nav>
+
             <div class="flex items-center gap-3">
                 @guest
                     <a href="{{ route('auth') }}"
-                        class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-5 py-2 rounded-full font-Arial shadow-md hover:shadow-lg hover:from-[#f8e48c] hover:to-[#e0a100] transition">
+                        class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white px-5 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105 transition">
                         Sign In
                     </a>
                 @endguest
+
                 @auth
                     @php
                         $user = auth()->user();
                         $avatar = $user->avatar
                             ? asset('storage/' . $user->avatar)
                             : asset('default-avatar.png');
-                      @endphp
+                    @endphp
 
                     <div x-data="{ open:false }" class="relative">
                         <button @click="open = !open"
-                            class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
+                            class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow">
                             <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
                                 onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
                         </button>
@@ -70,8 +82,7 @@
                             </div>
                             <ul class="py-1 text-sm">
                                 <li>
-                                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-50">Profil
-                                        Saya</a>
+                                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 hover:bg-gray-50">Profil Saya</a>
                                 </li>
                                 <li class="border-t">
                                     <form method="POST" action="{{ route('logout') }}">
@@ -92,17 +103,14 @@
 
     <section class="relative">
         <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-[580px] object-cover brightness-75">
-        <div
-            class="absolute inset-0 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black/30 via-black/20 to-black/30">
+        <div class="absolute inset-0 flex flex-col justify-center items-center text-center bg-gradient-to-b from-black/30 via-black/20 to-black/30">
             <h1 class="text-5xl md:text-6xl font-semibold mb-3">
-                <span
-                    class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
+                <span class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-lg">
                     Selamat Datang di <span class="logo-font text-6xl md:text-7xl">AdatKu</span>
                 </span>
             </h1>
             <p class="text-lg md:text-xl w-11/12 md:w-2/5">
-                <span
-                    class="bg-gradient-to-r from-[#fff3b0] via-[#f5d547] to-[#d4a017] bg-clip-text text-transparent drop-shadow-md">
+                <span class="bg-gradient-to-r from-[#fff3b0] via-[#f5d547] to-[#d4a017] bg-clip-text text-transparent drop-shadow-md">
                     Temukan keindahan budaya dan tradisi melalui koleksi busana adat, rias, dan pelaminan terbaik.
                 </span>
             </p>
@@ -126,11 +134,6 @@
                            text-white shadow-md">
                         Daftar MUA
                     </button>
-                    {{-- kalau nanti mau tambah filter tinggal aktifkan ini
-                    <button class="w-full text-left py-2.5 px-4 rounded-xl text-gray-700 bg-gray-50 hover:bg-gray-100">
-                        MUA Terdekat
-                    </button>
-                    --}}
                 </nav>
 
                 <div class="border-t border-gray-200 pt-4 text-xs text-gray-500">
@@ -244,6 +247,7 @@
                     class="w-10 h-10 rounded-full hover:scale-110 transition"></a>
         </div>
     </footer>
+
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </body>
