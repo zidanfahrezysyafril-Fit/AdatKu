@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Edit Profil MUA')
+@section('title', 'Edit Profile MUA')
 
 @section('content')
 @php

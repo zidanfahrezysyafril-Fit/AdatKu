@@ -125,6 +125,7 @@
       <a href="{{ ('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
     </nav>
 
+<<<<<<< HEAD
     <div class="flex items-center gap-3">
       @guest
       <a href="{{ route('login') }}"
@@ -140,6 +141,21 @@
       ? asset('storage/' . $user->avatar)
       : asset('default-avatar.png');
       @endphp
+=======
+        @auth
+          @php
+            $user = auth()->user();
+            $avatar = $user->avatar
+              ? asset('storage/' . $user->avatar)
+              : asset('default-avatar.png');
+          @endphp
+          @if ($user->role === 'Pengguna')
+            <a href="{{ route('pengguna.pesanan.index') }}"
+              class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 hover:bg-yellow-200 text-[#b48a00] font-semibold text-sm shadow-md">
+              📦 Pesanan Saya
+            </a>
+          @endif
+>>>>>>> 08e8921fdb069ed8820a3f562f49f6ec4bebaaed
 
       @if ($user->role === 'Pengguna')
       <a href="{{ route('pengguna.pesanan.index') }}"
@@ -296,6 +312,7 @@
   </div>
 </footer>
 
+<<<<<<< HEAD
 <div class="fixed left-5 bottom-5 z-50">
   <a href="{{ route('login') }}" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
            text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl
@@ -323,6 +340,20 @@
 <span class="floating-icon from-top icon-lg" style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
 
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+=======
+  {{-- ORNAMEN ADAT NAIK DARI BAWAH --}}
+  <span class="floating-icon from-bottom icon-lg" style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">✦</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✥</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 25%; animation-duration: 18s; animation-delay: 6s;">✦</span>
+  <span class="floating-icon from-bottom icon-lg" style="left: 35%; animation-duration: 25s; animation-delay: 1s;">✦</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 55%; animation-duration: 20s; animation-delay: 7s;">✦</span>
+
+  {{-- ORNAMEN ADAT TURUN DARI ATAS --}}
+  <span class="floating-icon from-top icon-lg" style="left: 52%; animation-duration: 28s; animation-delay: 2s;">✦</span>
+  <span class="floating-icon from-top icon-xl" style="left: 62%; animation-duration: 30s; animation-delay: 7s;">✦</span>
+  <span class="floating-icon from-top icon-md" style="left: 72%; animation-duration: 22s; animation-delay: 9s;">✥</span>
+  <span class="floating-icon from-top icon-lg" style="left: 82%; animation-duration: 27s; animation-delay: 3s;">✦</span>
+>>>>>>> 08e8921fdb069ed8820a3f562f49f6ec4bebaaed
 
 </body>
 </html>

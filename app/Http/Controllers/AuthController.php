@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
-use function PHPUnit\Framework\returnArgument;
+use Laravel\Socialite\Facades\Socialite;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -50,11 +51,12 @@ class AuthController extends Controller
             if ($role === 'pengguna') {
                 return redirect()->route('home');
             }
-            if ($role === 'admin'){
+            if ($role === 'admin') {
                 return redirect()->route('dashboard_a');
             }
             return redirect()->route('dashboard');
-            }
+        }
+
         // Jika gagal login
         session()->increment('login_attempts', 1);
         throw ValidationException::withMessages([
@@ -85,7 +87,7 @@ class AuthController extends Controller
             'name' => e($validated['name']),
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => 'pengguna',
+            'role' => 'Pengguna', // Sesuai dengan enum di database
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
@@ -101,5 +103,74 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('landing')->with('success', 'Anda telah logout.');
+    }
+
+    /**
+     * Redirect ke Google OAuth
+     */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Callback dari Google OAuth
+     */
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+
+            // Cari user berdasarkan google_id atau email
+            $user = User::where('google_id', $googleUser->id)
+                ->orWhere('email', $googleUser->email)
+                ->first();
+
+            if ($user) {
+                // Update google_id dan avatar jika belum ada
+                if (!$user->google_id) {
+                    $user->google_id = $googleUser->id;
+                }
+
+                // Update avatar dari Google jika user belum punya avatar
+                if ($googleUser->avatar && !$user->avatar) {
+                    $user->avatar = $googleUser->avatar;
+                }
+
+                $user->save();
+            } else {
+                // Buat user baru dengan role default 'Pengguna'
+                $user = User::create([
+                    'name' => $googleUser->name,
+                    'email' => $googleUser->email,
+                    'google_id' => $googleUser->id,
+                    'avatar' => $googleUser->avatar,
+                    'password' => null, // Tidak perlu password untuk Google login
+                    'role' => 'Pengguna', // Role default sesuai enum database
+                    'email_verified_at' => now(), // Otomatis terverifikasi
+                ]);
+            }
+
+            // Login user
+            Auth::login($user);
+            session()->regenerate();
+
+            // Redirect berdasarkan role (sama seperti login biasa)
+            $role = strtolower($user->role ?? '');
+
+            if ($role === 'mua') {
+                return redirect()->route('dashboard');
+            }
+            if ($role === 'pengguna') {
+                return redirect()->route('home');
+            }
+            if ($role === 'admin') {
+                return redirect()->route('dashboard_a');
+            }
+
+            return redirect()->route('dashboard');
+        } catch (Exception $e) {
+            return redirect()->route('login')->with('error', 'Gagal login dengan Google. Silakan coba lagi.');
+        }
     }
 }
