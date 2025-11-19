@@ -11,6 +11,7 @@
     rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -49,6 +50,81 @@
 
     .animate-slide {
       animation: slide 12s infinite ease-in-out;
+    }
+
+    /* TEKS RATA KIRI–KANAN */
+    .justify-teks {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    /* ICON PUTIH MELAYANG */
+    .floating-icon {
+      position: fixed;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.9);
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .icon-md {
+      font-size: 22px;
+    }
+
+    .icon-lg {
+      font-size: 30px;
+    }
+
+    .icon-xl {
+      font-size: 38px;
+    }
+
+    /* Naik dari bawah */
+    @keyframes float-up {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-140vh);
+        opacity: 0;
+      }
+    }
+
+    .from-bottom {
+      bottom: -10%;
+      animation-name: float-up;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    /* Turun dari atas */
+    @keyframes float-down {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(140vh);
+        opacity: 0;
+      }
+    }
+
+    .from-top {
+      top: -10%;
+      animation-name: float-down;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
     }
   </style>
 </head>
@@ -99,6 +175,7 @@
             Sign In
           </a>
         @endguest
+
         @auth
           @php
             $user = auth()->user();
@@ -161,19 +238,21 @@
 
       <div class="mt-6 flex gap-4">
         <a href="#"
-          class="border border-white/70 text-white px-6 py-3 rounded-full hover:bg-white/10 transition">Pelajari
-          Lebih</a>
+          class="border border-white/70 text-white px-6 py-3 rounded-full hover:bg-white/10 transition">
+          Pelajari Lebih
+        </a>
       </div>
     </div>
   </section>
 
   <main class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-10">
 
+    <!-- FORM KONTAK -->
     <section class="md:col-span-2">
-      <p class="text-slate-600 mb-2">
-        Hubungi kami untuk kasus apapun yang berhubungan di dalam website AdatKU ini.
+      <p class="text-slate-600 mb-2 justify-teks">
+        Hubungi kami untuk kasus apapun yang berhubungan di dalam website AdatKu ini.
       </p>
-      <p class="text-slate-600 mb-6">
+      <p class="text-slate-600 mb-6 justify-teks">
         Kami akan secepatnya dan sebisa mungkin membantu Anda.
       </p>
 
@@ -213,19 +292,20 @@
         <button type="submit"
           class="px-5 py-3 text-white font-medium rounded-xl shadow-md bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500 hover:opacity-90 transition">
           kirim keluhan
-        </button </form>
+        </button>
+      </form>
     </section>
 
+    <!-- INFO KONTAK -->
     <aside class="md:pl-6">
       <h2 class="text-xl font-semibold mb-4">Kontak Kami</h2>
       <ul class="space-y-3 text-slate-700">
         <li class="flex items-start gap-3">
           <span>📍</span>
-          <span>
+          <span class="justify-teks">
             Adatku<br>
-
-            <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl " target="_blank"
-              class="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium">
+            <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl" target="_blank"
+              class="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium mt-1">
               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
                 <path
                   d="M7 2C6.45 2 6 2.45 6 3V5H5C3.34 5 2 6.34 2 8V19C2 20.66 3.34 22 5 22H19C20.66 22 22 20.66 22 19V8C22 6.34 20.66 5 19 5H18V3C18 2.45 17.55 2 17 2H7ZM12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8Z" />
@@ -239,7 +319,33 @@
           <span>✉️</span>
           <a href="mailto:adatku11@gmail.com" class="hover:underline">
             adatku11@gmail.com
-            <a href="#" class="hover:underline"></a>
+          </a>
         </li>
       </ul>
     </aside>
+
+  </main>
+
+  <!-- ORNAMEN ADAT NAIK DARI BAWAH -->
+  <span class="floating-icon from-bottom icon-lg" style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">❖</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✿</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 25%; animation-duration: 18s; animation-delay: 6s;">❋</span>
+  <span class="floating-icon from-bottom icon-lg" style="left: 35%; animation-duration: 25s; animation-delay: 1s;">✦</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 45%; animation-duration: 30s; animation-delay: 5s;">❁</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 55%; animation-duration: 20s; animation-delay: 7s;">✥</span>
+  <span class="floating-icon from-bottom icon-lg" style="left: 65%; animation-duration: 26s; animation-delay: 2s;">◈</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 75%; animation-duration: 24s; animation-delay: 4s;">❂</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 85%; animation-duration: 29s; animation-delay: 8s;">✺</span>
+
+  <!-- ORNAMEN ADAT TURUN DARI ATAS -->
+  <span class="floating-icon from-top icon-lg" style="left: 12%; animation-duration: 26s; animation-delay: 1s;">❖</span>
+  <span class="floating-icon from-top icon-xl" style="left: 22%; animation-duration: 32s; animation-delay: 4s;">✿</span>
+  <span class="floating-icon from-top icon-md" style="left: 32%; animation-duration: 20s; animation-delay: 6s;">❋</span>
+  <span class="floating-icon from-top icon-lg" style="left: 52%; animation-duration: 28s; animation-delay: 2s;">✦</span>
+  <span class="floating-icon from-top icon-xl" style="left: 62%; animation-duration: 30s; animation-delay: 7s;">❁</span>
+  <span class="floating-icon from-top icon-md" style="left: 72%; animation-duration: 22s; animation-delay: 9s;">✥</span>
+  <span class="floating-icon from-top icon-lg" style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
+
+</body>
+
+</html>

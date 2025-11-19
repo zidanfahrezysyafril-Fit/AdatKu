@@ -49,6 +49,82 @@
     .animate-slide {
       animation: slide 12s infinite ease-in-out;
     }
+
+    /* TEKS RATA KIRI–KANAN */
+    .justify-teks {
+      text-align: justify !important;
+      text-justify: inter-word;
+    }
+
+    /* ========== ORNAMEN ADAT MELAYANG ========== */
+
+    .floating-icon {
+      position: fixed;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.9);
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .icon-md {
+      font-size: 22px;
+    }
+
+    .icon-lg {
+      font-size: 30px;
+    }
+
+    .icon-xl {
+      font-size: 38px;
+    }
+
+    /* Naik dari bawah */
+    @keyframes float-up {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-140vh);
+        opacity: 0;
+      }
+    }
+
+    .from-bottom {
+      bottom: -10%;
+      animation-name: float-up;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    /* Turun dari atas */
+    @keyframes float-down {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(140vh);
+        opacity: 0;
+      }
+    }
+
+    .from-top {
+      top: -10%;
+      animation-name: float-down;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
   </style>
 </head>
 
@@ -176,16 +252,16 @@
     </div>
   </section>
 
-  <div class="object-cover space-y-2 my-10 mx-20">
+  <div class="object-cover space-y-4 my-10 mx-4 md:mx-20">
     <h1 class="flex flex-col items-center text-4xl text-bold logo-font text-[#5c2b33]">
       Sekilas Tentang AdatKu
     </h1>
-    <a class="flex flex-col items-center justify-center text-lg text-gray-600">
+    <p class="max-w-4xl mx-auto text-lg text-gray-600 leading-relaxed justify-teks">
       AdatKu adalah sebuah website berbasis digital yang dibuat untuk melestarikan budaya daerah Indonesia
       sekaligus mempermudah masyarakat dalam memesan layanan adat secara online.
       Website ini menggabungkan unsur kebudayaan tradisional dengan teknologi modern, sehingga menghadirkan
       pengalaman baru dalam mengenal dan menggunakan layanan adat seperti baju adat, make up (MUA), dan pelaminan.
-    </a>
+    </p>
   </div>
 
   <h1 class="flex flex-col items-center text-6xl text-bold logo-font text-[#5c2b33]">
@@ -193,6 +269,7 @@
   </h1>
   <main class="py-16 space-y-28">
 
+    {{-- BAJU ADAT --}}
     <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
       <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
         <div class="flex w-[400%] animate-slide">
@@ -202,8 +279,8 @@
           <img src="{{ asset('bajusunda.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Baju Sunda">
         </div>
       </div>
-      <div class="mt-10 md:mt-0 md:w-[420px] text-center md:text-left">
-        <h2 class="logo-font text-4xl font-bold text-[#c98a00] mb-4">Baju Adat</h2>
+      <div class="mt-10 md:mt-0 md:w-[420px]">
+        <h2 class="logo-font text-4xl font-bold text-[#c98a00] mb-4 text-center md:text-left">Baju Adat</h2>
         <p class="justify-teks text-gray-600 leading-relaxed text-lg">
           Baju adat adalah simbol kebanggaan daerah dan identitas budaya. Setiap daerah di Indonesia memiliki
           ciri khas tersendiri pada busana adatnya yang mencerminkan keindahan, filosofi, serta nilai-nilai luhur
@@ -212,6 +289,7 @@
       </div>
     </section>
 
+    {{-- MAKE UP --}}
     <section class="flex flex-col md:flex-row-reverse items-center justify-center md:space-x-16 md:space-x-reverse">
       <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
         <div class="flex w-[400%] animate-slide">
@@ -221,9 +299,9 @@
           <img src="{{ asset('makeupwisuda.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Makeup Wisuda">
         </div>
       </div>
-      <div class="mt-10 md:mt-0 md:w-[420px] text-center md:text-right">
-        <h2 class="logo-font text-4xl font-bold text-[#c98a00] mb-4">Make Up</h2>
-        <p class="text-gray-600 leading-relaxed text-lg">
+      <div class="mt-10 md:mt-0 md:w-[420px]">
+        <h2 class="logo-font text-4xl font-bold text-[#c98a00] mb-4 text-center md:text-right">Make Up</h2>
+        <p class="justify-teks text-gray-600 leading-relaxed text-lg">
           Seni rias atau make up berperan penting dalam mempercantik penampilan. Dari rias pengantin hingga
           wisuda, setiap gaya memiliki karakteristik unik yang mempertegas keanggunan dan kepercayaan diri
           seseorang.
@@ -231,6 +309,7 @@
       </div>
     </section>
 
+    {{-- PELAMINAN --}}
     <section class="flex flex-col md:flex-row items-center justify-center md:space-x-16">
       <div class="relative w-[460px] h-[340px] overflow-hidden rounded-2xl shadow-xl">
         <div class="flex w-[400%] animate-slide">
@@ -240,9 +319,9 @@
           <img src="{{ asset('pelamin4.jpg') }}" class="w-1/4 h-[340px] object-cover" alt="Pelamin 4">
         </div>
       </div>
-      <div class="mt-10 md:mt-0 md:w-[420px] text-center md:text-left">
-        <h2 class="logo-font text-4xl font-bold text-[#c98a00] mb-4">Pelaminan</h2>
-        <p class="text-gray-600 leading-relaxed text-lg">
+      <div class="mt-10 md:mt-0 md:w-[420px]">
+        <h2 class="logo-font text-4xl font-bold text-[#c98a00] mb-4 text-center md:text-left">Pelaminan</h2>
+        <p class="justify-teks text-gray-600 leading-relaxed text-lg">
           Pelaminan adalah simbol kebahagiaan dalam pernikahan. Setiap desain pelaminan menonjolkan kekayaan adat
           dan keindahan budaya, menciptakan suasana yang megah dan sakral bagi pasangan pengantin.
         </p>
@@ -269,6 +348,26 @@
       Daftarkan jasa MUA kamu di sini
     </a>
   </div>
+
+  {{-- ORNAMEN ADAT NAIK DARI BAWAH --}}
+  <span class="floating-icon from-bottom icon-lg" style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">❖</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✿</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 25%; animation-duration: 18s; animation-delay: 6s;">❋</span>
+  <span class="floating-icon from-bottom icon-lg" style="left: 35%; animation-duration: 25s; animation-delay: 1s;">✦</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 45%; animation-duration: 30s; animation-delay: 5s;">❁</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 55%; animation-duration: 20s; animation-delay: 7s;">✥</span>
+  <span class="floating-icon from-bottom icon-lg" style="left: 65%; animation-duration: 26s; animation-delay: 2s;">◈</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 75%; animation-duration: 24s; animation-delay: 4s;">❂</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 85%; animation-duration: 29s; animation-delay: 8s;">✺</span>
+
+  {{-- ORNAMEN ADAT TURUN DARI ATAS --}}
+  <span class="floating-icon from-top icon-lg" style="left: 12%; animation-duration: 26s; animation-delay: 1s;">❖</span>
+  <span class="floating-icon from-top icon-xl" style="left: 22%; animation-duration: 32s; animation-delay: 4s;">✿</span>
+  <span class="floating-icon from-top icon-md" style="left: 32%; animation-duration: 20s; animation-delay: 6s;">❋</span>
+  <span class="floating-icon from-top icon-lg" style="left: 52%; animation-duration: 28s; animation-delay: 2s;">✦</span>
+  <span class="floating-icon from-top icon-xl" style="left: 62%; animation-duration: 30s; animation-delay: 7s;">❁</span>
+  <span class="floating-icon from-top icon-md" style="left: 72%; animation-duration: 22s; animation-delay: 9s;">✥</span>
+  <span class="floating-icon from-top icon-lg" style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
 
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
