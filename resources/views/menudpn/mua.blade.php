@@ -141,10 +141,6 @@
         </aside>
 
         <section class="flex-1 bg-white rounded-2xl shadow-md border border-gray-200 px-6 py-6 min-h-[300px]">
-<<<<<<< HEAD
-           
-=======
->>>>>>> 8c2ba5d19d1590090093620469da99025964ff90
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">Pilih MUA Terdaftar</h2>

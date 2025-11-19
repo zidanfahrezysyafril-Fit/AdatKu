@@ -182,8 +182,6 @@
               ? asset('storage/' . $user->avatar)
               : asset('default-avatar.png');
           @endphp
-
-          {{-- 🔔 TOMBOL PESANAN UNTUK PENGGUNA --}}
           @if ($user->role === 'Pengguna')
             <a href="{{ route('pengguna.pesanan.index') }}"
               class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-100 hover:bg-yellow-200 text-[#b48a00] font-semibold text-sm shadow-md">
@@ -350,24 +348,17 @@
   </div>
 
   {{-- ORNAMEN ADAT NAIK DARI BAWAH --}}
-  <span class="floating-icon from-bottom icon-lg" style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">❖</span>
-  <span class="floating-icon from-bottom icon-xl" style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✿</span>
-  <span class="floating-icon from-bottom icon-md" style="left: 25%; animation-duration: 18s; animation-delay: 6s;">❋</span>
+  <span class="floating-icon from-bottom icon-lg" style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">✦</span>
+  <span class="floating-icon from-bottom icon-xl" style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✥</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 25%; animation-duration: 18s; animation-delay: 6s;">✦</span>
   <span class="floating-icon from-bottom icon-lg" style="left: 35%; animation-duration: 25s; animation-delay: 1s;">✦</span>
-  <span class="floating-icon from-bottom icon-xl" style="left: 45%; animation-duration: 30s; animation-delay: 5s;">❁</span>
-  <span class="floating-icon from-bottom icon-md" style="left: 55%; animation-duration: 20s; animation-delay: 7s;">✥</span>
-  <span class="floating-icon from-bottom icon-lg" style="left: 65%; animation-duration: 26s; animation-delay: 2s;">◈</span>
-  <span class="floating-icon from-bottom icon-xl" style="left: 75%; animation-duration: 24s; animation-delay: 4s;">❂</span>
-  <span class="floating-icon from-bottom icon-md" style="left: 85%; animation-duration: 29s; animation-delay: 8s;">✺</span>
+  <span class="floating-icon from-bottom icon-md" style="left: 55%; animation-duration: 20s; animation-delay: 7s;">✦</span>
 
   {{-- ORNAMEN ADAT TURUN DARI ATAS --}}
-  <span class="floating-icon from-top icon-lg" style="left: 12%; animation-duration: 26s; animation-delay: 1s;">❖</span>
-  <span class="floating-icon from-top icon-xl" style="left: 22%; animation-duration: 32s; animation-delay: 4s;">✿</span>
-  <span class="floating-icon from-top icon-md" style="left: 32%; animation-duration: 20s; animation-delay: 6s;">❋</span>
   <span class="floating-icon from-top icon-lg" style="left: 52%; animation-duration: 28s; animation-delay: 2s;">✦</span>
-  <span class="floating-icon from-top icon-xl" style="left: 62%; animation-duration: 30s; animation-delay: 7s;">❁</span>
+  <span class="floating-icon from-top icon-xl" style="left: 62%; animation-duration: 30s; animation-delay: 7s;">✦</span>
   <span class="floating-icon from-top icon-md" style="left: 72%; animation-duration: 22s; animation-delay: 9s;">✥</span>
-  <span class="floating-icon from-top icon-lg" style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
+  <span class="floating-icon from-top icon-lg" style="left: 82%; animation-duration: 27s; animation-delay: 3s;">✦</span>
 
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
