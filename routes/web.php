@@ -12,7 +12,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PublicMuaController;
 use App\Http\Controllers\PembayaranController;
-
+use App\Http\Controllers\ContactController;
 
 Route::get('/', fn() => view('home'))->name('landing');
 Route::get('/home', fn() => view('home'))->name('home');
@@ -120,8 +120,8 @@ Route::middleware(['auth', CheckRole::class . ':pengguna'])->group(function () {
     Route::get('/pesanan/create/{layanan}', [PesananController::class, 'createUser'])
         ->name('pengguna.pesanan.create');
 
-    Route::post('/pesanan/{layanan}', [PesananController::class, 'storeUser'])
-        ->name('pengguna.store');
+    Route::post('/pengguna/pesanan/store', [PesananController::class, 'storeuser'])->name('pengguna.store');
+
 
     Route::get('/pesanan/{pesanan}', [PesananController::class, 'showUser'])
         ->name('pengguna.show');
@@ -162,3 +162,15 @@ Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
             ->name('pembayaran.index');
     });
 });
+
+    // Route untuk kirim pesan (public)
+    Route::post('/api/hubungi-kami', [ContactController::class, 'send']);
+
+    // Route untuk admin (harus login sebagai admin)
+    Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+        Route::get('/contact-messages', [ContactController::class, 'index'])->name('admin.contact.index');
+        Route::post('/contact-messages/{id}/read', [ContactController::class, 'markAsRead'])->name('admin.contact.read');
+        Route::delete('/contact-messages/{id}', [ContactController::class, 'destroy'])->name('admin.contact.destroy');
+        Route::get('/contact-messages/unread-count', [ContactController::class, 'unreadCount']);
+    });
+    

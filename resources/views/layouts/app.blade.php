@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'MUA Panel')</title>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
         @keyframes slideIn {
             from {
@@ -27,52 +29,72 @@
     </style>
 </head>
 
-<body class="text-slate-800 min-h-screen overflow-x-hidden" x-data="{ open: false }">
+<body class="text-slate-800 min-h-screen overflow-x-hidden bg-slate-50" x-data="{ open: false }">
 
     <!-- HEADER -->
-    <header class="fixed top-0 inset-x-0 z-40 bg-white shadow-sm border-b border-rose-100">
-        <div class="px-6 h-16 flex items-center justify-between">
+    <header class="fixed top-0 inset-x-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-rose-100">
+        <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
             <div class="flex items-center gap-3">
+                <!-- Burger (mobile) -->
                 <button @click="open = !open"
-                    class="lg:hidden inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 hover:bg-slate-100">
-                    <!-- menu -->
+                    class="lg:hidden inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 hover:bg-slate-100 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
+
+                <!-- Logo + title -->
                 <div class="flex items-center gap-3">
                     <div
-                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-amber-400 flex items-center justify-center text-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] font-semibold shadow">
-                        M</div>
-                    <div>
-                        <p class="text-xs uppercase tracking-wide text-rose-600">MUA Panel</p>
-                        <h1 class="text-lg font-semibold">Dashboard</h1>
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-amber-400 flex items-center justify-center font-semibold shadow-lg text-red-600">
+                        M
+                    </div>
+                    <div class="leading-tight">
+                        <p class="text-[11px] uppercase tracking-[0.16em] text-rose-500">
+                            MUA Panel
+                        </p>
+                        <h1 class="text-base sm:text-lg font-semibold text-slate-900">
+                            Dashboard
+                        </h1>
                     </div>
                 </div>
             </div>
+
+            <!-- Profil -->
             @auth
                 @php
                     $user = auth()->user();
                     $avatar = $user->avatar
                         ? asset('storage/' . $user->avatar)
                         : asset('default-avatar.png');
-                  @endphp
+                @endphp
 
-                <div x-data="{ open:false }" class="relative">
-                    <button @click="open = !open"
-                        class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
+                <div x-data="{ openProfile:false }" class="relative">
+                    <button @click="openProfile = !openProfile"
+                        class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-200">
                         <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
                             onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
                     </button>
 
-                    <div x-show="open" x-transition @click.outside="open=false"
-                        class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
+                    <div x-show="openProfile" x-transition @click.outside="openProfile = false"
+                        class="absolute right-0 mt-3 w-64 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
                         <div class="px-4 py-3 border-b">
-                            <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
-                            <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                            <p class="text-sm font-semibold text-gray-800 truncate">
+                                {{ $user->name }}
+                            </p>
+                            <p class="text-xs text-gray-500 truncate">
+                                {{ $user->email }}
+                            </p>
                         </div>
                         <ul class="py-1 text-sm">
+                            <li>
+                                <a href="{{ route('profile.show') }}"
+                                    class="block px-4 py-2 hover:bg-slate-50 text-slate-700">
+                                    Profil Saya
+                                </a>
+                            </li>
                             <li class="border-t">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -87,6 +109,8 @@
             @endauth
         </div>
     </header>
+
+    <!-- ALERT -->
     @if (session('success'))
         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" x-transition.opacity
             class="fixed top-20 right-5 z-50 bg-green-50 border border-green-300 text-green-700 px-5 py-3 rounded-xl shadow-lg">
@@ -100,29 +124,40 @@
         </div>
     @endif
 
-    <aside class="fixed z-30 top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-[#231b27] text-white border-r border-white/10"
-        :class="open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'" x-transition.opacity
-        x-transition.duration.200ms>
+    <!-- SIDEBAR -->
+    <aside class="fixed z-30 top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-[#231b27] text-white border-r border-white/10
+               transition-transform duration-200 ease-out"
+        :class="open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+
         <div class="flex flex-col h-full">
+            <!-- Brand / title -->
             <div class="px-6 py-4 border-b border-white/10">
-                <h2 class="text-base font-semibold tracking-wide text-white/90">MUA Panel</h2>
+                <h2 class="text-sm font-semibold tracking-[0.16em] uppercase text-white/70">
+                    Menu Utama
+                </h2>
             </div>
 
-            <nav class="flex-1 px-3 py-4 text-sm space-y-1">
+            <!-- NAV -->
+            <nav class="flex-1 px-3 py-4 text-sm space-y-1 overflow-y-auto">
+
+                {{-- Dashboard --}}
                 <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  hover:bg-white/10 transition
-                  {{ request()->routeIs('dashboard') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
+                          hover:bg-white/10 hover:shadow-sm transition
+                          {{ request()->routeIs('dashboard') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                     <svg class="w-4 h-4 opacity-80 group-hover:opacity-100" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 3l9 8h-3v10H6V11H3l9-8z" />
                     </svg>
                     <span>Dashboard</span>
                 </a>
+
+                {{-- Group: MUA --}}
                 @php $role = strtolower(auth()->user()->role ?? ''); @endphp
                 @if ($role === 'mua')
                     <div x-data="{ openMua: {{ request()->routeIs('mua.*') || request()->routeIs('profilemua.*') ? 'true' : 'false' }} }"
-                        class="pt-1">
+                        class="pt-2 space-y-1">
+
                         <button @click="openMua = !openMua"
-                            class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl mb-2 hover:bg-white/10 transition">
+                            class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
@@ -137,51 +172,71 @@
                             </svg>
                         </button>
 
-                        <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/10 space-y-1">
-                            <a href="{{ route('mua.panel') }}"
-                                class="block px-3 py-2 rounded-lg hover:bg-white/10 {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
+                        <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
+
+                            <a href="{{ route('mua.panel') }}" class="block px-3 py-2 rounded-lg hover:bg-white/10
+                                          {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Profil MUA
                             </a>
+
                             <a href="{{ route('panelmua.layanan.index') }}"
-                                class="block px-3 py-2 rounded-lg mb-2 hover:bg-white/10">
+                                class="block px-3 py-2 rounded-lg hover:bg-white/10">
                                 Layanan
                             </a>
                         </div>
                     </div>
                 @endif
-                <a href="{{ route('panelmua.pesanan.index') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  hover:bg-white/10 transition
-                  {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-white/80 group-hover:text-white">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
-                    </svg>
-                    <span>Pesanan</span>
-                </a>
-                 <a href="{{ route('panelmua.pembayaran.index') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  hover:bg-white/10 transition
-                  {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-white/10 ring-1 ring-white/10' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-white/80 group-hover:text-white">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
-                    </svg>
-                    <span>Pembayaran</span>
-                </a>
+
+                {{-- Pesanan --}}
+                <div class="pt-2 space-y-1">
+                    <p class="px-3 text-[11px] uppercase tracking-[0.18em] text-white/40">
+                        Transaksi
+                    </p>
+
+                    <a href="{{ route('panelmua.pesanan.index') }}"
+                        class="group mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl
+                              hover:bg-white/10 hover:shadow-sm transition
+                              {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
+                        </svg>
+                        <span>Pesanan</span>
+                    </a>
+
+                    <a href="{{ route('panelmua.pembayaran.index') }}"
+                        class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                              hover:bg-white/10 hover:shadow-sm transition
+                              {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
+                        </svg>
+                        <span>Pembayaran</span>
+                    </a>
+                </div>
             </nav>
-            <div class="mt-auto p-4 border-t border-white/10 text-xs text-white/70">
-                29°C — Cerah Berawan
+
+            <!-- FOOTER SIDEBAR -->
+            <div
+                class="mt-auto px-4 py-3 border-t border-white/10 text-[11px] text-white/60 flex items-center justify-between">
+                <span>29°C — Cerah Berawan</span>
+                <span class="text-white/40">AdatKu</span>
             </div>
         </div>
     </aside>
 
-    <main class="pt-21 lg:pl-72 ">
-        <div class="w-full">
+    <!-- MAIN CONTENT -->
+    <main class="lg:pl-72 pt-20">
+        <div class="px-4 sm:px-6 lg:px-8 pb-8">
             @yield('content')
         </div>
     </main>
+
+</body>
 
 </html>

@@ -50,9 +50,12 @@ class ProfileController extends Controller
     }
     public function showProfile()
     {
-        $user = Auth::user();
-        return view('profile.show', compact('user'));
+        if (url()->previous()) {
+            return redirect()->back();
+        }
+        return redirect()->route('home');
     }
+
     public function edit()
     {
         $user = Auth::user();

@@ -40,7 +40,7 @@ class PesananController extends Controller
         }
         $pesanan->status_pembayaran = 'Dibatalkan';
         $pesanan->save();
-        return redirect()->route('panelmua.pesanan.index')
+        return redirect()->route('pengguna.pesanan.index')
             ->with('success', 'Pesanan berhasil dibatalkan.');
     }
     public function indexMua()
@@ -93,20 +93,31 @@ class PesananController extends Controller
 
         return back()->with('success', 'Pesanan berhasil dihapus.');
     }
-    public function storeUser(Request $request, Layanan $layanan)
+    public function storeUser(Request $request)
     {
+        // 1) VALIDASI TERMASUK layanan_id
         $validated = $request->validate([
+            'layanan_id'      => ['required', 'exists:layanans,id'],
             'tanggal_booking' => ['required', 'date', 'after_or_equal:today'],
             'alamat'          => ['required', 'string', 'max:500'],
+            'catatan'         => ['nullable', 'string'],
         ]);
+
+        // 2) AMBIL DATA LAYANAN DARI DATABASE
+        $layanan = Layanan::findOrFail($validated['layanan_id']);
+
+        // 3) SIMPAN PESANAN
         $pesanan = Pesanan::create([
-            'id_pengguna'       => auth::id(),  
+            'id_pengguna'       => Auth::id(),              // id user yang login
             'id_layanan'        => $layanan->id,
             'tanggal_booking'   => $validated['tanggal_booking'],
             'alamat'            => $validated['alamat'],
+            'catatan'           => $validated['catatan'] ?? null,
             'total_harga'       => $layanan->harga,
             'status_pembayaran' => 'Belum_Lunas',
         ]);
+
+        // 4) ARAHKAN KE HALAMAN DETAIL PESANAN
         return redirect()
             ->route('pengguna.show', $pesanan->id)
             ->with('success', 'Pesanan berhasil dibuat.');
