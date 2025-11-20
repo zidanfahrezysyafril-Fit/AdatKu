@@ -125,164 +125,130 @@
 
     {{-- KARTUN ADAT --}}
     <img src="{{ asset('foto kartun2.jpg') }}"
-        class="hidden md:block fixed left-10 bottom-0 h-[310px] md:h-[330px] object-contain z-10">
+        class="hidden md:block fixed left-10 bottom-0 h-[300px] object-contain z-10">
     <img src="{{ asset('foto kartun2.jpg') }}"
-        class="hidden md:block fixed right-10 bottom-0 h-[310px] md:h-[330px] object-contain z-10">
+        class="hidden md:block fixed right-10 bottom-0 h-[300px] object-contain z-10">
 
-    {{-- CARD LOGIN (disamain ukurannya dengan register) --}}
-    <div class="relative z-20 flex items-center justify-center min-h-screen px-4 py-2">
-        <div class="w-full max-w-3xl bg-[#fffdf7]/95 rounded-[22px]
-                    shadow-[0_16px_40px_rgba(190,143,43,0.28)]
-                    border border-[#f4ddab] backdrop-blur-sm overflow-hidden">
+{{-- CARD LOGIN MELAYANG (SAMA UKURAN DENGAN REGISTER) --}}
+<div class="relative z-20 flex items-center justify-center min-h-screen px-4 py-6">
+    <div class="w-full max-w-4xl bg-[#fffdf7]/95 rounded-[28px]
+                shadow-[0_18px_55px_rgba(190,143,43,0.35)]
+                border border-[#f4ddab] backdrop-blur-md overflow-hidden
+                transform hover:-translate-y-1 transition-all duration-300">
 
-            <div class="grid md:grid-cols-2">
+        <div class="grid md:grid-cols-2">
 
-                {{-- KOLOM KIRI: FORM LOGIN --}}
-                <div class="px-6 md:px-7 py-6 md:py-7 flex flex-col justify-center">
+            {{-- KIRI: FORM LOGIN --}}
+            <div class="px-8 py-6 flex flex-col justify-center">
 
-                    {{-- LOGO --}}
-                    <div class="flex justify-center mb-4">
-                        <div
-                            class="flex items-center justify-center w-30 h-12 rounded-full border border-[#f4c970] bg-white shadow-md">
-                            <img src="{{ asset('logos3.jpg') }}" alt="Logo AdatKu" class="h-9 object-contain">
-                        </div>
+                {{-- LOGO --}}
+                <div class="flex justify-center mb-4">
+                    <div class="flex items-center justify-center w-40 h-14 rounded-full
+                                border border-[#f4c970] bg-white shadow-md">
+                        <img src="{{ asset('logos3.jpg') }}" alt="Logo AdatKu" class="h-11 object-contain">
+                    </div>
+                </div>
+
+                {{-- TEKS ATAS --}}
+                <div class="text-center mb-4">
+                    <h1 class="text-2xl font-bold text-[#d68e00]">AdatKu</h1>
+                    <p class="text-sm text-[#c2983a]">
+                        Masuk untuk melanjutkan
+                        <span class="font-semibold text-[#e6a400]">AdatKu</span>
+                    </p>
+                </div>
+
+                {{-- TITLE --}}
+                <h2 class="text-center text-lg font-bold text-[#d68e00] mb-4">Login</h2>
+
+                {{-- FORM LOGIN --}}
+                <form method="POST" action="{{ route('login.post') }}" class="space-y-3">
+                    @csrf
+
+                    {{-- EMAIL --}}
+                    <div>
+                        <label class="block text-[12px] font-medium text-[#a98225] mb-1">Email</label>
+                        <input type="email" name="email" value="{{ old('email') }}" required
+                               class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
+                                      px-3 py-2 text-[13px] text-gray-800
+                                      focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]">
                     </div>
 
-                    {{-- TEKS ATAS --}}
-                    <div class="text-center mb-4">
-                        <h1 class="text-xl md:text-2xl font-bold text-[#d68e00]">AdatKu</h1>
-                        <p class="text-[11px] md:text-xs text-[#c2983a]">
-                            Masuk untuk melanjutkan
-                            <span class="font-semibold text-[#e6a400]">AdatKu</span>
-                        </p>
+                    {{-- PASSWORD --}}
+                    <div>
+                        <label class="block text-[12px] font-medium text-[#a98225] mb-1">Password</label>
+                        <input type="password" name="password" required
+                               class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
+                                      px-3 py-2 text-[13px] text-gray-800
+                                      focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]">
                     </div>
 
-                    {{-- PESAN ERROR --}}
-                    @if(session('error'))
-                        <div class="mb-3 p-2.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-[11px]">
-                            {{ session('error') }}
-                        </div>
-                    @endif
+                    {{-- REMEMBER --}}
+                    <div class="flex items-center justify-between text-[12px] text-gray-700">
+                        <label class="inline-flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="remember"
+                                   class="rounded border-[#efcd82] text-[#f6c453] focus:ring-[#f6c453]">
+                            <span>Remember me</span>
+                        </label>
+                    </div>
 
-                    {{-- PESAN SUCCESS --}}
-                    @if(session('success'))
-                        <div class="mb-3 p-2.5 bg-green-50 border border-green-200 text-green-700 rounded-xl text-[11px]">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    {{-- JUDUL --}}
-                    <h2 class="text-center text-lg font-bold text-[#d68e00] mb-4">
+                    {{-- TOMBOL LOGIN --}}
+                    <button type="submit"
+                            class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
+                                   text-white font-semibold text-sm shadow-lg hover:brightness-110
+                                   transition-all duration-200">
                         Login
-                    </h2>
+                    </button>
+                </form>
 
-                    {{-- FORM LOGIN --}}
-                    <form method="POST" action="{{ route('login.post') }}" class="space-y-3">
-                        @csrf
-
-                        {{-- EMAIL --}}
-                        <div>
-                            <label class="block text-[11px] font-medium text-[#a98225] mb-1">
-                                Email
-                            </label>
-                            <input type="email" name="email" value="{{ old('email') }}" required class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
-                                          px-3 py-2 text-[11px] text-gray-800
-                                          focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]
-                                          @error('email') border-red-300 @enderror">
-                            @error('email')
-                                <p class="mt-1 text-[10px] text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- PASSWORD --}}
-                        <div>
-                            <label class="block text-[11px] font-medium text-[#a98225] mb-1">
-                                Password
-                            </label>
-                            <input type="password" name="password" required class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
-                                          px-3 py-2 text-[11px] text-gray-800
-                                          focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]
-                                          @error('password') border-red-300 @enderror">
-                            @error('password')
-                                <p class="mt-1 text-[10px] text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- REMEMBER ME --}}
-                        <div class="flex items-center justify-between text-[10px] text-gray-700">
-                            <label class="inline-flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" name="remember"
-                                    class="rounded border-[#efcd82] text-[#f6c453] focus:ring-[#f6c453]">
-                                <span>Remember me</span>
-                            </label>
-                        </div>
-
-                        {{-- TOMBOL LOGIN --}}
-                        <button type="submit" class="w-full py-2 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
-                                       text-white font-semibold text-[11px] shadow-lg
-                                       hover:brightness-110 transition-all duration-200">
-                            Login
-                        </button>
-                    </form>
-
-                    {{-- DIVIDER --}}
-                    <div class="relative my-3">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-[#efcd82]"></div>
-                        </div>
-                        <div class="relative flex justify-center text-[10px]">
-                            <span class="px-2 bg-[#fffdf7] text-[#a98225]">atau</span>
-                        </div>
+                {{-- DIVIDER --}}
+                <div class="relative my-3">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-[#efcd82]"></div>
                     </div>
-
-                    {{-- TOMBOL LOGIN GOOGLE --}}
-                    <a href="{{ route('google.login') }}" class="flex items-center justify-center gap-3 w-full py-2
-                              rounded-xl bg-white border border-[#efcd82] text-gray-700
-                              font-semibold text-[11px] shadow-md hover:shadow-lg hover:bg-gray-50
-                              transition-all duration-200">
-                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                            <path fill="#FFC107"
-                                d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
-                            <path fill="#FF3D00"
-                                d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
-                            <path fill="#4CAF50"
-                                d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
-                            <path fill="#1976D2"
-                                d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
-                        </svg>
-                        Login dengan Google
-                    </a>
-
-                    {{-- LINK KE REGISTER --}}
-                    <p class="mt-4 text-[10px] text-center text-gray-700">
-                        Belum punya akun?
-                        <a href="{{ route('register') }}" class="text-[#d68e00] font-semibold hover:underline">
-                            Daftar
-                        </a>
-                    </p>
-
-                    <p class="mt-3 text-center text-[9px] text-gray-500">
-                        © 2025 AdatKu. Semua hak dilindungi.
-                    </p>
-                </div>
-
-                {{-- KOLOM KANAN: TEKS --}}
-                <div
-                    class="hidden md:flex flex-col justify-center items-center bg-gradient-to-b from-[#fff8e1] to-[#f3cc75]">
-                    <div class="px-7 text-center">
-                        <h3 class="text-xl font-bold text-[#c27b00] mb-3">
-                            Rayakan Adat dengan Cara Modern
-                        </h3>
-                        <p class="text-xs text-[#9b7b34] max-w-xs mx-auto">
-                            Temukan MUA, baju adat, dan layanan adat terbaik di daerahmu —
-                            cepat, mudah, dan modern.
-                        </p>
+                    <div class="relative flex justify-center text-[11px]">
+                        <span class="px-2 bg-[#fffdf7] text-[#a98225]">atau</span>
                     </div>
                 </div>
+
+                {{-- TOMBOL LOGIN GOOGLE --}}
+                <a href="{{ route('google.login') }}"
+                   class="flex items-center justify-center gap-3 w-full py-2.5 rounded-xl
+                          bg-white border border-[#efcd82] text-gray-700 font-semibold text-sm
+                          shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-200">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" alt="Google">
+                    Login dengan Google
+                </a>
+
+                {{-- LINK KE REGISTER --}}
+                <p class="mt-4 text-[12px] text-center text-gray-700">
+                    Belum punya akun?
+                    <a href="{{ route('register') }}" class="text-[#d68e00] font-semibold hover:underline">Daftar</a>
+                </p>
+
+                <p class="mt-2 text-center text-[10px] text-gray-500">
+                    © 2025 AdatKu. Semua hak dilindungi.
+                </p>
 
             </div>
+
+            {{-- KANAN: TEKS --}}
+            <div class="hidden md:flex flex-col justify-center items-center
+                        bg-gradient-to-b from-[#fff8e1] to-[#f3cc75] py-6 px-6">
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold text-[#c27b00] mb-3">
+                        Rayakan Adat dengan Cara Modern
+                    </h3>
+                    <p class="text-sm text-[#9b7b34] max-w-sm mx-auto">
+                        Temukan MUA, baju adat, dan layanan adat terbaik di daerahmu — cepat, mudah, dan modern.
+                    </p>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
+
 
 </body>
 
