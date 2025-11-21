@@ -6,6 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Mua;
+use App\Models\MuaRequest;
+
 
 class User extends Authenticatable
 {
@@ -56,5 +59,24 @@ class User extends Authenticatable
     public function pesananPengguna()
     {
         return $this->hasMany(Pesanan::class, 'id_pengguna');
+    }
+    public function muaRequest()
+    {
+        return $this->hasOne(MuaRequest::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return strtolower($this->role ?? '') === 'admin';
+    }
+
+    public function isMua(): bool
+    {
+        return strtolower($this->role ?? '') === 'MUA';
+    }
+
+    public function isPengguna(): bool
+    {
+        return strtolower($this->role ?? '') === 'pengguna';
     }
 }

@@ -3,13 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Mua extends Model
+class MuaRequest extends Model
 {
-
-    public $incrementing = false;
-    protected $keyType = 'string';
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -19,16 +17,13 @@ class Mua extends Model
         'deskripsi',
         'instagram',
         'tiktok',
-        'foto'
+        'foto',
+        'status',
+        'catatan_admin',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function layanan()
-    {
-        return $this->hasMany(Layanan::class, 'mua_id');
     }
 }

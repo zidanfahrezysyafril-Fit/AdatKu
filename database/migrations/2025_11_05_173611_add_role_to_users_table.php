@@ -6,23 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['Pengguna', 'MUA', 'Admin'])->default('Pengguna');
+            if (!Schema::hasColumn('users', 'role')) {
+                $table->enum('role', ['Pengguna', 'MUA', 'Admin'])
+                      ->default('Pengguna')
+                      ->after('google_id'); // kalau google_id sudah ada
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('role');
         });
     }
 };

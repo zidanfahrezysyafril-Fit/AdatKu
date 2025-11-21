@@ -3,20 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Models\User;
 use App\Models\Layanan;
 use App\Models\Pembayaran;
 
 class Pesanan extends Model
 {
-    use HasUuids;
-
     protected $table = 'pesanans';
-    protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    // primaryKey default sudah 'id', jadi gak perlu di-set lagi
 
+    // BIARKAN auto increment default (true) dan keyType 'int'
     protected $fillable = [
         'id_pengguna',
         'id_layanan',
@@ -40,6 +36,7 @@ class Pesanan extends Model
     {
         return $this->belongsTo(Layanan::class, 'id_layanan');
     }
+
     public function pembayaran()
     {
         return $this->hasOne(Pembayaran::class, 'id_pesanan');

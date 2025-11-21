@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('pesanans', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+         Schema::create('pesanans', function (Blueprint $table) {
+            $table->id(); // PRIMARY auto increment sesuai relasi lain
 
+            // relasi ke user
             $table->foreignId('id_pengguna')
                 ->constrained('users')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
-            $table->uuid('id_layanan');
-            $table->foreign('id_layanan')
-                ->references('id')
-                ->on('layanans')
-                ->onDelete('cascade');
+            // relasi ke layanan
+            $table->foreignId('id_layanan')
+                ->constrained('layanans')
+                ->cascadeOnDelete();
 
             $table->date('tanggal_booking');
             $table->text('alamat');

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class PenggunaController extends Controller
 {
     public function index()
     {
+        $userLogin = Auth::user();
         $users = User::orderBy('name')->get();
         return view('user.index', compact('users'));
     }

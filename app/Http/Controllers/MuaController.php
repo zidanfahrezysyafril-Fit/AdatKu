@@ -55,7 +55,6 @@ class MuaController extends Controller
                 'max:20',
                 Rule::unique('muas', 'kontak_wa')
                     ->ignore($existing?->id)
-                    ->whereNull('deleted_at'),
             ],
             'alamat'     => ['nullable', 'string'],
             'deskripsi'  => ['nullable', 'string'],

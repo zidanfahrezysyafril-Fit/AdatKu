@@ -5,21 +5,25 @@ use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MuaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PenggunaController;
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PublicMuaController;
 use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\MuaRequestController;
+use App\Http\Controllers\Admin\MuaApprovalController;
 
 Route::get('/', fn() => view('home'))->name('landing');
 Route::get('/home', fn() => view('home'))->name('home');
-Route::get('/dashboard', [\App\Http\Controllers\MuaController::class, 'dashboard'])
+Route::get('/dashboard', [MuaController::class, 'dashboard'])
     ->name('dashboard')
-    ->middleware('auth');
+    ->middleware(['auth', CheckRole::class . ':mua']);
 
 Route::get('hubungikami', fn() => view('menudpn.hubungikami'))->name('hubungikami');
 
@@ -35,9 +39,6 @@ Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallba
 
 // Protected Routes (contoh)
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 
     Route::get('/home', function () {
         return view('home');
@@ -106,7 +107,7 @@ Route::get('/dashboard_a', [DashboardController::class, 'index'])
     ->name('admin.dashboard')
     ->middleware(['auth', CheckRole::class . ':admin']);
 
-Route::get('/users', [PenggunaController::class, 'index'])->name('users.index');
+Route::get('/users', [PenggunaController::class, 'index'])->name('users.index')->middleware(['auth']);
 
 Route::get('/users/create', [PenggunaController::class, 'create'])->name('users.create');
 Route::post('/users', [PenggunaController::class, 'store'])->name('users.store');
@@ -164,14 +165,43 @@ Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
     });
 });
 
-    // Route untuk kirim pesan (public)
-    Route::post('/api/hubungi-kami', [ContactController::class, 'send']);
+// Route untuk kirim pesan (public)
+Route::post('/hubungi-kami', [ContactController::class, 'send']);
 
-    // Route untuk admin (harus login sebagai admin)
-    Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-        Route::get('/contact-messages', [ContactController::class, 'index'])->name('admin.contact.index');
-        Route::post('/contact-messages/{id}/read', [ContactController::class, 'markAsRead'])->name('admin.contact.read');
-        Route::delete('/contact-messages/{id}', [ContactController::class, 'destroy'])->name('admin.contact.destroy');
-        Route::get('/contact-messages/unread-count', [ContactController::class, 'unreadCount']);
-    });
-    
+// Route untuk admin (harus login sebagai admin)
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/contact-messages', [ContactController::class, 'index'])->name('admin.contact.index');
+    Route::post('/contact-messages/{id}/read', [ContactController::class, 'markAsRead'])->name('admin.contact.read');
+    Route::delete('/contact-messages/{id}', [ContactController::class, 'destroy'])->name('admin.contact.destroy');
+    Route::get('/contact-messages/unread-count', [ContactController::class, 'unreadCount']);
+});
+
+// lupa password
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
+
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/mua/ajukan', [MuaRequestController::class, 'index'])
+        ->name('mua.request.index');
+
+    Route::post('/mua/ajukan', [MuaRequestController::class, 'store'])
+        ->name('mua.request.store');
+});
+
+
+// ADMIN - Approve / Reject MUA
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/mua-requests', [MuaApprovalController::class, 'index'])->name('mua-requests.index');
+    Route::get('/mua-requests/{muaRequest}', [MuaApprovalController::class, 'show'])->name('mua-requests.show');
+    Route::post('/mua-requests/{muaRequest}/approve', [MuaApprovalController::class, 'approve'])->name('mua-requests.approve');
+    Route::post('/mua-requests/{muaRequest}/reject', [MuaApprovalController::class, 'reject'])->name('mua-requests.reject');
+});

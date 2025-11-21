@@ -5,20 +5,25 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('pembayarans', function (Blueprint $table) {
-            $table->uuid('id')->primary(); // UUID agar sesuai dengan pesanans.id
-            $table->uuid('id_pesanan');    // FK ke pesanans.id
+            $table->id(); // AUTO_INCREMENT PK
+
+            $table->foreignId('id_pesanan')
+                ->constrained('pesanans')
+                ->cascadeOnDelete();
+
             $table->date('tanggal_bayar');
             $table->enum('metode_bayar', ['Transfer_Bank', 'E_Wallet', 'COD']);
             $table->text('bukti_transfer')->nullable();
-            $table->timestamps();
 
-            $table->foreign('id_pesanan')->references('id')->on('pesanans')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
-    public function down(): void {
+    public function down(): void
+    {
         Schema::dropIfExists('pembayarans');
     }
 };
