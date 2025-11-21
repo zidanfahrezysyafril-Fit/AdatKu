@@ -11,24 +11,28 @@ class PesananController extends Controller
 {
     public function indexUser()
     {
-        $pesanans = Pesanan::where('id_pengguna', auth::id())
-            ->with('layanan')
+        $pesanan = Pesanan::where('id_pengguna', Auth::id())
+            ->with(['layanan', 'pengguna']) // sekalian load relasi biar ga N+1
             ->latest()
-            ->get();
+            ->get(); // <-- ini COLLECTION
 
-        return view('pengguna.pesanan.index', compact('pesanans'));
+        return view('pengguna.pesanan.index', compact('pesanan'));
     }
+
 
     public function showUser(Pesanan $pesanan)
     {
-        if ($pesanan->id_pengguna !== auth::id()) {
+        if ($pesanan->id_pengguna !== Auth::id()) {
             abort(403);
         }
 
+        // Kalau mau, bisa sekalian load relasi (opsional)
         $pesanan->load('layanan', 'pengguna');
 
-        return view('pengguna.pesanan.show', compact('pesanan'));
+        // Balikkan saja ke halaman daftar pesanan
+        return redirect()->route('pengguna.pesanan.show');
     }
+
 
     public function destroyUser(Pesanan $pesanan)
     {
@@ -119,7 +123,7 @@ class PesananController extends Controller
 
         // 4) ARAHKAN KE HALAMAN DETAIL PESANAN
         return redirect()
-            ->route('pengguna.show', $pesanan->id)
+            ->route('pengguna.pesanan.index')
             ->with('success', 'Pesanan berhasil dibuat.');
     }
     public function createUser(Layanan $layanan)

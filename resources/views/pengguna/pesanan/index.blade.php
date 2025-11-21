@@ -37,11 +37,8 @@
             /* pattern lembut seperti home */
             background-image:
                 linear-gradient(135deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
-                linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
-                linear-gradient(315deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
-                linear-gradient(45deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
-            background-size: 24px 24px;
-            background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+                linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
+            background-size: 26px 26px;
         }
 
         .logo-font {
@@ -61,20 +58,89 @@
         .card-shadow {
             box-shadow: 0 22px 60px rgba(15, 23, 42, 0.10);
         }
+
+        /* ============ ICON MELAYANG (sama kayak home) ============ */
+
+        .floating-icon {
+            position: fixed;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+            z-index: 30;
+            pointer-events: none;
+            text-shadow: 0 0 12px rgba(0, 0, 0, 0.18);
+        }
+
+        .icon-md {
+            font-size: 22px;
+        }
+
+        .icon-lg {
+            font-size: 30px;
+        }
+
+        .icon-xl {
+            font-size: 38px;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-140vh);
+                opacity: 0;
+            }
+        }
+
+        .from-bottom {
+            bottom: -10%;
+            animation-name: float-up;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes float-down {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(140vh);
+                opacity: 0;
+            }
+        }
+
+        .from-top {
+            top: -10%;
+            animation-name: float-down;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
     </style>
 </head>
 
 <body class="text-slate-800 min-h-screen flex flex-col">
 
-    {{-- ================= HEADER: STRIP PUTIH PANJANG ================= --}}
-    <header class="sticky top-0 z-50 bg-white/95 border-b border-rose-50 shadow-sm">
+    {{-- ================= HEADER ================= --}}
+    <header class="sticky top-0 z-50 bg-white/95 border-b border-amber-100 shadow-sm backdrop-blur">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
 
             {{-- KIRI: LOGO + NAMA --}}
             <div class="flex items-center gap-3">
                 <a href="/" class="flex items-center gap-3">
                     <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
-                        class="w-14 h-14 rounded-full object-cover shadow-md">
+                        class="w-14 h-14 rounded-full object-cover shadow-md border border-amber-200">
                     <h1
                         class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
                         AdatKu
@@ -82,15 +148,14 @@
                 </a>
             </div>
 
-            {{-- KANAN: MENU BERANDA & DAFTAR MUA DENGAN PANAH --}}
-            <nav class="flex items-center gap-6 text-sm md:text-base font-medium">
-                <a href="{{ url('/') }}" class="text-[#b48a00] hover:text-[#eab308] flex items-center gap-1 transition">
+            {{-- KANAN: MENU BERANDA & DAFTAR MUA --}}
+            <nav class="flex items-center gap-6 text-sm md:text-base font-medium text-[#b48a00]">
+                <a href="{{ url('/') }}" class="hover:text-[#eab308] flex items-center gap-1 transition">
                     <span class="text-lg">←</span>
                     <span>Beranda</span>
                 </a>
 
-                <a href="{{ url('/daftarmua') }}"
-                    class="text-[#b48a00] hover:text-[#eab308] flex items-center gap-1 transition">
+                <a href="{{ url('/daftarmua') }}" class="hover:text-[#eab308] flex items-center gap-1 transition">
                     <span class="text-lg">←</span>
                     <span>Daftar MUA</span>
                 </a>
@@ -114,7 +179,7 @@
         </section>
 
         <section class="max-w-6xl mx-auto px-6 mt-7 mb-20">
-            @if ($pesanans->isEmpty())
+            @if ($pesanan->isEmpty())
                 <div
                     class="mt-4 rounded-[28px] border border-dashed border-rose-200 bg-[rgba(255,242,213,0.65)] px-6 py-10 text-center">
                     <p class="text-3xl mb-2">✨</p>
@@ -129,7 +194,7 @@
                 </div>
             @else
                 <div class="space-y-5">
-                    @foreach ($pesanans as $item)
+                    @foreach ($pesanan as $item)
                         @php
                             $mua = $item->layanan->mua ?? null;
                             if ($mua) {
@@ -165,7 +230,7 @@
                         <article
                             class="bg-white/95 rounded-[28px] card-shadow border border-rose-100 overflow-hidden flex flex-col md:flex-row">
 
-                            {{-- KIRI: RINCIAN PESANAN (mirip detail) --}}
+                            {{-- KIRI: RINCIAN PESANAN --}}
                             <div class="flex-1 px-6 md:px-8 py-5 md:py-7 space-y-2">
                                 <p class="text-[10px] font-semibold tracking-[0.26em] uppercase text-rose-400">
                                     Rincian Pesanan
@@ -206,9 +271,9 @@
                                     $detailPayload = [
                                         "layanan" => $namaLayanan,
                                         "tanggal" => \Carbon\Carbon::parse($item->tanggal_booking)->translatedFormat("d F Y"),
-                                        "alamat"  => $item->alamat,
-                                        "status"  => $statusLabel, // Lunas / Belum Lunas / Dibatalkan
-                                        "harga"   => "Rp " . number_format($item->total_harga, 0, ",", "."),
+                                        "alamat" => $item->alamat,
+                                        "status" => $statusLabel,
+                                        "harga" => "Rp " . number_format($item->total_harga, 0, ",", "."),
                                         "created" => $item->created_at->format("d/m/Y H:i"),
                                         "updated" => $item->updated_at->format("d/m/Y H:i"),
                                     ];
@@ -222,7 +287,7 @@
                                 </button>
                             </div>
 
-                            {{-- KANAN: RINGKASAN + AKSI (mirip panel kanan detail) --}}
+                            {{-- KANAN: RINGKASAN + AKSI --}}
                             <div
                                 class="md:w-72 bg-gradient-to-b from-rose-50/80 to-amber-50/60 border-t md:border-t-0 md:border-l border-rose-100 px-6 md:px-7 py-5 md:py-7 flex flex-col justify-between">
                                 <div class="space-y-3 text-right md:text-left">
@@ -255,21 +320,21 @@
                                     @if ($waNumber && $item->status_pembayaran !== 'Dibatalkan')
                                         <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank"
                                             class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full
-                                                                                                                              bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
+                                                                                                                                                      bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
                                             <span>💬</span>
                                             <span>Chat MUA via WhatsApp</span>
                                         </a>
                                     @endif
 
                                     @if ($item->status_pembayaran === 'Belum_Lunas')
-                                        {{-- FORM BATALKAN PESANAN (untuk modal custom) --}}
+                                        {{-- FORM BATALKAN PESANAN --}}
                                         <form method="POST" action="{{ route('pengguna.destroy', $item->id) }}" class="cancel-form"
                                             id="cancel-form-{{ $item->id }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"
                                                 class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
-                                                                                                                bg-rose-500 text-white hover:bg-rose-600 transition btn-cancel-pesanan"
+                                                                                                                                        bg-rose-500 text-white hover:bg-rose-600 transition btn-cancel-pesanan"
                                                 data-id="{{ $item->id }}">
                                                 Batalkan Pesanan
                                             </button>
@@ -404,47 +469,117 @@
         </div>
     </div>
 
-    <footer class="mt-10">
+    {{-- FOOTER --}}
+    <footer class="mt-6">
         <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
-            {{-- ORNAMENT PATTERN --}}
             <div
                 class="absolute inset-0 opacity-[0.09] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
             </div>
 
-            {{-- CONTENT --}}
-            <div class="relative max-w-6xl mx-auto text-center">
-                <h1
-                    class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
-                    AdatKu
-                </h1>
+            <div class="relative max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-3 gap-8 items-start">
+                    {{-- Brand & intro --}}
+                    <div>
+                        <h1
+                            class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+                            AdatKu
+                        </h1>
+                        <p class="text-sm mt-2 text-[#f5e9df] leading-relaxed">
+                            Platform penyewaan MUA, busana adat, dan pelaminan untuk mempercantik acara istimewa kamu.
+                            Budaya tetap hidup, tampilan tetap elegan ✨
+                        </p>
+                    </div>
 
-                <p class="text-sm mt-2 text-[#f5e9df] max-w-xl mx-auto leading-relaxed">
-                    Platform penyewaan MUA & busana adat untuk mempercantik acara istimewa kamu.
-                    Budaya tetap hidup, tampil tetap elegan ✨
-                </p>
+                    {{-- Link cepat --}}
+                    <div class="text-sm">
+                        <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
+                        <ul class="space-y-1.5">
+                            <li><a href="{{ route('home') }}" class="hover:text-[#f7e07b] transition">Beranda</a></li>
+                            <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
+                            <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
+                            <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
+                            <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi
+                                    Kami</a></li>
+                        </ul>
+                    </div>
 
-                <div class="mt-4 flex justify-center gap-5 text-sm font-medium">
-                    <a href="/" class="hover:text-[#f7e07b] transition">Beranda</a>
-                    <a href="#" class="hover:text-[#f7e07b] transition">Tentang Kami</a>
-                    <a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi Kami</a>
+                    {{-- Kontak & kredit --}}
+                    <div class="text-sm">
+                        <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
+                        <p class="text-[#f5e9df] text-[13px]">
+                            Email: <a href="mailto:adatku11@gmail.com"
+                                class="hover:text-[#f7e07b]">adatku11@gmail.com</a><br>
+                            Instagram: <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl"
+                                target="_blank" class="hover:text-[#f7e07b]">@_.adatku</a>
+                        </p>
+
+                        <div class="mt-4 text-[11px] text-[#e2c9bf] leading-relaxed">
+                            <p>Dikembangkan oleh:</p>
+                            <p class="mt-1">
+                                <span class="font-semibold">Zidan Fahrezy Syafril</span> (Koordinator & Fullstack)<br>
+                                <span class="font-semibold">Cahyani Putri Sofari</span> (Frontend & Dokumentasi)<br>
+                                <span class="font-semibold">Fetty Ratna Dewi</span> (Frontend & Dokumentasi)
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-                <p class="mt-6 text-xs text-[#e2c9bf]">
+                <p class="mt-4 text-xs text-center text-[#e2c9bf] ">
+                    Dikembangkan oleh
+                    <span class="font-semibold">Zidan Fahrezy Syafril</span>,
+                    <span class="font-semibold">Cahyani Putri Sofari</span>,
+                    dan <span class="font-semibold">Fetty Ratna Dewi</span>.
+                </p>
+                <p class="mt-2 text-xs text-center text-[#f7e07b]">
                     &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
                 </p>
+
             </div>
         </div>
     </footer>
 
+    {{-- ICON MELAYANG --}}
+    <span class="floating-icon from-bottom icon-lg"
+        style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">❖</span>
+    <span class="floating-icon from-bottom icon-xl"
+        style="left: 15%; animation-duration: 28s; animation-delay: 3s;">✿</span>
+    <span class="floating-icon from-bottom icon-md"
+        style="left: 25%; animation-duration: 18s; animation-delay: 6s;">❋</span>
+    <span class="floating-icon from-bottom icon-lg"
+        style="left: 35%; animation-duration: 25s; animation-delay: 1s;">✦</span>
+    <span class="floating-icon from-bottom icon-xl"
+        style="left: 45%; animation-duration: 30s; animation-delay: 5s;">❁</span>
+    <span class="floating-icon from-bottom icon-md"
+        style="left: 55%; animation-duration: 20s; animation-delay: 7s;">✥</span>
+    <span class="floating-icon from-bottom icon-lg"
+        style="left: 65%; animation-duration: 26s; animation-delay: 2s;">◈</span>
+    <span class="floating-icon from-bottom icon-xl"
+        style="left: 75%; animation-duration: 24s; animation-delay: 4s;">❂</span>
+    <span class="floating-icon from-bottom icon-md"
+        style="left: 85%; animation-duration: 29s; animation-delay: 8s;">✺</span>
+
+    <span class="floating-icon from-top icon-lg"
+        style="left: 12%; animation-duration: 26s; animation-delay: 1s;">❖</span>
+    <span class="floating-icon from-top icon-xl"
+        style="left: 22%; animation-duration: 32s; animation-delay: 4s;">✿</span>
+    <span class="floating-icon from-top icon-md"
+        style="left: 32%; animation-duration: 20s; animation-delay: 6s;">❋</span>
+    <span class="floating-icon from-top icon-lg"
+        style="left: 52%; animation-duration: 28s; animation-delay: 2s;">✦</span>
+    <span class="floating-icon from-top icon-xl"
+        style="left: 62%; animation-duration: 30s; animation-delay: 7s;">❁</span>
+    <span class="floating-icon from-top icon-md"
+        style="left: 72%; animation-duration: 22s; animation-delay: 9s;">✥</span>
+    <span class="floating-icon from-top icon-lg"
+        style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
+
     <script>
         let selectedPesananId = null;
 
-        // setelah DOM siap
         document.addEventListener('DOMContentLoaded', function () {
-            // pasang event click ke semua tombol batal
             document.querySelectorAll('.btn-cancel-pesanan').forEach(function (btn) {
                 btn.addEventListener('click', function (e) {
-                    e.preventDefault(); // cegah submit form dulu
+                    e.preventDefault();
                     selectedPesananId = this.dataset.id;
 
                     const modal = document.getElementById('cancelModal');
@@ -471,7 +606,6 @@
             closeCancelModal();
         }
 
-        // tutup modal kalau klik area gelap di luar kartu
         document.addEventListener('click', function (e) {
             const modal = document.getElementById('cancelModal');
             if (e.target === modal) {
@@ -479,7 +613,6 @@
             }
         });
 
-        // tutup modal dengan tombol ESC
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeCancelModal();
@@ -489,7 +622,6 @@
 
     <script>
         function openDetailModal(data) {
-            // isi text
             document.getElementById('dm-layanan').innerText = data.layanan;
             document.getElementById('dm-tanggal').innerText = data.tanggal;
             document.getElementById('dm-alamat').innerText = data.alamat;
@@ -497,7 +629,6 @@
             document.getElementById('dm-created').innerText = data.created;
             document.getElementById('dm-updated').innerText = data.updated;
 
-            // badge status
             let badge = '';
             if (data.status.toLowerCase().includes('lunas') && !data.status.toLowerCase().includes('belum')) {
                 badge = `<span class="px-3 py-1.5 text-[11px] rounded-full bg-emerald-100 text-emerald-700 font-semibold">Lunas</span>`;
@@ -519,7 +650,6 @@
             modal.classList.remove('flex');
         }
 
-        // tutup kalau klik area gelap
         document.addEventListener('click', function (e) {
             const modal = document.getElementById('detailModal');
             if (e.target === modal) {
@@ -527,7 +657,6 @@
             }
         });
 
-        // tutup dengan ESC
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeDetailModal();

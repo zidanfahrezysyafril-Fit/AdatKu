@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PublicMuaController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Auth\GoogleController;
 
 Route::get('/', fn() => view('home'))->name('landing');
 Route::get('/home', fn() => view('home'))->name('home');
@@ -29,8 +30,8 @@ Route::post('register', [AuthController::class, 'register'])->name('register.pos
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Google OAuth Routes
-Route::get('auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 
 // Protected Routes (contoh)
 Route::middleware('auth')->group(function () {
@@ -120,8 +121,8 @@ Route::middleware(['auth', CheckRole::class . ':pengguna'])->group(function () {
     Route::get('/pesanan/create/{layanan}', [PesananController::class, 'createUser'])
         ->name('pengguna.pesanan.create');
 
-    Route::post('/pengguna/pesanan/store', [PesananController::class, 'storeuser'])->name('pengguna.store');
-
+    Route::post('/pengguna/pesanan/store', [PesananController::class, 'storeuser'])
+        ->name('pengguna.store');
 
     Route::get('/pesanan/{pesanan}', [PesananController::class, 'showUser'])
         ->name('pengguna.show');
