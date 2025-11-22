@@ -102,7 +102,7 @@
     </style>
 </head>
 
-<body class="relative min-h-screen bg-gradient-to-b from-[#fff7e1] via-[#f4d890] to-[#cfa043] overflow-hidden">
+<body class="relative min-h-screen bg-gradient-to-b from-[#fff7e1] via-[#f4d890] to-[#cfa043] overflow-x-hidden">
 
     {{-- ORNAMEN NAIK DARI BAWAH --}}
     <span class="floating-icon from-bottom icon-lg"
@@ -140,14 +140,14 @@
     <span class="floating-icon from-top icon-lg"
         style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
 
-    {{-- KARTUN ADAT --}}
+    {{-- KARTUN ADAT (MUNCUL DI HP, DIKECILIN) --}}
     <img src="{{ asset('foto kartun2.jpg') }}"
-        class="hidden md:block fixed left-10 bottom-0 h-[300px] object-contain z-10">
+        class="block fixed left-1 bottom-0 h-[120px] sm:left-4 sm:h-[170px] md:left-10 md:h-[260px] lg:h-[300px] object-contain z-10">
     <img src="{{ asset('foto kartun2.jpg') }}"
-        class="hidden md:block fixed right-10 bottom-0 h-[300px] object-contain z-10">
+        class="block fixed right-1 bottom-0 h-[120px] sm:right-4 sm:h-[170px] md:right-10 md:h-[260px] lg:h-[300px] object-contain z-10">
 
     {{-- CARD LOGIN MELAYANG --}}
-    <div class="relative z-20 flex items-center justify-center min-h-screen px-4 py-6">
+    <div class="relative z-20 flex items-center justify-center min-h-screen px-4 py-6 sm:px-6">
         <div class="w-full max-w-4xl bg-[#fffdf7]/95 rounded-[28px]
                     shadow-[0_18px_55px_rgba(190,143,43,0.35)]
                     border border-[#f4ddab] backdrop-blur-md overflow-hidden
@@ -156,29 +156,29 @@
             <div class="grid md:grid-cols-2">
 
                 {{-- KIRI: FORM LOGIN --}}
-                <div class="px-8 py-6 flex flex-col justify-center">
+                <div class="px-5 py-6 sm:px-8 flex flex-col justify-center">
 
                     {{-- LOGO --}}
                     <div class="flex justify-center mb-4">
-                        <div class="flex items-center justify-center w-40 h-14 rounded-full
+                        <div class="flex items-center justify-center w-32 h-12 sm:w-40 sm:h-14 rounded-full
                                     border border-[#f4c970] bg-white shadow-md">
-                            <img src="{{ asset('logos3.jpg') }}" alt="Logo AdatKu" class="h-11 object-contain">
+                            <img src="{{ asset('logos3.jpg') }}" alt="Logo AdatKu" class="h-9 sm:h-11 object-contain">
                         </div>
                     </div>
 
                     {{-- TEKS ATAS --}}
-                    <div class="text-center mb-4">
-                        <h1 class="text-2xl font-bold text-[#d68e00]">AdatKu</h1>
-                        <p class="text-sm text-[#c2983a]">
+                    <div class="text-center mb-3 sm:mb-4">
+                        <h1 class="text-xl sm:text-2xl font-bold text-[#d68e00]">AdatKu</h1>
+                        <p class="text-xs sm:text-sm text-[#c2983a]">
                             Masuk untuk melanjutkan
-                            <span class="font-semibold text-[#e6a400]">AdatKu</span>
+                            <span class="font-semibold text-[#e4a200]">AdatKu</span>
                         </p>
                     </div>
 
                     {{-- TITLE --}}
-                    <h2 class="text-center text-lg font-bold text-[#d68e00] mb-4">Login</h2>
+                    <h2 class="text-center text-base sm:text-lg font-bold text-[#d68e00] mb-4">Login</h2>
 
-                    {{-- ALERT BERHASIL / ERROR UMUM (bukan popup) --}}
+                    {{-- ALERT --}}
                     @if (session('success'))
                         <div
                             class="mb-3 text-[12px] px-3 py-2 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -196,24 +196,37 @@
                     <form method="POST" action="{{ route('login.post') }}" class="space-y-3">
                         @csrf
 
-                        {{-- EMAIL --}}
-                        <div>
-                            <label class="block text-[12px] font-medium text-[#a98225] mb-1">Email</label>
-                            <input type="email" name="email" value="{{ old('email') }}" required class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
-                                          px-3 py-2 text-[13px] text-gray-800
-                                          focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]">
-                        </div>
+                        {{-- BARIS: EMAIL & PASSWORD (STACK DI HP) --}}
+                        <div class="grid md:grid-cols-2 gap-3">
+                            {{-- EMAIL --}}
+                            <div>
+                                <label class="block text-[12px] font-medium text-[#a98225] mb-1">Email</label>
+                                <input type="email" name="email" value="{{ old('email') }}" required
+                                    class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
+                                           px-3 py-2 text-[13px] text-gray-800
+                                           focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]">
+                            </div>
 
-                        {{-- PASSWORD --}}
-                        <div>
-                            <label class="block text-[12px] font-medium text-[#a98225] mb-1">Password</label>
-                            <input type="password" name="password" required class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
-                                          px-3 py-2 text-[13px] text-gray-800
-                                          focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]">
+                            {{-- PASSWORD + MATA --}}
+                            <div>
+                                <label class="block text-[12px] font-medium text-[#a98225] mb-1">Password</label>
+                                <div class="relative">
+                                    <input type="password" id="login_password" name="password" required
+                                        class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
+                                               px-3 py-2 pr-10 text-[13px] text-gray-800
+                                               focus:outline-none focus:ring-2 focus:ring-[#f6c453] focus:border-[#f6c453]">
+                                    <span
+                                        class="absolute inset-y-0 right-3 flex items-center text-sm cursor-pointer text-[#d68e00]"
+                                        onclick="togglePassword('login_password', this)">
+                                        😶
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- REMEMBER --}}
-                        <div class="flex items-center justify-between text-[12px] text-gray-700">
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[12px] text-gray-700 mt-1">
                             <label class="inline-flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" name="remember"
                                     class="rounded border-[#efcd82] text-[#f6c453] focus:ring-[#f6c453]">
@@ -222,11 +235,18 @@
                         </div>
 
                         {{-- TOMBOL LOGIN --}}
-                        <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
-                                       text-white font-semibold text-sm shadow-lg hover:brightness-110
-                                       transition-all duration-200">
+                        <button type="submit" class="mt-1 w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
+                                   text-white font-semibold text-sm shadow-lg hover:brightness-110
+                                   transition-all duration-200">
                             Login
                         </button>
+
+                        <div class="mt-3 text-center">
+                            <a href="{{ route('password.request') }}" class="text-sm text-rose-600 hover:underline">
+                                Lupa password?
+                            </a>
+                        </div>
+
                     </form>
 
                     {{-- DIVIDER --}}
@@ -241,8 +261,8 @@
 
                     {{-- TOMBOL LOGIN GOOGLE --}}
                     <a href="{{ route('google.login') }}" class="flex items-center justify-center gap-3 w-full py-2.5 rounded-xl
-                              bg-white border border-[#efcd82] text-gray-700 font-semibold text-sm
-                              shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-200">
+                               bg-white border border-[#efcd82] text-gray-700 font-semibold text-sm
+                               shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-200">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" alt="Google">
                         Login dengan Google
                     </a>
@@ -260,7 +280,7 @@
 
                 </div>
 
-                {{-- KANAN: TEKS --}}
+                {{-- KANAN: TEKS (DISembunyikan DI HP) --}}
                 <div class="hidden md:flex flex-col justify-center items-center
                             bg-gradient-to-b from-[#fff8e1] to-[#f3cc75] py-6 px-6">
                     <div class="text-center">
@@ -277,31 +297,27 @@
         </div>
     </div>
 
-    {{-- POPUP ERROR LOGIN (EMAIL/PASSWORD SALAH / PASSWORD KEPENDEKAN) --}}
+    {{-- POPUP ERROR LOGIN --}}
     @if ($errors->has('email') || $errors->has('password'))
         @php
-            // Tentukan pesan & judul sesuai jenis error
             $passwordError = $errors->has('password') ? $errors->first('password') : null;
             $loginError = $errors->has('email') ? $errors->first('email') : null;
 
             if ($passwordError && !$loginError) {
                 $popupTitle = 'Password tidak valid';
-                $popupMessage = $passwordError; // misal: "Password minimal 6 karakter."
+                $popupMessage = $passwordError;
             } else {
                 $popupTitle = 'Login gagal';
                 $popupMessage = $loginError ?: 'Email atau password yang kamu masukkan tidak cocok. Silakan cek kembali dan coba lagi.';
             }
         @endphp
 
-        <!-- OVERLAY GELAP -->
         <div id="login-error-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden z-[998]"></div>
 
-        <!-- SPINNER PHASE (HANYA LOADING DI AWAL) -->
         <div id="login-error-spinner" class="fixed inset-0 flex items-center justify-center hidden z-[999]">
             <div class="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
 
-        <!-- POPUP CARD SETELAH SPINNER -->
         <div id="login-error-popup" class="fixed inset-0 flex items-center justify-center hidden z-[1000]">
             <div
                 class="bg-[#fffdf7] w-[340px] px-6 py-5 rounded-2xl text-center shadow-xl border border-[#f4ddab] animate-fadeIn">
@@ -322,17 +338,14 @@
 
                 if (!overlay || !spinner || !popup) return;
 
-                // Step 1: tampilkan overlay + spinner dulu
                 overlay.classList.remove('hidden');
                 spinner.classList.remove('hidden');
 
-                // Step 2: setelah 1 detik, sembunyikan spinner → tampilkan popup card
                 setTimeout(() => {
                     spinner.classList.add('hidden');
                     popup.classList.remove('hidden');
                 }, 1000);
 
-                // Step 3: setelah beberapa detik, fade out popup + overlay
                 setTimeout(() => {
                     popup.classList.add('opacity-0');
                     overlay.classList.add('opacity-0');
@@ -342,10 +355,26 @@
                         spinner.remove();
                         overlay.remove();
                     }, 300);
-                }, 3500); // total ±3.5 detik
+                }, 3500);
             });
         </script>
     @endif
+
+    {{-- SCRIPT TOGGLE PASSWORD --}}
+    <script>
+        function togglePassword(inputId, el) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                el.textContent = '🫣';
+            } else {
+                input.type = 'password';
+                el.textContent = '😶';
+            }
+        }
+    </script>
 
 </body>
 

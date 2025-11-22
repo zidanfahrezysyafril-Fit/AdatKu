@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Mail;
+
+use App\Models\MuaRequest;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+
+class MuaRequestSubmitted extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public MuaRequest $muaRequest;
+
+    public function __construct(MuaRequest $muaRequest)
+    {
+        $this->muaRequest = $muaRequest;
+    }
+
+    public function build()
+    {
+        return $this->subject('Pengajuan MUA Baru - AdatKu')
+            ->view('emails.mua.request_submitted');
+    }
+}

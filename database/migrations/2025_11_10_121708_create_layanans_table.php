@@ -7,18 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('layanans', function (Blueprint $t) {
-            $t->uuid('id')->primary();
-            $t->uuid('mua_id');                         
-            $t->string('nama', 120);
-            $t->unsignedBigInteger('harga')->default(0);
-            $t->string('kategori', 40)->nullable();    
-            $t->text('deskripsi')->nullable();
-            $t->string('foto', 255)->nullable();
-            $t->timestamps();
+        Schema::create('layanans', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('mua_id')->constrained('muas')->cascadeOnDelete();
 
-            $t->foreign('mua_id')->references('id')->on('muas')->cascadeOnDelete();
-            $t->index(['mua_id', 'kategori']);
+            $table->string('nama');
+            $table->decimal('harga', 10, 2);
+            $table->string('kategori', 50)->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->string('foto')->nullable();
+
+            $table->timestamps();
         });
     }
 

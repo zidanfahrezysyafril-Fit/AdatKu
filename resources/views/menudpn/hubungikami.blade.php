@@ -122,6 +122,56 @@
     .animate-soft {
       animation: slide-up-soft 0.4s ease-out;
     }
+
+    /* ANIMASI POPUP SUKSES */
+    @keyframes popup-bounce {
+      0% {
+        transform: scale(0.8) translateY(10px);
+        opacity: 0;
+      }
+
+      60% {
+        transform: scale(1.03) translateY(0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .popup-success-card {
+      animation: popup-bounce 0.32s ease-out;
+    }
+
+    @keyframes float-bubble {
+      0% {
+        transform: translateY(0px) translateX(0px);
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      50% {
+        transform: translateY(-14px) translateX(6px);
+      }
+
+      80% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-26px) translateX(-4px);
+        opacity: 0;
+      }
+    }
+
+    .floating-emoji {
+      animation: float-bubble 3.5s ease-in-out infinite;
+    }
   </style>
 </head>
 
@@ -132,9 +182,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-20 z-[60]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                        backdrop-blur-md border border-[#fff3b0]/40
-                        @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                        @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                    backdrop-blur-md border border-[#fff3b0]/40
+                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -192,8 +242,8 @@
         <div class="flex items-center gap-3">
           @guest
             <a href="{{ route('pengguna.home') }}" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                            text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
-                            transition text-sm font-semibold">
+                        text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
+                        transition text-sm font-semibold">
               Sign In
             </a>
           @endguest
@@ -236,12 +286,11 @@
     </div>
   </header>
 
-  {{-- HERO (dibikin lebih penuh & informatif) --}}
+  {{-- HERO --}}
   <section class="relative overflow-hidden">
     <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu"
       class="w-full h-[420px] md:h-[500px] lg:h-[540px] object-cover brightness-[0.7]">
 
-    {{-- overlay gelap lembut --}}
     <div class="absolute inset-0 bg-gradient-to-b from-black/65 via-black/35 to-black/60"></div>
 
     <div class="absolute inset-0 flex items-center">
@@ -266,15 +315,14 @@
             Kirim pesan lewat formulir di bawah. Tim AdatKu siap membantu kamu dengan ramah dan cepat.
           </p>
 
-          {{-- tiga kartu kecil supaya nggak kosong --}}
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2 text-sm">
             <div
               class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 backdrop-blur-sm flex items-start gap-2">
               <span class="text-lg">💬</span>
               <div>
                 <p class="font-semibold text-[#ffeaa5] text-xs uppercase tracking-wide mb-0.5">Pertanyaan Umum</p>
-                <p class="text-[11px] leading-snug text-[#fefce8]">Tanya fitur AdatKu, cara daftar, dan alur
-                  pemesanan.</p>
+                <p class="text-[11px] leading-snug text-[#fefce8]">Tanya fitur AdatKu, cara daftar, dan alur pemesanan.
+                </p>
               </div>
             </div>
 
@@ -452,6 +500,50 @@
         </div>
       </div>
     </aside>
+
+    {{-- POPUP SUKSES KIRIM PESAN --}}
+    <div x-cloak x-show="successModal" x-transition.opacity
+      class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+
+      <div class="popup-success-card relative max-w-md w-[90%] bg-gradient-to-br
+                  from-[#fff9fb] via-white to-[#fff3d7]
+                  rounded-3xl shadow-2xl border border-amber-100 px-6 py-6 overflow-hidden">
+
+        {{-- bubble warna --}}
+        <div class="absolute -top-6 -left-4 w-16 h-16 rounded-full bg-amber-100/60 blur-md"></div>
+        <div class="absolute -bottom-10 -right-6 w-24 h-24 rounded-full bg-rose-100/60 blur-xl"></div>
+
+        {{-- emoji melayang --}}
+        <div class="absolute top-3 right-6 text-2xl floating-emoji delay-100">✨</div>
+        <div class="absolute bottom-4 left-6 text-2xl floating-emoji delay-300">💌</div>
+        <div class="absolute top-10 left-1/2 -translate-x-1/2 text-xl floating-emoji delay-700">🌸</div>
+
+        <div class="relative">
+          <div
+            class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4 border border-emerald-100">
+            <span class="text-3xl">✅</span>
+          </div>
+
+          <h2 class="text-xl font-semibold text-slate-800 mb-1">
+            Pesan terkirim! 🎉
+          </h2>
+          <p class="text-sm text-slate-600 mb-4" x-text="successMessage"></p>
+
+          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-3">
+            <span>Terima kasih sudah menghubungi AdatKu 💛</span>
+            <span>Hubungi Kami · AdatKu</span>
+          </div>
+
+          <div class="flex justify-end">
+            <button type="button" @click="successModal = false"
+              class="px-4 py-2 rounded-full border border-slate-200 text-slate-600 text-sm hover:bg-slate-50">
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   {{-- MODAL PROFIL & EDIT --}}
@@ -495,8 +587,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                               hover:opacity-90 transition">
+                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                           hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -507,10 +599,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[90] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                        w-[92%] max-w-3xl p-8 md:p-10 relative">
+                    w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal=false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                             hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -527,8 +619,8 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center
-                              w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
-                              bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
+                          w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
+                          bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -540,10 +632,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                  file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                  file:border file:border-yellow-200 file:bg-white
-                                  file:text-slate-700 file:cursor-pointer
-                                  hover:file:bg-yellow-50">
+                              file:mr-3 file:rounded-lg file:px-4 file:py-2
+                              file:border file:border-yellow-200 file:bg-white
+                              file:text-slate-700 file:cursor-pointer
+                              hover:file:bg-yellow-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -555,20 +647,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                text-sm md:text-base
-                                focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                focus:border-[#c98a00]">
+                            text-sm md:text-base
+                            focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                            focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal=false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                 hover:bg-slate-200 transition">
+                             hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                 hover:opacity-90 transition">
+                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                             hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -606,8 +698,7 @@
               <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
               <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
               <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
-              <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi
-                  Kami</a></li>
+              <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi Kami</a></li>
             </ul>
           </div>
 
@@ -631,7 +722,7 @@
           </div>
         </div>
 
-        <p class="mt-4 text-xs text-center text-[#e2c9bf] ">
+        <p class="mt-4 text-xs text-center text-[#e2c9bf]">
           Dikembangkan oleh
           <span class="font-semibold">Zidan Fahrezy Syafril</span>,
           <span class="font-semibold">Cahyani Putri Sofari</span>,
@@ -645,27 +736,22 @@
     </div>
   </footer>
 
- {{-- ICON MELAYANG (4 bawah + 4 atas) --}}
-<!-- Dari bawah -->
-<span class="floating-icon from-bottom icon-lg"
-  style="left: 10%; animation-duration: 22s; animation-delay: 0s;">❖</span>
-<span class="floating-icon from-bottom icon-md"
-  style="left: 32%; animation-duration: 24s; animation-delay: 3s;">✿</span>
-<span class="floating-icon from-bottom icon-xl"
-  style="left: 58%; animation-duration: 28s; animation-delay: 6s;">❁</span>
-<span class="floating-icon from-bottom icon-lg"
-  style="left: 80%; animation-duration: 25s; animation-delay: 4s;">✥</span>
+  {{-- ICON MELAYANG (4 bawah + 4 atas) --}}
+  <!-- Dari bawah -->
+  <span class="floating-icon from-bottom icon-lg"
+    style="left: 10%; animation-duration: 22s; animation-delay: 0s;">❖</span>
+  <span class="floating-icon from-bottom icon-md"
+    style="left: 32%; animation-duration: 24s; animation-delay: 3s;">✿</span>
+  <span class="floating-icon from-bottom icon-xl"
+    style="left: 58%; animation-duration: 28s; animation-delay: 6s;">❁</span>
+  <span class="floating-icon from-bottom icon-lg"
+    style="left: 80%; animation-duration: 25s; animation-delay: 4s;">✥</span>
 
-<!-- Dari atas -->
-<span class="floating-icon from-top icon-md"
-  style="left: 15%; animation-duration: 23s; animation-delay: 2s;">✦</span>
-<span class="floating-icon from-top icon-lg"
-  style="left: 42%; animation-duration: 27s; animation-delay: 5s;">❋</span>
-<span class="floating-icon from-top icon-xl"
-  style="left: 68%; animation-duration: 30s; animation-delay: 8s;">◈</span>
-<span class="floating-icon from-top icon-md"
-  style="left: 88%; animation-duration: 26s; animation-delay: 3s;">❂</span>
-
+  <!-- Dari atas -->
+  <span class="floating-icon from-top icon-md" style="left: 15%; animation-duration: 23s; animation-delay: 2s;">✦</span>
+  <span class="floating-icon from-top icon-lg" style="left: 42%; animation-duration: 27s; animation-delay: 5s;">❋</span>
+  <span class="floating-icon from-top icon-xl" style="left: 68%; animation-duration: 30s; animation-delay: 8s;">◈</span>
+  <span class="floating-icon from-top icon-md" style="left: 88%; animation-duration: 26s; animation-delay: 3s;">❂</span>
 
   {{-- SCRIPT ALPINE CONTACT FORM --}}
   <script>
@@ -677,6 +763,11 @@
           type: 'success',
           message: ''
         },
+
+        // popup sukses
+        successModal: false,
+        successMessage: '',
+
         formData: {
           nama: '',
           telepon: '',
@@ -698,7 +789,7 @@
           try {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-            const response = await fetch('/api/hubungi-kami', {
+            const response = await fetch('/hubungi-kami', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -711,8 +802,14 @@
             const data = await response.json();
 
             if (data.success) {
+              // notif kecil di atas form
               this.showNotification('success', data.message || 'Pesan berhasil dikirim! Kami akan segera menghubungi kamu.');
 
+              // isi pesan popup
+              this.successMessage = data.message || 'Pesanmu sudah terkirim ke tim AdatKu. Kami akan merespons dalam 1–2 hari kerja. ✨';
+              this.successModal = true;
+
+              // reset form
               this.formData = {
                 nama: '',
                 telepon: '',
@@ -720,6 +817,12 @@
                 subjek: '',
                 pesan: ''
               };
+
+              // auto close popup (kalau mau manual, hapus blok ini)
+              setTimeout(() => {
+                this.successModal = false;
+              }, 4500);
+
             } else {
               throw new Error(data.message || 'Gagal mengirim pesan');
             }

@@ -141,10 +141,9 @@ class ContactController extends Controller
         $message = ContactMessage::findOrFail($id);
         $message->update(['is_read' => true]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Pesan ditandai sebagai sudah dibaca'
-        ]);
+        return redirect()
+            ->route('admin.contact.index')
+            ->with('success', 'Pesan sudah kamu baca');
     }
 
     /**
@@ -155,10 +154,9 @@ class ContactController extends Controller
         $message = ContactMessage::findOrFail($id);
         $message->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Pesan berhasil dihapus'
-        ]);
+         return redirect()
+            ->route('admin.contact.index')
+            ->with('success', 'Pesan di hapus');
     }
 
     /**

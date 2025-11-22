@@ -81,7 +81,7 @@ class GoogleController extends Controller
     {
         switch ($user->role) {
             case 'Admin':
-                return redirect()->intended('/admin/dashboard');
+                return redirect()->intended('dashboard_a');
 
             case 'MUA':
                 return redirect()->intended('/dashboard');
