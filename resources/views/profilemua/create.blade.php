@@ -11,14 +11,14 @@
     <div class="max-w-6xl mx-auto">
         <div class="{{ $sec }}">
             <div class="px-6 py-4 border-b border-slate-100">
-                <h2 class="text-2xl font-bold text-rose-700">Buat Profil MUA</h2>
+                <h2 class="text-3xl font-bold" style="color:#c98a00;">Buat Profil MUA</h2>
             </div>
 
             {{-- Alert (auto-hide) --}}
             @if(session('success') || session('info'))
                 <div x-data="{ show: true }" x-init="setTimeout(()=>show=false,3000)" x-show="show" x-transition
                     class="mx-6 mt-4 mb-0 rounded-xl border px-4 py-3
-                       {{ session('success') ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-amber-50 border-amber-200 text-amber-700' }}">
+                                       {{ session('success') ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-amber-50 border-amber-200 text-amber-700' }}">
                     {{ session('success') ?? session('info') }}
                 </div>
             @endif
@@ -102,11 +102,22 @@
                 <div class="sticky bottom-0 inset-x-0">
                     <div class="bg-white/85 backdrop-blur border-t border-slate-200">
                         <div class="max-w-6xl mx-auto px-6 py-3 flex justify-end gap-3">
+
+                            {{-- TOMBOL BATAL WARNA EMAS --}}
                             <a href="{{ route('mua.panel') }}"
-                                class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50">Batal</a>
-                            <button type="submit" class="px-5 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700">
+                               class="px-4 py-2 rounded-xl border border-[#c98a00] bg-white text-[#c98a00] text-sm font-semibold
+                                      hover:bg-[#fff9e6] hover:border-[#b27a00] hover:text-[#b27a00] transition">
+                                Batal
+                            </a>
+
+                            {{-- TOMBOL SIMPAN PROFIL WARNA EMAS --}}
+                            <button type="submit" class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl 
+               bg-[#c98a00] text-white font-semibold text-sm shadow-md
+               hover:bg-[#b27a00] active:bg-[#9a6d00] transition 
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eab308] focus-visible:ring-offset-2">
                                 Simpan Profil
                             </button>
+
                         </div>
                     </div>
                 </div>

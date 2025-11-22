@@ -26,6 +26,71 @@
         .animate-slideIn {
             animation: slideIn 0.4s ease-out;
         }
+
+        /* 🎨 WARNA BRAND ADATKU */
+        .adat-title {
+            color: #b21f39; /* judul besar / teks penting */
+        }
+
+        .adat-gold {
+            color: #c98a00; /* gold elegan */
+        }
+
+        .adat-text {
+            color: #6d5f5b; /* paragraf / deskripsi */
+        }
+
+        .adat-jade {
+            color: #009f61; /* angka uang / status bagus */
+        }
+
+        /* ✨ Paksa background AdatKu di body, override bg-slate-50 Tailwind */
+        body.bg-slate-50 {
+            background-color: #fff9f7 !important;
+            background-image:
+                radial-gradient(circle at top left, rgba(249, 213, 213, 0.55) 0%, transparent 50%),
+                radial-gradient(circle at bottom right, rgba(244, 219, 178, 0.55) 0%, transparent 55%);
+            background-attachment: fixed;
+        }
+
+        /* ✨ BACKGROUND CANTIK ADATKU */
+        body {
+            background-color: #fff9f7;
+            background-image:
+                radial-gradient(circle at top left, rgba(249, 213, 213, 0.55) 0%, transparent 50%),
+                radial-gradient(circle at bottom right, rgba(244, 219, 178, 0.55) 0%, transparent 55%);
+            background-attachment: fixed;
+        }
+
+        /* === CARD STATISTIK STYLE ADATKU === */
+        .stat-card {
+            position: relative;
+            border-radius: 1.25rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid #f7e7c3;
+            box-shadow: 0 4px 10px rgba(200, 150, 120, 0.1);
+            transition: .2s ease;
+            background-color: #ffffff;
+        }
+
+        /* Left gold edge */
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 100%;
+            border-radius: 1.25rem 0 0 1.25rem;
+            background: linear-gradient(180deg, #f9d67f, #e2b650);
+            opacity: .85;
+        }
+
+        /* Hover effect */
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(200, 150, 120, 0.22);
+        }
     </style>
 </head>
 
@@ -35,6 +100,7 @@
     <header class="fixed top-0 inset-x-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-rose-100">
         <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
+            {{-- Kiri: logo + judul --}}
             <div class="flex items-center gap-3">
                 <!-- Burger (mobile) -->
                 <button @click="open = !open"
@@ -46,23 +112,22 @@
                 </button>
 
                 <!-- Logo + title -->
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-amber-400 flex items-center justify-center font-semibold shadow-lg text-red-600">
-                        M
-                    </div>
-                    <div class="leading-tight">
-                        <p class="text-[11px] uppercase tracking-[0.16em] text-rose-500">
-                            MUA Panel
-                        </p>
-                        <h1 class="text-base sm:text-lg font-semibold text-slate-900">
-                            Dashboard
-                        </h1>
-                    </div>
+                <a href="{{ route('home') }}" class="flex items-center gap-3">
+                    <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
+                        class="w-12 h-12 rounded-full object-cover shadow-md border border-amber-200">
+                </a>
+
+                <div class="leading-tight">
+                    <p class="text-[11px] uppercase tracking-[0.16em] adat-gold font-semibold">
+                        MUA Panel
+                    </p>
+                    <h1 class="text-base sm:text-lg font-semibold adat-title">
+                        Dashboard
+                    </h1>
                 </div>
             </div>
 
-            <!-- Profil -->
+            {{-- Kanan: profil user --}}
             @auth
                 @php
                     $user = auth()->user();
@@ -107,6 +172,7 @@
                     </div>
                 </div>
             @endauth
+
         </div>
     </header>
 
@@ -125,7 +191,7 @@
     @endif
 
     <!-- SIDEBAR -->
-    <aside class="fixed z-30 top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-[#231b27] text-white border-r border-white/10
+    <aside class="fixed z-30 top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-[#1e1723] text-white border-r border-white/10
                transition-transform duration-200 ease-out"
         :class="open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
 
@@ -137,27 +203,35 @@
                 </h2>
             </div>
 
-            <!-- NAV -->
             <nav class="flex-1 px-3 py-4 text-sm space-y-1 overflow-y-auto">
 
-                {{-- Dashboard --}}
+                @php
+                    $role = strtolower(auth()->user()->role ?? '');
+                    $isMuaActive = request()->routeIs('mua.*')
+                        || request()->routeIs('profilemua.*')
+                        || request()->routeIs('panelmua.layanan.*');
+                @endphp
+
+                {{-- DASHBOARD --}}
                 <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
-                          hover:bg-white/10 hover:shadow-sm transition
-                          {{ request()->routeIs('dashboard') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+              bg-white/5 border-l-4 border-[#e0ac33]/30
+              hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+              {{ request()->routeIs('dashboard') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                     <svg class="w-4 h-4 opacity-80 group-hover:opacity-100" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 3l9 8h-3v10H6V11H3l9-8z" />
                     </svg>
                     <span>Dashboard</span>
                 </a>
 
-                {{-- Group: MUA --}}
-                @php $role = strtolower(auth()->user()->role ?? ''); @endphp
+                {{-- GROUP: MUA --}}
                 @if ($role === 'mua')
-                    <div x-data="{ openMua: {{ request()->routeIs('mua.*') || request()->routeIs('profilemua.*') ? 'true' : 'false' }} }"
-                        class="pt-2 space-y-1">
+                    <div x-data="{ openMua: {{ $isMuaActive ? 'true' : 'false' }} }" class="pt-2 space-y-1">
 
-                        <button @click="openMua = !openMua"
-                            class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition">
+                        {{-- TOMBOL MUA (MAIN ITEM) --}}
+                        <button @click="openMua = !openMua" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl
+                                   bg-white/5 border-l-4 border-[#e0ac33]/30
+                                   hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                                   {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
@@ -172,31 +246,33 @@
                             </svg>
                         </button>
 
+                        {{-- SUBMENU MUA --}}
                         <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
-
                             <a href="{{ route('mua.panel') }}" class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                          {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                      {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Profil MUA
                             </a>
 
                             <a href="{{ route('panelmua.layanan.index') }}"
-                                class="block px-3 py-2 rounded-lg hover:bg-white/10">
+                                class="block px-3 py-2 rounded-lg hover:bg-white/10
+                                      {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Layanan
                             </a>
                         </div>
                     </div>
                 @endif
 
-                {{-- Pesanan --}}
+                {{-- TRANSAKSI --}}
                 <div class="pt-2 space-y-1">
                     <p class="px-3 text-[11px] uppercase tracking-[0.18em] text-white/40">
                         Transaksi
                     </p>
 
-                    <a href="{{ route('panelmua.pesanan.index') }}"
-                        class="group mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl
-                              hover:bg-white/10 hover:shadow-sm transition
-                              {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                    {{-- PESANAN --}}
+                    <a href="{{ route('panelmua.pesanan.index') }}" class="group mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl
+                  bg-white/5 border-l-4 border-[#e0ac33]/30
+                  hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                  {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -206,10 +282,11 @@
                         <span>Pesanan</span>
                     </a>
 
-                    <a href="{{ route('panelmua.pembayaran.index') }}"
-                        class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
-                              hover:bg-white/10 hover:shadow-sm transition
-                              {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                    {{-- PEMBAYARAN --}}
+                    <a href="{{ route('panelmua.pembayaran.index') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                  bg-white/5 border-l-4 border-[#e0ac33]/30
+                  hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                  {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
                             <path stroke-linecap="round" stroke-linejoin="round"
