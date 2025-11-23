@@ -1,9 +1,15 @@
 @extends('layouts.app')
-@section('title', 'Edit Profile MUA')
+@section('title', 'Edit Profil MUA')
 
 @section('content')
   @php
-    $inp = 'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[15px] shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 placeholder:text-slate-400 transition';
+    // INPUT: normal abu, pas focus baru muncul border emas gradasi
+    $inp = 'w-full rounded-xl px-3 py-2.5 placeholder:text-slate-400 border border-slate-300
+            focus:outline-none focus:border-[3px] focus:border-transparent
+            focus:[background-image:linear-gradient(white,white),linear-gradient(90deg,#FFE07D,#C98A00)]
+            focus:[background-origin:border-box] focus:[background-clip:padding-box,border-box]
+            focus:ring-0';
+
     $lab = 'block text-[13px] font-semibold text-slate-600 mb-1.5';
   @endphp
 
@@ -12,9 +18,15 @@
 
       {{-- HEADER --}}
       <div class="pb-5 border-b border-rose-50 mb-8">
-        <p class="text-xs font-semibold tracking-[0.18em] text-rose-400 uppercase mb-1.5">MUA Panel</p>
-        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Edit Profil MUA</h2>
-        <p class="text-sm text-slate-500 mt-1">Lengkapi dan perbarui identitas profesional kamu.</p>
+        <p class="text-xs font-semibold tracking-[0.18em] uppercase mb-1.5" style="color:#C98A00;">
+          MUA PANEL
+        </p>
+        <h2 class="text-2xl sm:text-3xl font-bold" style="color:#C98A00;">
+          Edit Profil MUA
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Lengkapi dan perbarui identitas profesional kamu.
+        </p>
       </div>
 
       <form action="{{ route('profilemua.update') }}" method="POST" enctype="multipart/form-data" class="space-y-10">
@@ -27,8 +39,7 @@
           {{-- FOTO --}}
           <div>
             <h3 class="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-              <span
-                class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-500 text-sm">📸</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-500 text-sm">📸</span>
               Foto Profil
             </h3>
 
@@ -55,33 +66,52 @@
           {{-- INFORMASI UTAMA --}}
           <div>
             <h3 class="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-              <span
-                class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-500 text-sm">📝</span>
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-500 text-sm">📝</span>
               Informasi Utama
             </h3>
 
             <div class="grid gap-4">
               <div>
                 <label class="{{ $lab }}">Nama Usaha</label>
-                <input type="text" name="nama_usaha" value="{{ old('nama_usaha', $mua->nama_usaha) }}" class="{{ $inp }}">
+                <input
+                  type="text"
+                  name="nama_usaha"
+                  value="{{ old('nama_usaha', $mua->nama_usaha) }}"
+                  class="{{ $inp }}"
+                  placeholder="Masukkan nama usaha / brand MUA kamu">
               </div>
 
               <div class="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label class="{{ $lab }}">Kontak WA</label>
-                  <input type="text" name="kontak_wa" value="{{ old('kontak_wa', $mua->kontak_wa) }}" class="{{ $inp }}">
+                  <input
+                    type="text"
+                    name="kontak_wa"
+                    value="{{ old('kontak_wa', $mua->kontak_wa) }}"
+                    class="{{ $inp }}"
+                    placeholder="+62 812 3456 7890">
                 </div>
                 <div>
                   <label class="{{ $lab }}">Alamat / Domisili</label>
-                  <input type="text" name="alamat" value="{{ old('alamat', $mua->alamat) }}" class="{{ $inp }}">
+                  <input
+                    type="text"
+                    name="alamat"
+                    value="{{ old('alamat', $mua->alamat) }}"
+                    class="{{ $inp }}"
+                    placeholder="Masukkan alamat / domisili kamu">
                 </div>
               </div>
 
               <div>
                 <label class="{{ $lab }}">Deskripsi Profil</label>
-                <textarea name="deskripsi" rows="4"
-                  class="{{ $inp }} resize-none">{{ old('deskripsi', $mua->deskripsi) }}</textarea>
-                <p class="text-xs text-slate-500 mt-1">Ceritakan style makeup, keunggulan, pengalaman, dan layananmu.</p>
+                <textarea
+                  name="deskripsi"
+                  rows="4"
+                  class="{{ $inp }} resize-none"
+                  placeholder="Ceritakan secara singkat tentang jasa MUA kamu...">{{ old('deskripsi', $mua->deskripsi) }}</textarea>
+                <p class="text-xs text-slate-500 mt-1">
+                  Ceritakan style makeup, keunggulan, pengalaman, dan layananmu.
+                </p>
               </div>
             </div>
           </div>
@@ -90,36 +120,53 @@
         {{-- SOSIAL MEDIA --}}
         <div>
           <h3 class="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <span
-              class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-500 text-sm">💬</span>
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-500 text-sm">💬</span>
             Sosial Media
           </h3>
 
           <div class="grid sm:grid-cols-2 gap-4">
             <div>
               <label class="{{ $lab }}">Instagram</label>
-              <input type="text" name="instagram" value="{{ old('instagram', $mua->instagram) }}" class="{{ $inp }}"
+              <input
+                type="text"
+                name="instagram"
+                value="{{ old('instagram', $mua->instagram) }}"
+                class="{{ $inp }}"
                 placeholder="@username">
             </div>
             <div>
               <label class="{{ $lab }}">TikTok</label>
-              <input type="text" name="tiktok" value="{{ old('tiktok', $mua->tiktok) }}" class="{{ $inp }}"
+              <input
+                type="text"
+                name="tiktok"
+                value="{{ old('tiktok', $mua->tiktok) }}"
+                class="{{ $inp }}"
                 placeholder="@username">
             </div>
           </div>
         </div>
 
-        {{-- ACTION BUTTONS --}}
-        <div class="flex justify-end gap-3 pt-5 border-t border-slate-100">
+                {{-- ACTION BUTTONS --}}
+        <div class="flex justify-end gap-3 mt-4">
+          {{-- BATAL --}}
           <a href="{{ route('mua.panel') }}"
-            class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm font-medium transition">
+             class="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl font-semibold text-white
+                    shadow-sm hover:brightness-110 active:brightness-95 transition"
+             style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
             Batal
           </a>
+
+          {{-- SIMPAN PERUBAHAN --}}
           <button type="submit"
-            class="px-5 py-2.5 rounded-xl bg-rose-600 text-white hover:bg-rose-700 text-sm font-semibold shadow-sm transition">
+            class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white
+                   shadow-md hover:brightness-110 active:brightness-95 transition
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eab308] focus-visible:ring-offset-2"
+            style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
             Simpan Perubahan
           </button>
         </div>
+
+
       </form>
     </div>
   </div>
