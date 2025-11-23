@@ -10,31 +10,33 @@
 
     <div class="w-full px-4 sm:px-6 lg:px-10 space-y-4 lg:space-y-6">
 
-        {{-- ALERT PROFIL --}}
+        {{-- ALERT PROFIL (TEMA KUNING EMAS) --}}
         @if ($mua)
-            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)" x-transition.opacity
-                class="flex items-start gap-3 bg-emerald-50 border border-emerald-200/80 text-emerald-800 px-4 sm:px-5 py-3 rounded-2xl shadow-sm">
-                <div
-                    class="mt-0.5 h-8 w-8 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-lg">
-                    ✔
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)" x-transition.opacity class="flex items-start gap-3 px-4 sm:px-5 py-3 rounded-2xl shadow-sm
+                       bg-[#FFF8E0] border border-[#FACC6B] text-[#8A4B00]">
+                <div class="mt-0.5 h-8 w-8 flex items-center justify-center rounded-full 
+                            bg-[#FFF1BF] text-[#D97706] text-lg">
+                    ✓
                 </div>
                 <div class="text-sm leading-relaxed">
-                    <p class="font-semibold">Profil MUA kamu sudah aktif ✨</p>
+                    <p class="font-semibold text-[#9A5A00]">Profil MUA kamu sudah aktif ✨</p>
                     <p>Kamu bisa memperbarui kapan saja lewat tombol <b>Edit Profil</b> di bagian bawah.</p>
                 </div>
             </div>
         @else
-            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)" x-transition.opacity
-                class="flex items-start gap-3 bg-amber-50 border border-amber-200/80 text-amber-800 px-4 sm:px-5 py-3 rounded-2xl shadow-sm">
-                <div class="mt-0.5 h-8 w-8 flex items-center justify-center rounded-full bg-amber-100 text-amber-600 text-lg">
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)" x-transition.opacity class="flex items-start gap-3 px-4 sm:px-5 py-3 rounded-2xl shadow-sm
+                       bg-[#FFF8E0] border border-[#FACC6B] text-[#8A4B00]">
+                <div class="mt-0.5 h-8 w-8 flex items-center justify-center rounded-full 
+                            bg-[#FFF1BF] text-[#D97706] text-lg">
                     !
                 </div>
                 <div class="text-sm leading-relaxed">
-                    <p class="font-semibold">Kamu belum punya profil MUA</p>
+                    <p class="font-semibold text-[#9A5A00]">Kamu belum punya profil MUA</p>
                     <p>Buat dulu supaya bisa tampil di halaman <b>Pilih MUA</b> dan mudah ditemukan pelanggan.</p>
                 </div>
             </div>
         @endif
+
 
         {{-- KARTU PROFIL UTAMA --}}
         <div class="relative bg-white/95 rounded-3xl ring-1 ring-rose-100 shadow-sm overflow-hidden">
@@ -229,17 +231,18 @@
 
                     @if(!$mua)
                         <a href="{{ route('profilemua.create') }}" class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white 
-                                          shadow-md hover:brightness-110 active:brightness-95 transition"
+                                                          shadow-md hover:brightness-110 active:brightness-95 transition"
                             style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                             Buat Profil
                         </a>
 
                     @else
-                        <a href="{{ route('profilemua.edit') }}"
-                            class="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-amber-500 text-white text-sm font-semibold shadow-sm
-                                                          hover:bg-amber-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2">
+                        <a href="{{ route('profilemua.edit') }}" class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white
+                                  shadow-md hover:brightness-110 active:brightness-95 transition"
+                            style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                             Edit Profil
                         </a>
+
                     @endif
 
                     <p class="text-[11px] sm:text-xs adat-text max-w-md text-right">
