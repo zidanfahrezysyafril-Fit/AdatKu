@@ -179,7 +179,15 @@
         </section>
 
         <section class="max-w-6xl mx-auto px-6 mt-7 mb-20">
-            @if ($pesanan->isEmpty())
+            @php
+                // GROUPING: 1 checkout = 1 kartu pesanan
+                // Kalau kolom kode_pesanan belum ada/terisi, fallback ke id (tetap 1 layanan = 1 kartu)
+                $groupedPesanan = $pesanan->groupBy(function ($p) {
+                    return $p->kode_checkout ?: ('single-' . $p->id);
+                });
+            @endphp
+
+            @if ($groupedPesanan->isEmpty())
                 <div
                     class="mt-4 rounded-[28px] border border-dashed border-rose-200 bg-[rgba(255,242,213,0.65)] px-6 py-10 text-center">
                     <p class="text-3xl mb-2">✨</p>
@@ -194,28 +202,58 @@
                 </div>
             @else
                 <div class="space-y-5">
-                    @foreach ($pesanan as $item)
+                    @foreach ($groupedPesanan as $groupKey => $group)
                         @php
-                            $mua = $item->layanan->mua ?? null;
+                            $first = $group->first();
+
+                            // list layanan dalam 1 pesanan
+                            $layananList = $group
+                                ->map(function ($p) {
+                                    return optional($p->layanan)->nama;
+                                })
+                                ->filter()
+                                ->values();
+
+                            $jumlahLayanan = $layananList->count();
+                            $namaUtama = $layananList->first() ?? '-';
+
+                            // judul di kartu (mis: "Baju Adat + 1 layanan lain")
+                            if ($jumlahLayanan > 1) {
+                                $namaDisplay = $namaUtama . ' + ' . ($jumlahLayanan - 1) . ' layanan lain';
+                            } else {
+                                $namaDisplay = $namaUtama;
+                            }
+
+                            // total harga dalam 1 pesanan (semua layanan)
+                            $totalHarga = $group->sum('total_harga');
+
+                            // MUA
+                            $mua = optional(optional($first->layanan)->mua);
                             if ($mua) {
                                 $waNumber = $mua->kontak_wa ?? null;
-                                $namaMua = $mua->nama_toko ?? $mua->nama;
+                                $namaMua = $mua->nama_toko ?? $mua->nama_usaha ?? $mua->nama;
                             } else {
                                 $waNumber = null;
                                 $namaMua = '';
                             }
 
-                            $tanggal = \Carbon\Carbon::parse($item->tanggal_booking)->translatedFormat('d M Y');
-                            $namaUser = $item->pengguna->name;
-                            $namaLayanan = $item->layanan->nama ?? '-';
+                            $tanggalBooking = \Carbon\Carbon::parse($first->tanggal_booking)->translatedFormat('d M Y');
+                            $tanggalBookingLong = \Carbon\Carbon::parse($first->tanggal_booking)->translatedFormat('d F Y');
 
+                            $namaUser = optional($first->pengguna)->name ?? 'Pelanggan';
+
+                            // teks WA berisi semua layanan
                             $waText = $mua
                                 ? urlencode(
-                                    "Halo Kak $namaMua, saya $namaUser ingin melanjutkan / konfirmasi pembayaran pesanan $namaLayanan untuk tanggal {$tanggal}.",
+                                    "Halo Kak $namaMua, saya $namaUser ingin melanjutkan / konfirmasi pembayaran pesanan (" .
+                                    $layananList->implode(', ') .
+                                    ") untuk tanggal {$tanggalBookingLong} dengan total Rp " .
+                                    number_format($totalHarga, 0, ',', '.') .
+                                    '.',
                                 )
                                 : '';
 
-                            $status = $item->status_pembayaran;
+                            $status = $first->status_pembayaran;
                             $statusLabel = str_replace('_', ' ', $status);
 
                             $statusClass =
@@ -224,9 +262,20 @@
                                 : ($status === 'Belum_Lunas'
                                     ? 'bg-amber-50 text-amber-700 border-amber-100'
                                     : 'bg-slate-50 text-slate-600 border-slate-100');
+
+                            // data untuk modal detail
+                            $detailPayload = [
+                                'layanan' => $layananList->implode(', '),
+                                'tanggal' => $tanggalBookingLong,
+                                'alamat' => $first->alamat,
+                                'status' => $statusLabel,
+                                'harga' => 'Rp ' . number_format($totalHarga, 0, ',', '.'),
+                                'created' => $first->created_at->format('d/m/Y H:i'),
+                                'updated' => $first->updated_at->format('d/m/Y H:i'),
+                            ];
                         @endphp
 
-                        {{-- ================== KARTU PESANAN ================== --}}
+                        {{-- ================== KARTU PESANAN (1 group = 1 kartu) ================== --}}
                         <article
                             class="bg-white/95 rounded-[28px] card-shadow border border-rose-100 overflow-hidden flex flex-col md:flex-row">
 
@@ -237,13 +286,13 @@
                                 </p>
 
                                 <h2 class="text-xl md:text-2xl font-semibold text-rose-700">
-                                    {{ $namaLayanan }}
+                                    {{ $namaDisplay }}
                                 </h2>
 
                                 <p class="text-xs text-slate-500 max-w-md">
                                     Booking untuk tanggal
                                     <span class="font-semibold text-slate-800">
-                                        {{ \Carbon\Carbon::parse($item->tanggal_booking)->translatedFormat('d M Y') }}
+                                        {{ $tanggalBooking }}
                                     </span>.
                                     Cek status pembayaran dan hubungi MUA jika kamu butuh bantuan.
                                 </p>
@@ -252,7 +301,7 @@
                                     <div class="flex">
                                         <span class="w-32 text-slate-500">Booking</span>
                                         <span class="flex-1 font-medium text-slate-800">
-                                            {{ \Carbon\Carbon::parse($item->tanggal_booking)->translatedFormat('d M Y') }}
+                                            {{ $tanggalBooking }}
                                         </span>
                                     </div>
 
@@ -267,17 +316,38 @@
                                     </div>
                                 </div>
 
-                                @php
-                                    $detailPayload = [
-                                        "layanan" => $namaLayanan,
-                                        "tanggal" => \Carbon\Carbon::parse($item->tanggal_booking)->translatedFormat("d F Y"),
-                                        "alamat" => $item->alamat,
-                                        "status" => $statusLabel,
-                                        "harga" => "Rp " . number_format($item->total_harga, 0, ",", "."),
-                                        "created" => $item->created_at->format("d/m/Y H:i"),
-                                        "updated" => $item->updated_at->format("d/m/Y H:i"),
-                                    ];
-                                @endphp
+                                {{-- DAFTAR LAYANAN DALAM PESANAN INI --}}
+                                <div class="mt-4 space-y-2">
+                                    @foreach ($group as $pItem)
+                                        @php
+                                            $layananItem = $pItem->layanan;
+                                        @endphp
+
+                                        @if ($layananItem)
+                                            <div class="flex items-center gap-3">
+                                                {{-- Thumbnail layanan --}}
+                                                @if ($layananItem->foto)
+                                                    <img src="{{ asset('storage/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
+                                                        class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                                @else
+                                                    <div
+                                                        class="w-10 h-10 rounded-lg bg-rose-100 flex items-center justify-center text-[10px] text-rose-600 font-semibold flex-shrink-0">
+                                                        {{ \Illuminate\Support\Str::limit($layananItem->nama, 8) }}
+                                                    </div>
+                                                @endif
+
+                                                <div class="flex-1">
+                                                    <p class="text-xs font-semibold text-slate-800">
+                                                        {{ $layananItem->nama }}
+                                                    </p>
+                                                    <p class="text-[11px] text-slate-500">
+                                                        Rp {{ number_format($pItem->total_harga, 0, ',', '.') }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
 
                                 <button type="button"
                                     class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-rose-500 hover:text-rose-600 hover:underline underline-offset-2"
@@ -298,48 +368,48 @@
                                     <div class="flex md:block items-center justify-between md:justify-start gap-2">
                                         <span class="text-xs text-slate-500 md:block">Total Harga</span>
                                         <span class="text-2xl md:text-3xl font-extrabold text-amber-600">
-                                            Rp {{ number_format($item->total_harga, 0, ',', '.') }}
+                                            Rp {{ number_format($totalHarga, 0, ',', '.') }}
                                         </span>
                                     </div>
 
                                     <div class="text-[11px] text-slate-500 space-y-0.5 md:text-left">
                                         <p>Pesanan dibuat:
                                             <span class="font-medium text-slate-700">
-                                                {{ $item->created_at->format('d/m/Y H:i') }}
+                                                {{ $first->created_at->format('d/m/Y H:i') }}
                                             </span>
                                         </p>
                                         <p>Terakhir diperbarui:
                                             <span class="font-medium text-slate-700">
-                                                {{ $item->updated_at->format('d/m/Y H:i') }}
+                                                {{ $first->updated_at->format('d/m/Y H:i') }}
                                             </span>
                                         </p>
                                     </div>
                                 </div>
 
                                 <div class="mt-4 flex flex-col items-stretch md:items-start gap-2">
-                                    @if ($waNumber && $item->status_pembayaran !== 'Dibatalkan')
+                                    @if ($waNumber && $first->status_pembayaran !== 'Dibatalkan')
                                         <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank"
                                             class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full
-                                                                                                                                                      bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
+                                                                            bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
                                             <span>💬</span>
                                             <span>Chat MUA via WhatsApp</span>
                                         </a>
                                     @endif
 
-                                    @if ($item->status_pembayaran === 'Belum_Lunas')
-                                        {{-- FORM BATALKAN PESANAN --}}
-                                        <form method="POST" action="{{ route('pengguna.destroy', $item->id) }}" class="cancel-form"
-                                            id="cancel-form-{{ $item->id }}">
+                                    @if ($first->status_pembayaran === 'Belum_Lunas')
+                                        {{-- FORM BATALKAN PESANAN (sekarang pakai id pesanan pertama di grup) --}}
+                                        <form method="POST" action="{{ route('pengguna.destroy', $first->id) }}" class="cancel-form"
+                                            id="cancel-form-{{ $first->id }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button"
                                                 class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
-                                                                                                                                        bg-rose-500 text-white hover:bg-rose-600 transition btn-cancel-pesanan"
-                                                data-id="{{ $item->id }}">
+                                                                                bg-rose-500 text-white hover:bg-rose-600 transition btn-cancel-pesanan"
+                                                data-id="{{ $first->id }}">
                                                 Batalkan Pesanan
                                             </button>
                                         </form>
-                                    @elseif ($item->status_pembayaran === 'Dibatalkan')
+                                    @elseif ($first->status_pembayaran === 'Dibatalkan')
                                         <span
                                             class="inline-block px-4 py-2 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-500">
                                             Pesanan dibatalkan

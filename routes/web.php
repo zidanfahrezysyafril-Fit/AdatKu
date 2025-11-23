@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Pesanan;
+use App\Models\Keranjang;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MuaController;
@@ -10,17 +11,22 @@ use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PublicMuaController;
+use App\Http\Controllers\MuaRequestController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MuaApprovalController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\MuaRequestController;
-use App\Http\Controllers\Admin\MuaApprovalController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+
 
 Route::get('/', fn() => view('home'))->name('landing');
-Route::get('/home', fn() => view('home'))->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [MuaController::class, 'dashboard'])
     ->name('dashboard')
     ->middleware(['auth', CheckRole::class . ':mua']);
@@ -204,4 +210,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/mua-requests/{muaRequest}', [MuaApprovalController::class, 'show'])->name('mua-requests.show');
     Route::post('/mua-requests/{muaRequest}/approve', [MuaApprovalController::class, 'approve'])->name('mua-requests.approve');
     Route::post('/mua-requests/{muaRequest}/reject', [MuaApprovalController::class, 'reject'])->name('mua-requests.reject');
+});
+
+// keranjang
+Route::middleware(['auth'])->group(function () {
+    Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('cart.add');
+
+    // ✅ route baru: checkout keranjang → buat pesanan & redirect ke /pesanan
+    Route::post('/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('cart.checkout');
 });

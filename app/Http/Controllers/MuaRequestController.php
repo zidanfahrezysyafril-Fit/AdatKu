@@ -16,15 +16,14 @@ class MuaRequestController extends Controller
     }
 
     /**
-     * Halaman: Ajukan / Lihat status pengajuan MUA (untuk USER).
+     * GET /mua/ajukan
+     * Sekarang kita TIDAK pakai halaman terpisah lagi.
+     * Kalau ada yang akses URL ini, langsung balikin ke home
+     * (form-nya sendiri muncul sebagai popup di home.blade.php).
      */
     public function index()
     {
-        $user = Auth::user();
-        $requestMua = $user->muaRequest; // bisa null
-
-        // PENTING: pakai view user, bukan admin
-        return view('mua.request_index', compact('user', 'requestMua'));
+        return redirect()->route('home');
     }
 
     /**
@@ -36,7 +35,9 @@ class MuaRequestController extends Controller
 
         // kalau sudah MUA, tidak boleh ajukan lagi
         if ($user->isMua()) {
-            return redirect()->back()->with('error', 'Kamu sudah terdaftar sebagai MUA.');
+            return redirect()
+                ->route('home')
+                ->with('error', 'Kamu sudah terdaftar sebagai MUA.');
         }
 
         $data = $request->validate([
@@ -48,8 +49,8 @@ class MuaRequestController extends Controller
             'tiktok'     => ['nullable', 'string', 'max:100'],
         ]);
 
-        $data['user_id'] = $user->id;
-        $data['status']  = 'pending';
+        $data['user_id']       = $user->id;
+        $data['status']        = 'pending';
         $data['catatan_admin'] = null;
 
         $muaRequest = MuaRequest::updateOrCreate(
@@ -57,17 +58,20 @@ class MuaRequestController extends Controller
             $data
         );
 
-        // kirim email ke admin
+        // kirim email ke admin (punyamu tadi tetap aku pakai)
         try {
             $adminEmail = config('mail.admin_address', config('mail.from.address'));
             if ($adminEmail) {
                 Mail::to($adminEmail)->send(new MuaRequestSubmitted($muaRequest));
             }
         } catch (\Throwable $e) {
+            // jangan bikin error ke user kalau email gagal
         }
 
+        // PENTING: sekarang balik ke HOME, bukan ke view mua.request_index lagi
         return redirect()
-            ->route('mua.request.index')
-            ->with('success', 'Pengajuan MUA berhasil dikirim. Mohon tunggu persetujuan admin.');
+            ->route('home')
+            ->with('success', 'Pengajuan MUA berhasil dikirim. Pengajuan akan dikonfirmasi oleh admin, silakan tunggu.');
     }
+    
 }

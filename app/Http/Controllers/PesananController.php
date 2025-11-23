@@ -36,17 +36,49 @@ class PesananController extends Controller
 
     public function destroyUser(Pesanan $pesanan)
     {
-        if ($pesanan->id_pengguna !== Auth::id()) {
+        $userId = Auth::id();
+
+        // Pastikan ini pesanan milik user yang login
+        if ($pesanan->id_pengguna !== $userId) {
             abort(403);
         }
-        if ($pesanan->status_pembayaran !== 'Belum_Lunas') {
-            return back()->with('error', 'Pesanan yang sudah dibayar / dibatalkan tidak bisa dibatalkan lagi.');
+
+        // Ambil kode_checkout dari pesanan yang diklik
+        $kodeCheckout = $pesanan->kode_checkout;
+
+        if ($kodeCheckout) {
+            // 🔸 Ambil SEMUA pesanan dalam 1 checkout (1 kartu)
+            $group = Pesanan::where('id_pengguna', $userId)
+                ->where('kode_checkout', $kodeCheckout)
+                ->get();
+        } else {
+            // 🔸 Fallback: kalau belum ada kode_checkout, batalin satuan saja
+            $group = collect([$pesanan]);
         }
-        $pesanan->status_pembayaran = 'Dibatalkan';
-        $pesanan->save();
-        return redirect()->route('pengguna.pesanan.index')
-            ->with('success', 'Pesanan berhasil dibatalkan.');
+
+        // Cek: ada yang sudah Lunas / Dibatalkan?
+        $nonCancelable = $group->filter(function ($p) {
+            return $p->status_pembayaran !== 'Belum_Lunas';
+        });
+
+        if ($nonCancelable->isNotEmpty()) {
+            return back()->with(
+                'error',
+                'Ada layanan di pesanan ini yang sudah dibayar / dibatalkan, jadi tidak bisa dibatalkan.'
+            );
+        }
+
+        // Set SEMUA dalam grup jadi Dibatalkan
+        foreach ($group as $p) {
+            $p->status_pembayaran = 'Dibatalkan';
+            $p->save();
+        }
+
+        return redirect()
+            ->route('pengguna.pesanan.index')
+            ->with('success', 'Pesanan berhasil dibatalkan untuk ' . $group->count() . ' layanan.');
     }
+
     public function indexMua()
     {
         $user = Auth::user();
@@ -65,7 +97,15 @@ class PesananController extends Controller
             ->latest()
             ->get();
 
-        return view('pesanan.index', compact('pesanans', 'mua'));
+        // 🔹 Group per checkout (1 checkout = 1 baris)
+        $groupedPesanans = $pesanans->groupBy(function ($p) {
+            return $p->kode_checkout ?: ('single-' . $p->id);
+        });
+
+        return view('pesanan.index', [
+            'mua'             => $mua,
+            'groupedPesanans' => $groupedPesanans,
+        ]);
     }
     public function updateStatusMua(Request $request, Pesanan $pesanan)
     {

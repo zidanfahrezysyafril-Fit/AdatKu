@@ -46,26 +46,26 @@
         }
 
         /* ================= ICON MELAYANG ================= */
-    .floating-icon {
-      position: fixed;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.9);
-      z-index: 30;
-      pointer-events: none;
-    }
+        .floating-icon {
+            position: fixed;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+            z-index: 30;
+            pointer-events: none;
+        }
 
-    .icon-md {
-      font-size: 22px;
-    }
+        .icon-md {
+            font-size: 22px;
+        }
 
-    .icon-lg {
-      font-size: 30px;
-    }
+        .icon-lg {
+            font-size: 30px;
+        }
 
-    .icon-xl {
-      font-size: 38px;
-    }
-    
+        .icon-xl {
+            font-size: 38px;
+        }
+
         @keyframes pulse {
 
             0%,
@@ -116,7 +116,7 @@
             box-shadow: 0 10px 24px rgba(15, 23, 42, 0.25);
         }
 
-        /* Modal Styles */
+        /* Modal Styles (umum: dipakai pesanan & keranjang) */
         .modal {
             display: none;
             position: fixed;
@@ -197,10 +197,18 @@
 
 <body class="text-slate-800 min-h-screen flex flex-col">
 
-    {{-- ================= HEADER: STRIP PUTIH PANJANG (SAMA SEPERTI PESANAN SAYA) ================= --}}
+    @php
+        // Default aman kalau controller belum kirim variabel
+        $cartItems = $cartItems ?? collect();
+        $cartTotal = $cartTotal ?? $cartItems->sum(function ($item) {
+            return (optional($item->layanan)->harga ?? 0) * $item->jumlah;
+        });
+        $cartCount = $cartCount ?? $cartItems->sum('jumlah');
+    @endphp
+
+    {{-- ================= HEADER ================= --}}
     <header class="sticky top-0 z-50 bg-white/95 border-b border-rose-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-
             {{-- KIRI: LOGO + NAMA --}}
             <div class="flex items-center gap-3">
                 <a href="{{ url('/') }}" class="flex items-center gap-3">
@@ -213,7 +221,7 @@
                 </a>
             </div>
 
-            {{-- KANAN: MENU BERANDA & DAFTAR MUA --}}
+            {{-- KANAN: MENU + KERANJANG --}}
             <nav class="flex items-center gap-6 text-sm md:text-base font-medium">
                 <a href="{{ url('/') }}" class="text-[#b48a00] hover:text-[#eab308] flex items-center gap-1 transition">
                     <span class="text-lg">←</span>
@@ -225,16 +233,25 @@
                     <span class="text-lg">←</span>
                     <span>Daftar MUA</span>
                 </a>
-            </nav>
 
+                {{-- 🛒 KERANJANG (POPUP) --}}
+                <button type="button" onclick="openCartModal()"
+                    class="relative flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-200 bg-amber-50/70 text-[#b48a00] hover:bg-amber-100 hover:border-amber-300 transition">
+                    <span class="text-lg">🛒</span>
+                    <span class="text-sm font-semibold">Keranjang</span>
+                    <span
+                        class="inline-flex items-center justify-center min-w-[22px] h-[22px] rounded-full bg-rose-500 text-white text-[11px] font-bold">
+                        {{ $cartCount }}
+                    </span>
+                </button>
+            </nav>
         </div>
     </header>
 
     {{-- ================= KONTEN DETAIL MUA ================= --}}
     <main class="flex-1">
         <div class="max-w-7xl mx-auto px-4 py-8 space-y-10">
-
-            {{-- ALERT SUCCESS DARI LARAVEL --}}
+            {{-- ALERT SUCCESS --}}
             @if (session('success'))
                 <div class="max-w-xl mx-auto mb-4">
                     <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl text-sm">
@@ -243,7 +260,7 @@
                 </div>
             @endif
 
-            {{-- ALERT ERROR VALIDASI GLOBAL (OPSIONAL) --}}
+            {{-- ALERT ERROR --}}
             @if ($errors->any())
                 <div class="max-w-xl mx-auto mb-4">
                     <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-2xl text-sm">
@@ -260,7 +277,6 @@
             {{-- PROFILE SECTION --}}
             <section class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-rose-100">
                 <div class="flex flex-col lg:flex-row">
-
                     {{-- LEFT: FOTO + SOSMED --}}
                     <div
                         class="lg:w-2/5 bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] p-8 lg:p-12 flex flex-col items-center justify-center">
@@ -269,6 +285,7 @@
                                 ? asset('storage/' . $mua->foto)
                                 : 'https://placehold.co/400x400/FFF1F2/E11D48?text=' . urlencode($mua->nama_studio ?? 'MUA');
                         @endphp
+
                         <div class="relative">
                             <div
                                 class="w-56 h-56 rounded-full overflow-hidden shadow-2xl ring-4 ring-[#f5d547] relative z-10">
@@ -433,14 +450,33 @@
                                     </span>
                                 </div>
 
-                                <button type="button" onclick="openModal(
+                                {{-- FORM CEPAT: TAMBAH 1 ITEM KE KERANJANG --}}
+                                <form id="cart-form-{{ $layanan->id }}" method="POST" action="{{ route('cart.add') }}"
+                                    class="hidden">
+                                    @csrf
+                                    <input type="hidden" name="layanan_id" value="{{ $layanan->id }}">
+                                    <input type="hidden" name="jumlah" value="1">
+                                </form>
+
+                                <div class="flex gap-3">
+                                    {{-- Tombol + Keranjang --}}
+                                    <button type="button"
+                                        onclick="document.getElementById('cart-form-{{ $layanan->id }}').submit()"
+                                        class="flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
+                                        <span class="text-lg">＋</span>
+                                        <span>Keranjang</span>
+                                    </button>
+
+                                    {{-- Tombol Pesan Layanan Ini (popup jumlah) --}}
+                                    <button type="button" onclick="openModal(
                                                         '{{ addslashes($layanan->nama) }}',
                                                         'Rp {{ number_format($layanan->harga, 0, ',', '.') }}',
                                                         '{{ $layanan->id }}'
                                                     )"
-                                    class="btn-primary w-full py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2">
-                                    Pesan Layanan Ini
-                                </button>
+                                        class="flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2">
+                                        Pesan Layanan Ini
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     @empty
@@ -475,7 +511,6 @@
                     </div>
                 @endif
             </section>
-
         </div>
     </main>
 
@@ -543,12 +578,11 @@
                 <p class="mt-2 text-xs text-center text-[#f7e07b]">
                     &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
                 </p>
-
             </div>
         </div>
     </footer>
 
-    {{-- MODAL POPUP PESAN LAYANAN --}}
+    {{-- MODAL POPUP PESAN LAYANAN (TAMBAH KE KERANJANG) --}}
     <div id="orderModal" class="modal" onclick="closeModalOnBackdrop(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             {{-- Modal Header --}}
@@ -572,57 +606,27 @@
                     <p id="modalServicePrice" class="text-2xl font-extrabold text-rose-600">-</p>
                 </div>
 
-                {{-- Form Pesanan --}}
-                {{-- Route ini TANPA parameter, layanan_id dikirim via input hidden --}}
-                <form id="orderForm" method="POST" action="{{ route('pengguna.store') }}" class="space-y-4">
+                {{-- Form Pesanan -> tambah ke keranjang --}}
+                <form id="orderForm" method="POST" action="{{ route('cart.add') }}" class="space-y-4">
                     @csrf
-
-                    <input type="hidden" id="layananId" name="layanan_id" value="{{ old('layanan_id') }}">
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">Nama Lengkap *</label>
-                        <input type="text" name="nama" required
-                            class="input-field w-full border border-gray-300 rounded-xl px-4 py-3"
-                            placeholder="Masukkan nama lengkap Anda"
-                            value="{{ old('nama', auth()->user()->name ?? '') }}">
-                        @error('nama')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">Tanggal Booking *</label>
-                        <input type="date" name="tanggal_booking" required
-                            class="input-field w-full border border-gray-300 rounded-xl px-4 py-3"
-                            value="{{ old('tanggal_booking') }}">
-                        @error('tanggal_booking')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-700">Alamat Lengkap *</label>
-                        <textarea name="alamat" rows="3" required
-                            class="input-field w-full border border-gray-300 rounded-xl px-4 py-3 resize-none"
-                            placeholder="Masukkan alamat lengkap untuk layanan">{{ old('alamat') }}</textarea>
-                        @error('alamat')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    <input type="hidden" id="layananId" name="layanan_id">
 
                     <div>
                         <label class="block text-sm font-semibold mb-2 text-slate-700">
-                            Catatan Tambahan (Opsional)
+                            Jumlah Layanan *
                         </label>
-                        <textarea name="catatan" rows="2"
-                            class="input-field w-full border border-gray-300 rounded-xl px-4 py-3 resize-none"
-                            placeholder="Contoh: Tema acara, preferensi warna makeup, dll">{{ old('catatan') }}</textarea>
-                        @error('catatan')
+                        <input type="number" name="jumlah" min="1" value="1" required
+                            class="input-field w-full border border-gray-300 rounded-xl px-4 py-3"
+                            placeholder="Masukkan jumlah">
+                        @error('jumlah')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    {{-- Tombol --}}
+                    <p class="text-[11px] text-slate-500">
+                        Detail seperti tanggal booking & alamat akan kamu lengkapi saat checkout di halaman keranjang.
+                    </p>
+
                     <div class="flex gap-3 pt-4">
                         <button type="button" onclick="closeModal()"
                             class="flex-1 px-6 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
@@ -630,13 +634,175 @@
                         </button>
                         <button type="submit"
                             class="flex-1 btn-primary px-6 py-3 rounded-xl text-white font-semibold shadow-lg">
-                            Kirim Pesanan
+                            Tambah ke Keranjang
                         </button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
+
+    {{-- ... semua kode di atas TIDAK aku ubah ... --}}
+
+    {{-- MODAL KERANJANG --}}
+    <div id="cartModal" class="modal" onclick="closeCartOnBackdrop(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div
+                class="sticky top-0 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] p-6 flex items-center justify-between z-10">
+                <h2 class="text-2xl font-bold text-white">Keranjang Saya 🛒</h2>
+                <button onclick="closeCartModal()"
+                    class="text-white hover:bg-white/20 p-2 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                @guest
+                    <p class="text-sm text-slate-600">
+                        Silakan <a href="{{ route('login') }}" class="text-rose-600 font-semibold underline">login</a>
+                        terlebih dahulu untuk melihat keranjang.
+                    </p>
+                @else
+                    @if ($cartItems->isEmpty())
+                        <p class="text-sm text-slate-600">
+                            Keranjangmu masih kosong. Pilih layanan dulu lalu tekan tombol <span class="font-semibold">＋
+                                Keranjang</span> ya ✨
+                        </p>
+                    @else
+                        {{-- Daftar item di keranjang --}}
+                        <div class="space-y-3 max-h-72 overflow-y-auto pr-1">
+                            @foreach ($cartItems as $item)
+                                @php
+                                    $layanan = $item->layanan;
+                                    if (!$layanan) {
+                                        continue;
+                                    }
+                                    $subtotal = ($layanan->harga ?? 0) * $item->jumlah;
+                                @endphp
+                                <div class="flex gap-3 p-3 rounded-2xl border border-amber-100 bg-amber-50/40">
+                                    @if ($layanan->foto)
+                                        <img src="{{ asset('storage/' . $layanan->foto) }}" alt="{{ $layanan->nama }}"
+                                            class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
+                                    @else
+                                        <div
+                                            class="w-16 h-16 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-semibold flex-shrink-0">
+                                            {{ Str::limit($layanan->nama, 10) }}
+                                        </div>
+                                    @endif
+                                    <div class="flex-1">
+                                        <p class="text-sm font-semibold text-slate-800">
+                                            {{ $layanan->nama }}
+                                        </p>
+                                        <p class="text-[11px] text-slate-500 uppercase tracking-wide">
+                                            {{ strtoupper($layanan->kategori ?? 'MAKEUP') }}
+                                        </p>
+                                        <p class="text-xs text-slate-600 mt-1">
+                                            Rp {{ number_format($layanan->harga, 0, ',', '.') }}
+                                            <span class="text-slate-400">× {{ $item->jumlah }}</span>
+                                        </p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs text-slate-500">Subtotal</p>
+                                        <p class="text-sm font-bold text-rose-600">
+                                            Rp {{ number_format($subtotal, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        {{-- Total --}}
+                        <div class="border-t border-amber-100 pt-3 mt-2 flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-700">
+                                Total ({{ $cartCount }} item)
+                            </span>
+                            <span class="text-lg font-extrabold text-rose-700">
+                                Rp {{ number_format($cartTotal, 0, ',', '.') }}
+                            </span>
+                        </div>
+
+                        {{-- 🔸 FORM CHECKOUT: TANGGAL + ALAMAT --}}
+                        <form method="POST" action="{{ route('cart.checkout') }}" class="mt-4 space-y-3">
+                            @csrf
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Tanggal Booking <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" name="tanggal_booking"
+                                    value="{{ old('tanggal_booking', now()->toDateString()) }}"
+                                    class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400">
+                                @error('tanggal_booking')
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Alamat Lengkap Acara <span class="text-red-500">*</span>
+                                </label>
+                                <textarea name="alamat" rows="2"
+                                    class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
+                                    placeholder="Tulis alamat lengkap lokasi acara kamu...">{{ old('alamat') }}</textarea>
+                                @error('alamat')
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <button type="submit" class="w-full btn-primary py-3 rounded-xl text-white font-semibold shadow-lg">
+                                Buat Pesanan
+                            </button>
+                        </form>
+
+                        {{-- Siapkan teks WhatsApp untuk ringkasan pesanan --}}
+                        @php
+                            $waCheckoutText = null;
+
+                            if (!empty($mua->kontak_wa ?? null)) {
+                                $text = "Halo kak, saya mau booking layanan MUA di AdatKu:\n";
+
+                                foreach ($cartItems as $item) {
+                                    $layanan = $item->layanan;
+                                    if (!$layanan) {
+                                        continue;
+                                    }
+
+                                    $subtotal = ($layanan->harga ?? 0) * $item->jumlah;
+                                    $text .= '- ' . $layanan->nama . ' x ' . $item->jumlah . ' (Rp '
+                                        . number_format($subtotal, 0, ',', '.') . ")\n";
+                                }
+
+                                $text .= "\nPerkiraan total: Rp " . number_format($cartTotal, 0, ',', '.');
+                                $text .= "\n\nNama:\nTanggal acara:\nAlamat lengkap:\nCatatan tambahan:";
+
+                                $waCheckoutText = rawurlencode($text);
+                            }
+                        @endphp
+
+                        {{-- Tombol Checkout via WhatsApp (opsional) --}}
+                        @if (!empty($mua->kontak_wa ?? null) && $waCheckoutText)
+                            <a href="https://wa.me/{{ $waNumber ?? '' }}?text={{ $waCheckoutText }}" target="_blank"
+                                class="mt-3 block w-full bg-emerald-500 hover:bg-emerald-600 text-center py-3 rounded-xl text-white font-semibold shadow-lg">
+                                Checkout via WhatsApp
+                            </a>
+                        @endif
+
+                        <p class="mt-2 text-[11px] text-slate-500 text-center">
+                            Setelah pesanan dibuat, kamu bisa lihat di menu <span class="font-semibold">Pesanan Saya</span>,
+                            cek status (pending / disetujui / ditolak), dan lanjut chat via WhatsApp di sana.
+                        </p>
+                    @endif
+                @endguest
+            </div>
+        </div>
+    </div>
+
+    {{-- ... sisanya (icon melayang + script) tetap sama ... --}}
+
 
     {{-- ICON MELAYANG (4 bawah + 4 atas) --}}
     <!-- Dari bawah -->
@@ -659,9 +825,8 @@
     <span class="floating-icon from-top icon-md"
         style="left: 88%; animation-duration: 26s; animation-delay: 3s;">❂</span>
 
-
     <script>
-        // Modal Functions
+        // Modal Pesan Layanan
         function openModal(serviceName, servicePrice, layananId) {
             document.getElementById('modalServiceName').textContent = serviceName;
             document.getElementById('modalServicePrice').textContent = servicePrice;
@@ -682,19 +847,28 @@
             }
         }
 
-        // Close modal on ESC key
+        // Modal Keranjang
+        function openCartModal() {
+            document.getElementById('cartModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeCartOnBackdrop(event) {
+            if (event.target.id === 'cartModal') {
+                closeCartModal();
+            }
+        }
+
+        // Close kedua modal pakai ESC
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeModal();
-            }
-        });
-
-        // Set minimum date to today
-        document.addEventListener('DOMContentLoaded', function () {
-            const dateInput = document.querySelector('input[name="tanggal_booking"]');
-            const today = new Date().toISOString().split('T')[0];
-            if (dateInput) {
-                dateInput.setAttribute('min', today);
+                closeCartModal();
             }
         });
     </script>

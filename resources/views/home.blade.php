@@ -164,16 +164,16 @@
 
 </head>
 
-<body class="text-gray-900" x-data="{ open:false, profileModal:false, editModal:false }">
+<body class="text-gray-900" x-data="{ open:false, profileModal:false, editModal:false, applyMuaModal:false }">
 
   {{-- FLASH MESSAGE --}}
   @if (session('success') || session('error'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2600)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-6 z-[9999]">
       <div class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
-                                  backdrop-blur-md border border-white/40
-                                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                                    backdrop-blur-md border border-white/40
+                                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -225,8 +225,8 @@
         <div class="flex items-center gap-3">
           @guest
             <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold
-                                              bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                              text-white shadow-md hover:brightness-110 transition">
+                                                bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                text-white shadow-md hover:brightness-110 transition">
               Masuk
             </a>
           @endguest
@@ -241,7 +241,7 @@
             @if ($user->role === 'Pengguna')
               <a href="{{ route('pengguna.pesanan.index') }}"
                 class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100
-                                                                        text-amber-800 text-xs font-semibold shadow-sm border border-amber-200">
+                                                                            text-amber-800 text-xs font-semibold shadow-sm border border-amber-200">
                 📦 Pesanan Saya
               </a>
             @endif
@@ -320,7 +320,7 @@
               @guest
                 <a href="{{ route('login') }}"
                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
-                                                      bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
+                                                        bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
                   Masuk / Daftar
                 </a>
               @endguest
@@ -547,15 +547,15 @@
               @endphp
 
               <div class="
-                                                bg-white rounded-3xl border px-5 md:px-6 py-6 md:py-7 flex flex-col items-center text-center 
-                                                {{ $isCenter
+                                                      bg-white rounded-3xl border px-5 md:px-6 py-6 md:py-7 flex flex-col items-center text-center 
+                                                      {{ $isCenter
           ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2'
           : 'shadow-md border-amber-100/80' }}
-                                              ">
+                                                    ">
                 <div
                   class="w-20 h-20 {{ $isCenter ? 'w-24 h-24' : '' }}
-                                                       rounded-full overflow-hidden bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                       flex items-center justify-center text-white text-2xl md:text-3xl font-bold mb-3 shadow-lg">
+                                                             rounded-full overflow-hidden bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                             flex items-center justify-center text-white text-2xl md:text-3xl font-bold mb-3 shadow-lg">
                   <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
                     onerror="this.onerror=null;this.src='https://placehold.co/300x300?text=Tim';">
                 </div>
@@ -584,7 +584,6 @@
       </p>
     </div>
   </section>
-
 
   {{-- CTA STRIP MODERN --}}
   <section class="py-10">
@@ -655,8 +654,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                          bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                          hover:opacity-90 transition">
+                                            bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                            hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -667,10 +666,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal = false" class="bg-white rounded-[32px] shadow-2xl border border-amber-100
-                                  w-[92%] max-w-3xl p-8 md:p-10 relative">
+                                    w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal = false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                                      hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                        hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -684,9 +683,9 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32
-                                              rounded-full p-[3px]
-                                              bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                              shadow-xl">
+                                                rounded-full p-[3px]
+                                                bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -697,10 +696,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                                  file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                                  file:border file:border-amber-200 file:bg-white
-                                                  file:text-slate-700 file:cursor-pointer
-                                                  hover:file:bg-amber-50">
+                                                    file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                                    file:border file:border-amber-200 file:bg-white
+                                                    file:text-slate-700 file:cursor-pointer
+                                                    hover:file:bg-amber-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -712,20 +711,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                              text-sm md:text-base
-                                              focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                              focus:border-[#c98a00]">
+                                                text-sm md:text-base
+                                                focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                                focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                              hover:bg-slate-200 transition">
+                                                hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                              bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                              hover:opacity-90 transition">
+                                                bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -811,9 +810,9 @@
     {{-- Kalau BELUM jadi MUA, tombolnya muncul --}}
     @if (!$isMua)
       <div class="fixed left-5 bottom-5 z-40">
-        <a href="{{ route('mua.request.index') }}" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                          text-white px-5 md:px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl
-                          hover:from-[#f8e48c] hover:to-[#e0a100] transition text-sm md:text-[15px] font-medium">
+        <a href="{{ route('mua.request.index') }}" @click.prevent="applyMuaModal = true" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                              text-white px-5 md:px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl
+                              hover:from-[#f8e48c] hover:to-[#e0a100] transition text-sm md:text-[15px] font-medium">
           Daftarkan jasa MUA kamu di sini
         </a>
       </div>
@@ -822,13 +821,142 @@
     {{-- Kalau belum login, tetap munculin, tapi arahkan ke login dulu --}}
     <div class="fixed left-5 bottom-5 z-40">
       <a href="{{ route('login') }}" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                    text-white px-5 md:px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl
-                    hover:from-[#f8e48c] hover:to-[#e0a100] transition text-sm md:text-[15px] font-medium">
+                      text-white px-5 md:px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl
+                      hover:from-[#f8e48c] hover:to-[#e0a100] transition text-sm md:text-[15px] font-medium">
         Daftarkan jasa MUA kamu di sini
       </a>
     </div>
   @endauth
 
+  {{-- MODAL AJUKAN SEBAGAI MUA (POPUP DI HOME) --}}
+  @auth
+    @php
+      $requestMua = $requestMua ?? null;
+      $userForRequest = $user ?? Auth::user();
+      $isMuaReq = strtolower($userForRequest->role ?? '') === 'mua';
+      $isDisabledReq = $isMuaReq ? 'disabled' : '';
+    @endphp
+
+    <div x-show="applyMuaModal" x-cloak x-transition.opacity
+      class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
+      <div @click.outside="applyMuaModal = false" class="bg-white rounded-[28px] shadow-2xl border border-amber-100
+                    w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
+
+        <button type="button" @click="applyMuaModal = false" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100
+                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
+          ✕
+        </button>
+
+        <h1 class="text-2xl md:text-3xl font-bold text-rose-700 mb-4">
+          Ajukan Sebagai MUA
+        </h1>
+
+        @if (session('success'))
+          <div class="mb-4 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 text-sm">
+            {{ session('success') }}
+          </div>
+        @endif
+
+        @if (session('error'))
+          <div class="mb-4 px-4 py-3 rounded-xl bg-rose-50 text-rose-700 text-sm">
+            {{ session('error') }}
+          </div>
+        @endif
+
+        @if ($requestMua)
+          <div class="mb-6 bg-white rounded-2xl shadow border border-amber-100 p-4 text-sm">
+            <p class="font-semibold text-slate-700">Status pengajuan kamu:</p>
+            <p class="mt-1">
+              <span class="font-bold capitalize">{{ $requestMua->status }}</span>
+              @if ($requestMua->catatan_admin)
+                - <span class="text-slate-600">{{ $requestMua->catatan_admin }}</span>
+              @endif
+            </p>
+          </div>
+        @endif
+
+        <form action="{{ route('mua.request.store') }}" method="POST"
+          class="bg-white rounded-2xl shadow p-6 space-y-4 border border-rose-100">
+          @csrf
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Nama Usaha / Studio</label>
+            <input type="text" name="nama_usaha" {{ $isDisabledReq }}
+              value="{{ old('nama_usaha', $requestMua->nama_usaha ?? '') }}"
+              class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400 @if($isMuaReq) bg-slate-100 cursor-not-allowed @endif">
+            @error('nama_usaha')
+              <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Kontak WhatsApp</label>
+            <input type="text" name="kontak_wa" {{ $isDisabledReq }}
+              value="{{ old('kontak_wa', $requestMua->kontak_wa ?? '') }}"
+              class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400 @if($isMuaReq) bg-slate-100 cursor-not-allowed @endif">
+            @error('kontak_wa')
+              <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Alamat</label>
+            <textarea name="alamat" rows="2" {{ $isDisabledReq }}
+              class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400 @if($isMuaReq) bg-slate-100 cursor-not-allowed @endif">{{ old('alamat', $requestMua->alamat ?? '') }}</textarea>
+            @error('alamat')
+              <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi Usaha</label>
+            <textarea name="deskripsi" rows="3" {{ $isDisabledReq }}
+              class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400 @if($isMuaReq) bg-slate-100 cursor-not-allowed @endif">{{ old('deskripsi', $requestMua->deskripsi ?? '') }}</textarea>
+            @error('deskripsi')
+              <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Instagram (opsional)</label>
+              <input type="text" name="instagram" {{ $isDisabledReq }}
+                value="{{ old('instagram', $requestMua->instagram ?? '') }}"
+                class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400 @if($isMuaReq) bg-slate-100 cursor-not-allowed @endif">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">TikTok (opsional)</label>
+              <input type="text" name="tiktok" {{ $isDisabledReq }} value="{{ old('tiktok', $requestMua->tiktok ?? '') }}"
+                class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400 @if($isMuaReq) bg-slate-100 cursor-not-allowed @endif">
+            </div>
+          </div>
+
+          @if($isMuaReq)
+            <div class="mt-6 text-center">
+              <a href="{{ route('mua.panel') }}"
+                class="px-6 py-2.5 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-semibold inline-block">
+                ← Kembali
+              </a>
+            </div>
+          @else
+            <div class="flex justify-between items-center mt-6">
+              <button type="button" @click="applyMuaModal = false"
+                class="px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-semibold">
+                ← Kembali
+              </button>
+
+              <button type="submit"
+                class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm shadow-md">
+                Kirim Pengajuan
+              </button>
+            </div>
+          @endif
+
+        </form>
+      </div>
+    </div>
+  @endauth
 
   {{-- ICON MELAYANG (4 bawah + 4 atas) --}}
   <!-- Dari bawah -->

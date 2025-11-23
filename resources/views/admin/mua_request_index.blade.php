@@ -84,23 +84,22 @@
                                         Detail
                                     </a>
 
+                                    {{-- SETUJUI --}}
                                     <form action="{{ route('admin.mua-requests.approve', $req) }}" method="POST"
                                           onsubmit="return confirm('Setujui pengajuan ini dan jadikan user sebagai MUA?');">
                                         @csrf
                                         <button type="submit"
-                                            class="w-full inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs bg-emerald-500 text-white hover:bg-emerald-600">
+                                                class="w-full inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs bg-emerald-500 text-white hover:bg-emerald-600">
                                             Setujui
                                         </button>
                                     </form>
 
-                                    <form action="{{ route('admin.mua-requests.reject', $req) }}" method="POST"
-                                          onsubmit="return confirm('Tolak pengajuan ini?');">
-                                        @csrf
-                                        <button type="submit"
+                                    {{-- TOLAK - buka modal isi catatan --}}
+                                    <button type="button"
+                                            onclick="openRejectModal({{ $req->id }}, '{{ addslashes(optional($req->user)->name ?? 'User') }}')"
                                             class="w-full inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs bg-rose-500 text-white hover:bg-rose-600">
-                                            Tolak
-                                        </button>
-                                    </form>
+                                        Tolak
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -195,5 +194,56 @@
             </table>
         </div>
     </div>
+
+    {{-- MODAL TOLAK PENGAJUAN --}}
+    <div id="rejectModal"
+         class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <form id="rejectForm" method="POST"
+              class="bg-white rounded-2xl w-[90%] max-w-md p-6 shadow-lg border border-rose-100">
+            @csrf
+            <h2 class="text-lg md:text-xl font-semibold text-rose-700 mb-2">
+                Tolak Pengajuan MUA
+            </h2>
+            <p class="text-xs text-slate-500 mb-3">
+                Beri alasan penolakan untuk <span id="rejectUserName" class="font-semibold"></span>.
+            </p>
+
+            <label class="block text-sm font-medium text-slate-700 mb-1">
+                Alasan Penolakan <span class="text-rose-500">*</span>
+            </label>
+            <textarea name="catatan_admin" rows="3" required minlength="5"
+                      class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400"></textarea>
+
+            <div class="mt-5 flex justify-end gap-2">
+                <button type="button" onclick="closeRejectModal()"
+                        class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm">
+                    Batal
+                </button>
+                <button type="submit"
+                        class="px-5 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm">
+                    Ya, Tolak
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function openRejectModal(id, name) {
+            const modal = document.getElementById('rejectModal');
+            const form  = document.getElementById('rejectForm');
+            const span  = document.getElementById('rejectUserName');
+
+            // set URL action: /admin/mua-requests/{id}/reject
+            form.action = "{{ url('admin/mua-requests') }}/" + id + "/reject";
+            span.textContent = name || 'user';
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeRejectModal() {
+            const modal = document.getElementById('rejectModal');
+            modal.classList.add('hidden');
+        }
+    </script>
 
 @endsection
