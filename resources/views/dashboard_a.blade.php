@@ -12,8 +12,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-2">
 
             {{-- Total User --}}
-            <div
-                class="bg-white/90 border border-amber-100 rounded-2xl p-5 shadow-[0_4px_14px_rgba(201,138,0,0.16)]">
+            <div class="card-soft p-5">
                 <p class="text-[11px] font-semibold tracking-wide text-amber-600 uppercase mb-1">
                     Total User Terdaftar
                 </p>
@@ -24,8 +23,7 @@
             </div>
 
             {{-- User jadi MUA --}}
-            <div
-                class="bg-white/90 border border-amber-100 rounded-2xl p-5 shadow-[0_4px_14px_rgba(201,138,0,0.16)]">
+            <div class="card-soft p-5">
                 <p class="text-[11px] font-semibold tracking-wide text-amber-600 uppercase mb-1">
                     User yang Menjadi MUA
                 </p>
@@ -36,8 +34,7 @@
             </div>
 
             {{-- User login sekarang --}}
-            <div
-                class="bg-white/90 border border-amber-100 rounded-2xl p-5 shadow-[0_4px_14px_rgba(201,138,0,0.16)]">
+            <div class="card-soft p-5">
                 <p class="text-[11px] font-semibold tracking-wide text-amber-600 uppercase mb-1">
                     User yang Login Sekarang
                 </p>
@@ -64,7 +61,7 @@
         {{-- ================= NOTIFIKASI PENDING MUA ================= --}}
         @if($pendingRequestsCount > 0)
             <div
-                class="bg-gradient-to-r from-amber-50 via-rose-50 to-amber-50 border border-amber-100 rounded-2xl p-5 shadow-sm">
+                class="card-soft p-5 bg-gradient-to-r from-[#fff3ea] via-[#ffeef5] to-[#fff6e8] border border-amber-100">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                     <div class="flex items-start gap-3">
                         <div
@@ -122,8 +119,7 @@
         @endif
 
         {{-- ================= AKSI CEPAT ================= --}}
-        <div
-            class="bg-white border border-amber-100 rounded-2xl p-5 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+        <div class="card-soft p-5 flex flex-wrap items-center justify-between gap-3">
             <div>
                 <h3 class="font-semibold text-slate-900">Aksi Cepat</h3>
                 <p class="text-xs text-slate-500 mt-1">
@@ -149,8 +145,8 @@
         </div>
 
         {{-- ================= TABEL MUA ================= --}}
-        <div class="bg-white border border-amber-100 rounded-2xl overflow-hidden shadow-sm">
-            <div class="p-4 border-b border-amber-100 flex items-center justify-between">
+        <div class="card-table">
+            <div class="p-4 border-b border-amber-100 flex items-center justify-between bg-white">
                 <div>
                     <h3 class="font-semibold text-slate-900">Daftar User yang Menjadi MUA</h3>
                     <p class="text-xs text-slate-500 mt-0.5">
