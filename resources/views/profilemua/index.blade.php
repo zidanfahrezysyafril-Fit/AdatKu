@@ -3,7 +3,7 @@
 
 @section('content')
     @php
-        $pill  = 'inline-flex items-center gap-2 text-xs sm:text-sm px-3 py-1.5 rounded-full ring-1 ring-amber-100 bg-amber-50/60 text-amber-700';
+        $pill = 'inline-flex items-center gap-2 text-xs sm:text-sm px-3 py-1.5 rounded-full ring-1 ring-amber-100 bg-amber-50/60 text-amber-700';
         $label = 'text-[11px] font-semibold tracking-wide text-slate-500 uppercase';
         $value = 'text-sm font-medium text-slate-800';
     @endphp
@@ -13,8 +13,9 @@
         {{-- ALERT PROFIL --}}
         @if ($mua)
             <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)" x-transition.opacity
-                 class="flex items-start gap-3 bg-emerald-50 border border-emerald-200/80 text-emerald-800 px-4 sm:px-5 py-3 rounded-2xl shadow-sm">
-                <div class="mt-0.5 h-8 w-8 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-lg">
+                class="flex items-start gap-3 bg-emerald-50 border border-emerald-200/80 text-emerald-800 px-4 sm:px-5 py-3 rounded-2xl shadow-sm">
+                <div
+                    class="mt-0.5 h-8 w-8 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-lg">
                     ✔
                 </div>
                 <div class="text-sm leading-relaxed">
@@ -24,7 +25,7 @@
             </div>
         @else
             <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)" x-transition.opacity
-                 class="flex items-start gap-3 bg-amber-50 border border-amber-200/80 text-amber-800 px-4 sm:px-5 py-3 rounded-2xl shadow-sm">
+                class="flex items-start gap-3 bg-amber-50 border border-amber-200/80 text-amber-800 px-4 sm:px-5 py-3 rounded-2xl shadow-sm">
                 <div class="mt-0.5 h-8 w-8 flex items-center justify-center rounded-full bg-amber-100 text-amber-600 text-lg">
                     !
                 </div>
@@ -40,21 +41,26 @@
 
             {{-- ornamen lembut di pinggir kartu --}}
             <div class="pointer-events-none absolute -left-16 top-10 h-40 w-40 rounded-full bg-amber-100/40 blur-3xl"></div>
-            <div class="pointer-events-none absolute -right-10 -bottom-6 h-40 w-40 rounded-full bg-rose-100/50 blur-3xl"></div>
+            <div class="pointer-events-none absolute -right-10 -bottom-6 h-40 w-40 rounded-full bg-rose-100/50 blur-3xl">
+            </div>
 
             {{-- HEADER --}}
-            <div class="relative px-6 sm:px-8 pt-6 pb-5 border-b border-rose-100 bg-gradient-to-r from-[#fff7f9] via-[#fff8ef] to-[#fffaf3]">
+            <div
+                class="relative px-6 sm:px-8 pt-6 pb-5 border-b border-rose-100 bg-gradient-to-r from-[#fff7f9] via-[#fff8ef] to-[#fffaf3]">
                 <div class="flex flex-wrap items-start justify-between gap-3">
 
                     <div class="space-y-1.5">
                         <p class="text-[11px] font-semibold tracking-[0.18em] adat-gold uppercase">
                             MUA Panel
                         </p>
-                        <h2 class="text-2xl sm:text-3xl font-bold adat-title">
+                        <h1 class="text-4xl font-bold" style="color:#C98A00;">
                             Profil MUA Anda
-                        </h2>
+                        </h1>
+
+
                         <p class="text-sm adat-text max-w-xl">
-                            Kelola identitas brand MUA agar lebih mudah dipercaya pelanggan dan tampil menonjol di pencarian.
+                            Kelola identitas brand MUA agar lebih mudah dipercaya pelanggan dan tampil menonjol di
+                            pencarian.
                         </p>
                     </div>
 
@@ -87,8 +93,7 @@
                         <div class="relative">
                             <figure
                                 class="w-40 h-52 sm:w-44 sm:h-56 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
-                                <img
-                                    src="{{ ($mua && $mua->foto) ? asset('storage/' . $mua->foto) : 'https://placehold.co/320x416?text=Foto' }}"
+                                <img src="{{ ($mua && $mua->foto) ? asset('storage/' . $mua->foto) : 'https://placehold.co/320x416?text=Foto' }}"
                                     class="w-full h-full object-cover" alt="Foto MUA">
                             </figure>
 
@@ -192,7 +197,7 @@
                                 <div class="{{ $label }}">Instagram</div>
                                 @if(!empty($mua?->instagram))
                                     <a href="https://instagram.com/{{ ltrim($mua->instagram, '@') }}" target="_blank"
-                                       class="inline-flex items-center gap-1 text-rose-600 font-medium text-sm hover:underline">
+                                        class="inline-flex items-center gap-1 text-rose-600 font-medium text-sm hover:underline">
                                         {{ '@' . ltrim($mua->instagram, '@') }}
                                         <span class="text-xs">↗</span>
                                     </a>
@@ -206,7 +211,7 @@
                                 <div class="{{ $label }}">TikTok</div>
                                 @if(!empty($mua?->tiktok))
                                     <a href="https://www.tiktok.com/@{{ ltrim($mua->tiktok,'@') }}" target="_blank"
-                                       class="inline-flex items-center gap-1 text-rose-600 font-medium text-sm hover:underline">
+                                        class="inline-flex items-center gap-1 text-rose-600 font-medium text-sm hover:underline">
                                         {{ '@' . ltrim($mua->tiktok, '@') }}
                                         <span class="text-xs">↗</span>
                                     </a>
@@ -223,15 +228,16 @@
                 <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
 
                     @if(!$mua)
-                        <a href="{{ route('profilemua.create') }}"
-                           class="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-[#c98a00] text-white text-sm font-semibold shadow-sm
-                                  hover:bg-[#b27a00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eab308] focus-visible:ring-offset-2">
+                        <a href="{{ route('profilemua.create') }}" class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white 
+                                          shadow-md hover:brightness-110 active:brightness-95 transition"
+                            style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                             Buat Profil
                         </a>
+
                     @else
                         <a href="{{ route('profilemua.edit') }}"
-                           class="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-amber-500 text-white text-sm font-semibold shadow-sm
-                                  hover:bg-amber-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2">
+                            class="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl bg-amber-500 text-white text-sm font-semibold shadow-sm
+                                                          hover:bg-amber-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2">
                             Edit Profil
                         </a>
                     @endif
