@@ -11,6 +11,10 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -29,19 +33,19 @@
 
         /* 🎨 WARNA BRAND ADATKU */
         .adat-title {
-            color: #b21f39; /* judul besar / teks penting */
+            color: #b21f39;
         }
 
         .adat-gold {
-            color: #c98a00; /* gold elegan */
+            color: #c98a00;
         }
 
         .adat-text {
-            color: #6d5f5b; /* paragraf / deskripsi */
+            color: #6d5f5b;
         }
 
         .adat-jade {
-            color: #009f61; /* angka uang / status bagus */
+            color: #009f61;
         }
 
         /* ✨ Paksa background AdatKu di body, override bg-slate-50 Tailwind */
@@ -73,7 +77,6 @@
             background-color: #ffffff;
         }
 
-        /* Left gold edge */
         .stat-card::before {
             content: "";
             position: absolute;
@@ -86,7 +89,6 @@
             opacity: .85;
         }
 
-        /* Hover effect */
         .stat-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 16px rgba(200, 150, 120, 0.22);
@@ -94,7 +96,8 @@
     </style>
 </head>
 
-<body class="text-slate-800 min-h-screen overflow-x-hidden bg-slate-50" x-data="{ open: false }">
+<body class="text-slate-800 min-h-screen overflow-x-hidden bg-slate-50 transition-all duration-300"
+    x-data="{ open: false }">
 
     <!-- HEADER -->
     <header class="fixed top-0 inset-x-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-rose-100">
@@ -117,7 +120,7 @@
                         class="w-12 h-12 rounded-full object-cover shadow-md border border-amber-200">
                 </a>
 
-                <div class="leading-tight">
+                <div class="leading-tight hidden sm:block">
                     <p class="text-[11px] uppercase tracking-[0.16em] adat-gold font-semibold">
                         MUA Panel
                     </p>
@@ -143,7 +146,7 @@
                             onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
                     </button>
 
-                    <div x-show="openProfile" x-transition @click.outside="openProfile = false"
+                    <div x-show="openProfile" x-transition.opacity @click.outside="openProfile = false"
                         class="absolute right-0 mt-3 w-64 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
                         <div class="px-4 py-3 border-b">
                             <p class="text-sm font-semibold text-gray-800 truncate">
@@ -190,10 +193,17 @@
         </div>
     @endif
 
-    <!-- SIDEBAR -->
-    <aside class="fixed z-30 top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-[#1e1723] text-white border-r border-white/10
-               transition-transform duration-200 ease-out"
-        :class="open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+    {{-- OVERLAY MOBILE (saat sidebar kebuka) --}}
+    <div x-cloak x-show="open" x-transition.opacity class="fixed inset-0 bg-black/40 z-30 lg:hidden"
+        @click="open = false">
+    </div>
+
+    {{-- ========= SIDEBAR MOBILE (SLIDE ANIM) ========= --}}
+    <aside x-cloak x-show="open" x-transition:enter="transition ease-out duration-300 transform"
+        x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="-translate-x-full" class="fixed top-16 left-0 z-40 w-72 h-[calc(100vh-4rem)] bg-[#1e1723] text-white border-r border-white/10
+               lg:hidden">
 
         <div class="flex flex-col h-full">
             <!-- Brand / title -->
@@ -204,7 +214,6 @@
             </div>
 
             <nav class="flex-1 px-3 py-4 text-sm space-y-1 overflow-y-auto">
-
                 @php
                     $role = strtolower(auth()->user()->role ?? '');
                     $isMuaActive = request()->routeIs('mua.*')
@@ -214,9 +223,9 @@
 
                 {{-- DASHBOARD --}}
                 <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
-              bg-white/5 border-l-4 border-[#e0ac33]/30
-              hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-              {{ request()->routeIs('dashboard') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                        bg-white/5 border-l-4 border-[#e0ac33]/30
+                        hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                        {{ request()->routeIs('dashboard') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                     <svg class="w-4 h-4 opacity-80 group-hover:opacity-100" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 3l9 8h-3v10H6V11H3l9-8z" />
                     </svg>
@@ -226,12 +235,10 @@
                 {{-- GROUP: MUA --}}
                 @if ($role === 'mua')
                     <div x-data="{ openMua: {{ $isMuaActive ? 'true' : 'false' }} }" class="pt-2 space-y-1">
-
-                        {{-- TOMBOL MUA (MAIN ITEM) --}}
                         <button @click="openMua = !openMua" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl
-                                   bg-white/5 border-l-4 border-[#e0ac33]/30
-                                   hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-                                   {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                                        bg-white/5 border-l-4 border-[#e0ac33]/30
+                                        hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                                        {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
@@ -246,16 +253,15 @@
                             </svg>
                         </button>
 
-                        {{-- SUBMENU MUA --}}
                         <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
                             <a href="{{ route('mua.panel') }}" class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                      {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                        {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Profil MUA
                             </a>
 
                             <a href="{{ route('panelmua.layanan.index') }}"
                                 class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                      {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                        {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Layanan
                             </a>
                         </div>
@@ -269,10 +275,11 @@
                     </p>
 
                     {{-- PESANAN --}}
-                    <a href="{{ route('panelmua.pesanan.index') }}" class="group mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  bg-white/5 border-l-4 border-[#e0ac33]/30
-                  hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-                  {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                    <a href="{{ route('panelmua.pesanan.index') }}"
+                        class="group mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl
+                            bg-white/5 border-l-4 border-[#e0ac33]/30
+                            hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                            {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -283,10 +290,125 @@
                     </a>
 
                     {{-- PEMBAYARAN --}}
-                    <a href="{{ route('panelmua.pembayaran.index') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
-                  bg-white/5 border-l-4 border-[#e0ac33]/30
-                  hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-                  {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                    <a href="{{ route('panelmua.pembayaran.index') }}"
+                        class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                            bg-white/5 border-l-4 border-[#e0ac33]/30
+                            hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                            {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
+                        </svg>
+                        <span>Pembayaran</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- FOOTER SIDEBAR -->
+            <div
+                class="mt-auto px-4 py-3 border-t border-white/10 text-[11px] text-white/60 flex items-center justify-between">
+                <span>29°C — Cerah Berawan</span>
+                <span class="text-white/40">AdatKu</span>
+            </div>
+        </div>
+    </aside>
+
+    {{-- ========= SIDEBAR DESKTOP (SELALU TERBUKA) ========= --}}
+    <aside
+        class="hidden lg:flex lg:flex-col lg:fixed lg:z-30 lg:top-16 lg:left-0 lg:w-72 lg:h-[calc(100vh-4rem)] bg-[#1e1723] text-white border-r border-white/10">
+
+        <div class="flex flex-col h-full">
+            <!-- Brand / title -->
+            <div class="px-6 py-4 border-b border-white/10">
+                <h2 class="text-sm font-semibold tracking-[0.16em] uppercase text-white/70">
+                    Menu Utama
+                </h2>
+            </div>
+
+            <nav class="flex-1 px-3 py-4 text-sm space-y-1 overflow-y-auto">
+                @php
+                    $role = strtolower(auth()->user()->role ?? '');
+                    $isMuaActive = request()->routeIs('mua.*')
+                        || request()->routeIs('profilemua.*')
+                        || request()->routeIs('panelmua.layanan.*');
+                @endphp
+
+                {{-- DASHBOARD --}}
+                <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                        bg-white/5 border-l-4 border-[#e0ac33]/30
+                        hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                        {{ request()->routeIs('dashboard') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                    <svg class="w-4 h-4 opacity-80 group-hover:opacity-100" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3l9 8h-3v10H6V11H3l9-8z" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+
+                {{-- GROUP: MUA --}}
+                @if ($role === 'mua')
+                    <div x-data="{ openMua: {{ $isMuaActive ? 'true' : 'false' }} }" class="pt-2 space-y-1">
+                        <button @click="openMua = !openMua" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl
+                                        bg-white/5 border-l-4 border-[#e0ac33]/30
+                                        hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                                        {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                            <span class="flex items-center gap-3">
+                                <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
+                                </svg>
+                                <span>MUA</span>
+                            </span>
+                            <svg :class="openMua ? 'rotate-180' : ''" class="w-4 h-4 transition-transform"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
+                            <a href="{{ route('mua.panel') }}" class="block px-3 py-2 rounded-lg hover:bg-white/10
+                                        {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                Profil MUA
+                            </a>
+
+                            <a href="{{ route('panelmua.layanan.index') }}"
+                                class="block px-3 py-2 rounded-lg hover:bg-white/10
+                                        {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                Layanan
+                            </a>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- TRANSAKSI --}}
+                <div class="pt-2 space-y-1">
+                    <p class="px-3 text-[11px] uppercase tracking-[0.18em] text-white/40">
+                        Transaksi
+                    </p>
+
+                    {{-- PESANAN --}}
+                    <a href="{{ route('panelmua.pesanan.index') }}"
+                        class="group mt-1 flex items-center gap-3 px-3 py-2.5 rounded-xl
+                            bg-white/5 border-l-4 border-[#e0ac33]/30
+                            hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                            {{ request()->routeIs('panelmua.pesanan.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
+                        </svg>
+                        <span>PESANAN</span>
+                    </a>
+
+                    {{-- PEMBAYARAN --}}
+                    <a href="{{ route('panelmua.pembayaran.index') }}"
+                        class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                            bg-white/5 border-l-4 border-[#e0ac33]/30
+                            hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                            {{ request()->routeIs('panelmua.pembayaran.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
                             <path stroke-linecap="round" stroke-linejoin="round"
