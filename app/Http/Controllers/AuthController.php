@@ -36,7 +36,6 @@ class AuthController extends Controller
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
 
-        // Batasi percobaan login
         if (session()->has('login_attempts') && session('login_attempts') >= 5) {
             return back()->withErrors([
                 'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam 1 menit.',
@@ -68,7 +67,6 @@ class AuthController extends Controller
         session()->increment('login_attempts', 1);
 
         throw ValidationException::withMessages([
-            // ini error “email atau password salah”
             'email' => 'Email atau password salah.',
         ]);
     }
@@ -97,7 +95,7 @@ class AuthController extends Controller
             'name'              => e($validated['name']),
             'email'             => $validated['email'],
             'password'          => Hash::make($validated['password']),
-            'role'              => 'Pengguna',   // Sesuai enum di DB
+            'role'              => 'Pengguna',
             // Kalau mau dianggap sudah verifikasi email, boleh tambahkan:
             // 'email_verified_at' => now(),
         ]);
@@ -111,12 +109,13 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('landing')
+        return redirect()->route('home')
             ->with('success', 'Anda telah logout.');
     }
 
@@ -155,15 +154,14 @@ class AuthController extends Controller
 
                 $user->save();
             } else {
-                // Buat user baru dengan role default 'Pengguna'
                 $user = User::create([
                     'name'              => $googleUser->name,
                     'email'             => $googleUser->email,
                     'google_id'         => $googleUser->id,
                     'avatar'            => $googleUser->avatar,
-                    'password'          => null,         // login via Google, tidak perlu password lokal
-                    'role'              => 'Pengguna',   // Role default
-                    'email_verified_at' => now(),        // Dianggap terverifikasi
+                    'password'          => null,    
+                    'role'              => 'Pengguna', 
+                    'email_verified_at' => now(),
                 ]);
             }
 

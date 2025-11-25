@@ -175,16 +175,17 @@
   </style>
 </head>
 
-<body class="bg-[rgba(255,242,213,0.08)] text-gray-900" x-data="{ open:false, profileModal:false, editModal:false }">
+<body class="bg-[rgba(255,242,213,0.08)] text-gray-900"
+  x-data="{ navOpen:false, userMenuOpen:false, profileModal:false, editModal:false }">
 
   {{-- FLASH SESSION (atas kecil) --}}
   @if (session('success') || session('error'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-20 z-[60]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                    backdrop-blur-md border border-[#fff3b0]/40
-                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                      backdrop-blur-md border border-[#fff3b0]/40
+                      @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                      @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -214,49 +215,65 @@
   {{-- NAVBAR --}}
   <header class="sticky top-0 z-50">
     <div class="bg-white/80 backdrop-blur-md border-b border-amber-100/70">
-      <div class="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <a href="/" class="flex items-center gap-3">
-            <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
-              class="w-12 h-12 rounded-full object-cover shadow-md border border-amber-200">
-            <div>
-              <h1
-                class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
-                AdatKu
-              </h1>
-              <p class="hidden sm:block text-[11px] text-amber-900/80">Hubungi kami kapan saja</p>
-            </div>
-          </a>
-        </div>
+      <div class="max-w-7xl mx-auto px-5 md:px-6 py-3.5 flex items-center justify-between gap-4">
+        {{-- Logo --}}
+        <a href="{{ route('home') }}" class="flex items-center gap-3">
+          <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
+            class="w-12 h-12 rounded-full object-cover shadow-md border border-amber-200">
+          <div>
+            <h1
+              class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
+              AdatKu
+            </h1>
+            <p class="hidden sm:block text-[11px] text-amber-900/80">Hubungi kami kapan saja</p>
+          </div>
+        </a>
 
+        {{-- NAV DESKTOP --}}
         <nav class="hidden md:flex items-center gap-6 text-[14px] font-medium text-[#b48a00]">
-          <a href="/" class="hover:text-[#eab308]">Beranda</a>
+          <a href="{{ route('home') }}" class="hover:text-[#eab308]">Beranda</a>
+
           @auth
             <a href="{{ url('daftarmua') }}" class="hover:text-[#eab308]">Daftar MUA</a>
           @endauth
-          <a href="{{ url('hubungikami') }}" class="text-[#eab308] font-semibold border-b-2 pb-0.5 border-[#eab308]">
+
+          <a href="{{ route('hubungikami') }}" class="text-[#eab308] font-semibold border-b-2 pb-0.5 border-[#eab308]">
             Hubungi Kami
           </a>
         </nav>
 
+        {{-- ACTION KANAN --}}
         <div class="flex items-center gap-3">
+          {{-- HAMBURGER MOBILE --}}
+          <button @click="navOpen = true" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/80
+                   shadow-sm hover:bg-amber-50 hover:border-amber-300 transition text-xs text-amber-800">
+            <span class="relative flex flex-col justify-between w-3.5 h-3">
+              <span class="block h-[2px] rounded-full bg-amber-500"></span>
+              <span class="block h-[2px] rounded-full bg-amber-400"></span>
+              <span class="block h-[2px] rounded-full bg-amber-500 w-2/3 self-end"></span>
+            </span>
+            <span class="hidden sm:inline">Menu</span>
+          </button>
+
           @guest
-            <a href="{{ route('pengguna.home') }}" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                        text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
-                        transition text-sm font-semibold">
+            {{-- tombol login (desktop & mobile) --}}
+            <a href="{{ route('pengguna.home') }}" class="hidden md:inline-flex bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                          text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
+                          transition text-sm font-semibold">
               Sign In
             </a>
           @endguest
 
           @auth
-            <div class="relative">
-              <button @click="open = !open"
+            {{-- AVATAR USER (desktop & mobile) --}}
+            <div class="relative hidden md:block">
+              <button @click="userMenuOpen = !userMenuOpen"
                 class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
                 <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
                   onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
               </button>
 
-              <div x-show="open" x-cloak x-transition @click.outside="open=false"
+              <div x-show="userMenuOpen" x-cloak x-transition @click.outside="userMenuOpen=false"
                 class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
                 <div class="px-4 py-3 border-b">
                   <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
@@ -264,7 +281,7 @@
                 </div>
                 <ul class="py-1 text-sm">
                   <li>
-                    <button type="button" @click="profileModal = true; open=false"
+                    <button type="button" @click="profileModal = true; userMenuOpen=false"
                       class="w-full text-left px-4 py-2 hover:bg-gray-50">
                       Profil Saya
                     </button>
@@ -286,67 +303,149 @@
     </div>
   </header>
 
+  {{-- NAV DRAWER MOBILE --}}
+  <div class="fixed inset-0 z-40 flex justify-end items-stretch transition-opacity duration-300" x-cloak
+    :class="navOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
+    @keydown.escape.window="navOpen = false">
+
+    {{-- overlay --}}
+    <div class="flex-1 h-full bg-black/40 backdrop-blur-sm" @click="navOpen = false"></div>
+
+    {{-- panel kanan --}}
+    <div class="relative h-full w-[78%] max-w-xs sm:max-w-sm bg-white
+                shadow-[0_0_40px_rgba(0,0,0,0.4)] border-l border-amber-100
+                flex flex-col transform transition-transform duration-300 ease-out"
+      :class="navOpen ? 'translate-x-0' : 'translate-x-full'">
+
+      {{-- header drawer --}}
+      <div
+        class="px-4 py-3 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-9 h-9 rounded-full bg-white/95 flex items-center justify-center shadow-md border border-amber-100">
+            <span class="logo-font text-xl text-[#c98a00]">A</span>
+          </div>
+          <div class="leading-tight text-white">
+            <p class="text-[11px] uppercase tracking-[0.2em] opacity-90">Navigasi</p>
+            <p class="text-sm font-semibold">AdatKu</p>
+          </div>
+        </div>
+
+        <button type="button" @click="navOpen = false"
+          class="w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-amber-700 shadow-sm hover:bg-amber-50">
+          ✕
+        </button>
+      </div>
+
+      {{-- menu list --}}
+      <div class="flex-1 overflow-y-auto px-4 py-3 text-sm text-slate-800 space-y-1">
+        <button @click="navOpen = false; window.location='{{ route('home') }}'"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">🏠</span><span>Beranda</span>
+        </button>
+
+        @auth
+          <button @click="navOpen = false; window.location='{{ url('daftarmua') }}'"
+            class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+            <span class="text-lg">💄</span><span>Daftar MUA</span>
+          </button>
+        @endauth
+
+        <button @click="navOpen = false; window.location='{{ route('hubungikami') }}'"
+          class="flex w-full items-center gap-2 py-2 rounded-lg bg-amber-50 text-amber-700 font-semibold">
+          <span class="text-lg">✉️</span><span>Hubungi Kami</span>
+        </button>
+
+        @auth
+          <button @click="navOpen = false; profileModal = true"
+            class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700 mt-1.5">
+            <span class="text-lg">👤</span><span>Profil Saya</span>
+          </button>
+
+          <form method="POST" action="{{ route('logout') }}" class="mt-1.5">
+            @csrf
+            <button type="submit" class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-red-50 text-red-600">
+              <span class="text-lg">⎋</span><span>Logout</span>
+            </button>
+          </form>
+        @else
+          <button @click="navOpen = false; window.location='{{ route('pengguna.home') }}'" class="mt-3 flex w-full items-center justify-center gap-2 py-2.5 rounded-full bg-gradient-to-r
+                     from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold shadow-md hover:brightness-110">
+            Sign In
+          </button>
+        @endauth
+      </div>
+    </div>
+  </div>
+
   {{-- HERO --}}
-  <section class="relative overflow-hidden">
-    <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu"
-      class="w-full h-[420px] md:h-[500px] lg:h-[540px] object-cover brightness-[0.7]">
+  <section class="relative min-h-[380px] sm:min-h-[420px] md:min-h-[480px]">
+    {{-- Background image + overlay --}}
+    <div class="absolute inset-0 -z-10">
+      <img src="{{ asset('logoss3 .jpg') }}" alt="Hero AdatKu" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/65 via-black/35 to-black/60"></div>
+    </div>
 
-    <div class="absolute inset-0 bg-gradient-to-b from-black/65 via-black/35 to-black/60"></div>
+    {{-- Konten hero --}}
+    <div class="max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-12 md:py-16">
+      <div class="max-w-xl text-left text-white space-y-4">
 
-    <div class="absolute inset-0 flex items-center">
-      <div class="max-w-6xl mx-auto px-6 w-full">
-        <div class="max-w-xl text-left text-white space-y-4">
+        <span
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-semibold tracking-[0.18em] uppercase bg-white/10 border border-[#f7e07b]/60 text-[#ffeaa5]">
+          <span class="text-xs">📮</span>
+          Butuh bantuan AdatKu?
+        </span>
 
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight">
           <span
-            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-semibold tracking-[0.18em] uppercase bg-white/10 border border-[#f7e07b]/60 text-[#ffeaa5]">
-            <span class="text-xs">📮</span>
-            Butuh bantuan AdatKu?
+            class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_4px_14px_rgba(0,0,0,0.55)]">
+            Hubungi Kami, cerita kendalamu di sini ✨
           </span>
+        </h1>
 
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight">
-            <span
-              class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_4px_14px_rgba(0,0,0,0.55)]">
-              Hubungi Kami, cerita kendalamu di sini ✨
-            </span>
-          </h1>
+        <p class="text-sm md:text-base text-[#fdf6d8] leading-relaxed">
+          Ada pertanyaan seputar pemesanan MUA, busana adat, atau kerja sama kampus?
+          Kirim pesan lewat formulir di bawah. Tim AdatKu siap membantu kamu dengan ramah dan cepat.
+        </p>
 
-          <p class="text-sm md:text-base text-[#fdf6d8] leading-relaxed">
-            Ada pertanyaan seputar pemesanan MUA, busana adat, atau kerja sama kampus?
-            Kirim pesan lewat formulir di bawah. Tim AdatKu siap membantu kamu dengan ramah dan cepat.
-          </p>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2 text-sm">
-            <div
-              class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 backdrop-blur-sm flex items-start gap-2">
-              <span class="text-lg">💬</span>
-              <div>
-                <p class="font-semibold text-[#ffeaa5] text-xs uppercase tracking-wide mb-0.5">Pertanyaan Umum</p>
-                <p class="text-[11px] leading-snug text-[#fefce8]">Tanya fitur AdatKu, cara daftar, dan alur pemesanan.
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 backdrop-blur-sm flex items-start gap-2">
-              <span class="text-lg">🤝</span>
-              <div>
-                <p class="font-semibold text-[#ffeaa5] text-xs uppercase tracking-wide mb-0.5">Kerja Sama</p>
-                <p class="text-[11px] leading-snug text-[#fefce8]">Kolaborasi dengan MUA, studio foto, atau event
-                  organizer.</p>
-              </div>
-            </div>
-
-            <div
-              class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 backdrop-blur-sm flex items-start gap-2">
-              <span class="text-lg">🛠️</span>
-              <div>
-                <p class="font-semibold text-[#ffeaa5] text-xs uppercase tracking-wide mb-0.5">Kendala Teknis</p>
-                <p class="text-[11px] leading-snug text-[#fefce8]">Laporkan bug, error website, atau masalah login.</p>
-              </div>
+        <div class="grid gap-3 mt-3 text-sm sm:grid-cols-3">
+          <div class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 backdrop-blur-sm flex items-start gap-2">
+            <span class="text-lg">💬</span>
+            <div>
+              <p class="font-semibold text-[#ffeaa5] text-xs uppercase tracking-wide mb-0.5">
+                Pertanyaan Umum
+              </p>
+              <p class="text-[11px] leading-snug text-[#fefce8]">
+                Tanya fitur AdatKu, cara daftar, dan alur pemesanan.
+              </p>
             </div>
           </div>
 
+          <div class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 backdrop-blur-sm flex items-start gap-2">
+            <span class="text-lg">🤝</span>
+            <div>
+              <p class="font-semibold text-[#ffeaa5] text-xs uppercase tracking-wide mb-0.5">
+                Kerja Sama
+              </p>
+              <p class="text-[11px] leading-snug text-[#fefce8]">
+                Kolaborasi dengan MUA, studio foto, atau event organizer.
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-white/10 border border-white/20 px-4 py-3 backdrop-blur-sm flex items-start gap-2">
+            <span class="text-lg">🛠️</span>
+            <div>
+              <p class="font-semibold text-[#ffeaa5] text-xs uppercase tracking-wide mb-0.5">
+                Kendala Teknis
+              </p>
+              <p class="text-[11px] leading-snug text-[#fefce8]">
+                Laporkan bug, error website, atau masalah login.
+              </p>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -369,7 +468,7 @@
         <h2 class="text-2xl font-bold text-[#c98a00] mb-2">
           Sampaikan Pesanmu
         </h2>
-        <p class="text-slate-600 mb-6 justify-teks text-sm md:text[15px]">
+        <p class="text-slate-600 mb-6 justify-teks text-sm md:text-[15px]">
           Isi formulir ini untuk menghubungi kami terkait pertanyaan, saran, atau kendala yang kamu alami
           saat menggunakan AdatKu.
         </p>
@@ -499,50 +598,50 @@
           </p>
         </div>
       </div>
-    </aside>
 
-    {{-- POPUP SUKSES KIRIM PESAN --}}
-    <div x-cloak x-show="successModal" x-transition.opacity
-      class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      {{-- POPUP SUKSES KIRIM PESAN --}}
+      <div x-cloak x-show="successModal" x-transition.opacity
+        class="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm">
 
-      <div class="popup-success-card relative max-w-md w-[90%] bg-gradient-to-br
+        <div class="popup-success-card relative max-w-md w-[90%] bg-gradient-to-br
                   from-[#fff9fb] via-white to-[#fff3d7]
                   rounded-3xl shadow-2xl border border-amber-100 px-6 py-6 overflow-hidden">
 
-        {{-- bubble warna --}}
-        <div class="absolute -top-6 -left-4 w-16 h-16 rounded-full bg-amber-100/60 blur-md"></div>
-        <div class="absolute -bottom-10 -right-6 w-24 h-24 rounded-full bg-rose-100/60 blur-xl"></div>
+          {{-- bubble warna --}}
+          <div class="absolute -top-6 -left-4 w-16 h-16 rounded-full bg-amber-100/60 blur-md"></div>
+          <div class="absolute -bottom-10 -right-6 w-24 h-24 rounded-full bg-rose-100/60 blur-xl"></div>
 
-        {{-- emoji melayang --}}
-        <div class="absolute top-3 right-6 text-2xl floating-emoji delay-100">✨</div>
-        <div class="absolute bottom-4 left-6 text-2xl floating-emoji delay-300">💌</div>
-        <div class="absolute top-10 left-1/2 -translate-x-1/2 text-xl floating-emoji delay-700">🌸</div>
+          {{-- emoji melayang --}}
+          <div class="absolute top-3 right-6 text-2xl floating-emoji delay-100">✨</div>
+          <div class="absolute bottom-4 left-6 text-2xl floating-emoji delay-300">💌</div>
+          <div class="absolute top-10 left-1/2 -translate-x-1/2 text-xl floating-emoji delay-700">🌸</div>
 
-        <div class="relative">
-          <div
-            class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4 border border-emerald-100">
-            <span class="text-3xl">✅</span>
-          </div>
+          <div class="relative">
+            <div
+              class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4 border border-emerald-100">
+              <span class="text-3xl">✅</span>
+            </div>
 
-          <h2 class="text-xl font-semibold text-slate-800 mb-1">
-            Pesan terkirim! 🎉
-          </h2>
-          <p class="text-sm text-slate-600 mb-4" x-text="successMessage"></p>
+            <h2 class="text-xl font-semibold text-slate-800 mb-1">
+              Pesan terkirim! 🎉
+            </h2>
+            <p class="text-sm text-slate-600 mb-4" x-text="successMessage"></p>
 
-          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-3">
-            <span>Terima kasih sudah menghubungi AdatKu 💛</span>
-            <span>Hubungi Kami · AdatKu</span>
-          </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 mb-3">
+              <span>Terima kasih sudah menghubungi AdatKu 💛</span>
+              <span>Hubungi Kami · AdatKu</span>
+            </div>
 
-          <div class="flex justify-end">
-            <button type="button" @click="successModal = false"
-              class="px-4 py-2 rounded-full border border-slate-200 text-slate-600 text-sm hover:bg-slate-50">
-              Tutup
-            </button>
+            <div class="flex justify-end">
+              <button type="button" @click="successModal = false"
+                class="px-4 py-2 rounded-full border border-slate-200 text-slate-600 text-sm hover:bg-slate-50">
+                Tutup
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </aside>
 
   </main>
 
@@ -587,8 +686,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                           hover:opacity-90 transition">
+                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                             hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -599,10 +698,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[90] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                    w-[92%] max-w-3xl p-8 md:p-10 relative">
+                      w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal=false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -619,8 +718,8 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center
-                          w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
-                          bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
+                            w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
+                            bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -632,10 +731,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                              file:mr-3 file:rounded-lg file:px-4 file:py-2
-                              file:border file:border-yellow-200 file:bg-white
-                              file:text-slate-700 file:cursor-pointer
-                              hover:file:bg-yellow-50">
+                                file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                file:border file:border-yellow-200 file:bg-white
+                                file:text-slate-700 file:cursor-pointer
+                                hover:file:bg-yellow-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -647,20 +746,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                            text-sm md:text-base
-                            focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                            focus:border-[#c98a00]">
+                              text-sm md:text-base
+                              focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                              focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal=false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                             hover:bg-slate-200 transition">
+                               hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                             hover:opacity-90 transition">
+                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                               hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -818,7 +917,7 @@
                 pesan: ''
               };
 
-              // auto close popup (kalau mau manual, hapus blok ini)
+              // auto close popup
               setTimeout(() => {
                 this.successModal = false;
               }, 4500);

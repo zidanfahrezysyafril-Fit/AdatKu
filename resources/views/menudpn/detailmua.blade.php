@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Detail MUA - {{ $mua->nama_studio ?? 'AdatKu MUA' }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {{-- FONTS & TAILWIND --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,17 +15,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #fff9fb;
-            /* pattern lembut seperti home */
+            /* pattern lembut */
             background-image:
                 linear-gradient(135deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
-                linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
-                linear-gradient(315deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
-                linear-gradient(45deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
-            background-size: 24px 24px;
-            background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+                linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
+            background-size: 26px 26px;
         }
 
         .logo-font {
@@ -32,20 +34,32 @@
         }
 
         .card-hover {
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
 
         .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(190, 143, 43, 0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(190, 143, 43, 0.23);
         }
 
         .badge-glow {
             box-shadow: 0 0 20px rgba(234, 179, 8, 0.35);
-            animation: pulse 2s infinite;
+            animation: pulse 2.2s infinite;
         }
 
-        /* ================= ICON MELAYANG ================= */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.85;
+            }
+        }
+
+        /* ICON MELAYANG */
         .floating-icon {
             position: fixed;
             font-weight: bold;
@@ -66,39 +80,9 @@
             font-size: 38px;
         }
 
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.85;
-            }
-        }
-
-        .image-overlay {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .image-overlay::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.35) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .image-overlay:hover::after {
-            opacity: 1;
-        }
-
         .btn-primary {
             background: linear-gradient(135deg, #f7e07b 0%, #eab308 45%, #c98a00 100%);
-            transition: all 0.25s ease;
+            transition: all 0.24s ease;
         }
 
         .btn-primary:hover {
@@ -108,7 +92,7 @@
         }
 
         .social-icon {
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .social-icon:hover {
@@ -116,7 +100,7 @@
             box-shadow: 0 10px 24px rgba(15, 23, 42, 0.25);
         }
 
-        /* Modal Styles (umum: dipakai pesanan & keranjang) */
+        /* Modal generik */
         .modal {
             display: none;
             position: fixed;
@@ -126,7 +110,7 @@
             background: rgba(15, 23, 42, 0.55);
             backdrop-filter: blur(4px);
             z-index: 9999;
-            animation: fadeIn 0.28s ease;
+            animation: fadeIn 0.25s ease;
         }
 
         .modal.active {
@@ -139,13 +123,13 @@
         .modal-content {
             background: white;
             border-radius: 1.5rem;
-            max-width: 600px;
+            max-width: 640px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            transform: translateY(12px) scale(0.96);
+            transform: translateY(10px) scale(0.96);
             opacity: 0;
-            transition: all 0.24s ease;
+            transition: all 0.22s ease;
             box-shadow: 0 22px 60px rgba(15, 23, 42, 0.35);
         }
 
@@ -164,17 +148,6 @@
             }
         }
 
-        .input-field {
-            transition: all 0.22s;
-        }
-
-        .input-field:focus {
-            border-color: #eab308;
-            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.18);
-            outline: none;
-        }
-
-        /* Scrollbar styling */
         .modal-content::-webkit-scrollbar {
             width: 8px;
         }
@@ -192,77 +165,152 @@
         .modal-content::-webkit-scrollbar-thumb:hover {
             background: #c98a00;
         }
+
+        .input-field {
+            transition: all 0.22s;
+        }
+
+        .input-field:focus {
+            border-color: #eab308;
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.18);
+            outline: none;
+        }
     </style>
 </head>
 
-<body class="text-slate-800 min-h-screen flex flex-col">
+@php
+    // Default aman kalau controller belum kirim variabel
+    $cartItems = $cartItems ?? collect();
+    $cartTotal = $cartTotal ?? $cartItems->sum(function ($item) {
+        return (optional($item->layanan)->harga ?? 0) * $item->jumlah;
+    });
+    $cartCount = $cartCount ?? $cartItems->sum('jumlah');
+@endphp
 
-    @php
-        // Default aman kalau controller belum kirim variabel
-        $cartItems = $cartItems ?? collect();
-        $cartTotal = $cartTotal ?? $cartItems->sum(function ($item) {
-            return (optional($item->layanan)->harga ?? 0) * $item->jumlah;
-        });
-        $cartCount = $cartCount ?? $cartItems->sum('jumlah');
-    @endphp
+<body class="text-slate-800 min-h-screen flex flex-col"
+    x-data="{ navOpen:false }"
+    x-cloak>
 
-    {{-- ================= HEADER ================= --}}
-    <header class="sticky top-0 z-50 bg-white/95 border-b border-rose-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-            {{-- KIRI: LOGO + NAMA --}}
-            <div class="flex items-center gap-3">
-                <a href="{{ url('/') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
-                        class="w-14 h-14 rounded-full object-cover shadow-md">
-                    <h1
-                        class="text-2xl logo-font bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
-                        AdatKu
-                    </h1>
+    {{-- ============ HEADER ============ --}}
+    <header class="sticky top-0 z-40">
+        <div class="backdrop-blur-md bg-white/90 border-b border-amber-100/70 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+
+                {{-- LOGO --}}
+                <a href="{{ route('home') }}" class="flex items-center gap-3">
+                    <div
+                        class="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md border border-amber-200 overflow-hidden">
+                        <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu" class="w-full h-full object-cover">
+                    </div>
+                    <div class="leading-tight">
+                        <div
+                            class="logo-font text-2xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
+                            AdatKu
+                        </div>
+                        <p class="text-[11px] text-amber-700/80 hidden sm:block">
+                            Sentuhan adat, pengalaman modern
+                        </p>
+                    </div>
                 </a>
+
+                {{-- NAV DESKTOP --}}
+                <nav class="hidden md:flex items-center gap-6 text-[14px] font-medium text-amber-900/80">
+                    <a href="{{ route('home') }}" class="hover:text-amber-600 transition">Beranda</a>
+                    <a href="{{ url('/daftarmua') }}" class="hover:text-amber-600 transition">Daftar MUA</a>
+                </nav>
+
+                {{-- AKSI KANAN --}}
+                <div class="flex items-center gap-3">
+
+                    {{-- KERANJANG (desktop & mobile) --}}
+                    <button type="button" onclick="openCartModal()"
+                        class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-200 bg-amber-50/70 text-[#b48a00] hover:bg-amber-100 hover:border-amber-300 transition text-xs sm:text-sm">
+                        <span class="text-lg">🛒</span>
+                        <span class="font-semibold">Keranjang</span>
+                        <span
+                            class="inline-flex items-center justify-center min-w-[22px] h-[22px] rounded-full bg-rose-500 text-white text-[11px] font-bold">
+                            {{ $cartCount }}
+                        </span>
+                    </button>
+
+                    {{-- HAMBURGER (MOBILE) --}}
+                    <button @click="navOpen = true"
+                        class="inline-flex md:hidden items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/90 shadow-sm hover:bg-amber-50 hover:border-amber-300 text-xs text-amber-800">
+                        <span class="relative flex flex-col justify-between w-3.5 h-3">
+                            <span class="block h-[2px] rounded-full bg-amber-500"></span>
+                            <span class="block h-[2px] rounded-full bg-amber-400"></span>
+                            <span class="block h-[2px] rounded-full bg-amber-500 w-2/3 self-end"></span>
+                        </span>
+                        <span>Menu</span>
+                    </button>
+                </div>
             </div>
-
-            {{-- KANAN: MENU + KERANJANG --}}
-            <nav class="flex items-center gap-6 text-sm md:text-base font-medium">
-                <a href="{{ url('/') }}" class="text-[#b48a00] hover:text-[#eab308] flex items-center gap-1 transition">
-                    <span class="text-lg">←</span>
-                    <span>Beranda</span>
-                </a>
-
-                <a href="{{ url('/daftarmua') }}"
-                    class="text-[#b48a00] hover:text-[#eab308] flex items-center gap-1 transition">
-                    <span class="text-lg">←</span>
-                    <span>Daftar MUA</span>
-                </a>
-
-                {{-- 🛒 KERANJANG (POPUP) --}}
-                <button type="button" onclick="openCartModal()"
-                    class="relative flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-200 bg-amber-50/70 text-[#b48a00] hover:bg-amber-100 hover:border-amber-300 transition">
-                    <span class="text-lg">🛒</span>
-                    <span class="text-sm font-semibold">Keranjang</span>
-                    <span
-                        class="inline-flex items-center justify-center min-w-[22px] h-[22px] rounded-full bg-rose-500 text-white text-[11px] font-bold">
-                        {{ $cartCount }}
-                    </span>
-                </button>
-            </nav>
         </div>
     </header>
 
-    {{-- ================= KONTEN DETAIL MUA ================= --}}
+    {{-- NAV DRAWER MOBILE --}}
+    <div class="fixed inset-0 z-[9998] flex justify-end items-stretch transition-opacity duration-300"
+        :class="navOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'">
+        {{-- overlay --}}
+        <div class="flex-1 h-full bg-black/40 backdrop-blur-sm" @click="navOpen = false"></div>
+
+        {{-- panel --}}
+        <div class="relative h-full w-[80%] max-w-xs sm:max-w-sm bg-white shadow-[0_0_40px_rgba(0,0,0,0.4)] border-l border-amber-100 flex flex-col transform transition-transform duration-300 ease-out"
+            :class="navOpen ? 'translate-x-0' : 'translate-x-full'">
+
+            <div
+                class="px-4 py-3 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-full bg-white/95 flex items-center justify-center shadow-md border border-amber-100">
+                        <span class="logo-font text-xl text-[#c98a00]">A</span>
+                    </div>
+                    <div class="leading-tight text-white">
+                        <p class="text-[11px] uppercase tracking-[0.2em] opacity-90">Navigasi</p>
+                        <p class="text-sm font-semibold">AdatKu</p>
+                    </div>
+                </div>
+
+                <button type="button" @click="navOpen = false"
+                    class="w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-amber-700 shadow-sm hover:bg-amber-50">
+                    ✕
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-4 py-3 text-sm text-slate-800 space-y-1">
+                <button @click="navOpen=false; window.location='{{ route('home') }}'"
+                    class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+                    <span class="text-lg">🏠</span><span>Beranda</span>
+                </button>
+
+                <button @click="navOpen=false; window.location='{{ url('/daftarmua') }}'"
+                    class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+                    <span class="text-lg">💄</span><span>Daftar MUA</span>
+                </button>
+
+                <button @click="navOpen=false; openCartModal()"
+                    class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+                    <span class="text-lg">🛒</span><span>Keranjang</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- ============ KONTEN ============ --}}
     <main class="flex-1">
-        <div class="max-w-7xl mx-auto px-4 py-8 space-y-10">
-            {{-- ALERT SUCCESS --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+            {{-- ALERT --}}
             @if (session('success'))
-                <div class="max-w-xl mx-auto mb-4">
+                <div class="max-w-xl mx-auto">
                     <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl text-sm">
                         {{ session('success') }}
                     </div>
                 </div>
             @endif
 
-            {{-- ALERT ERROR --}}
             @if ($errors->any())
-                <div class="max-w-xl mx-auto mb-4">
+                <div class="max-w-xl mx-auto">
                     <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-2xl text-sm">
                         <p class="font-semibold mb-1">Terjadi kesalahan:</p>
                         <ul class="list-disc list-inside space-y-1">
@@ -275,11 +323,12 @@
             @endif
 
             {{-- PROFILE SECTION --}}
-            <section class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-rose-100">
+            <section
+                class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-rose-100/80">
                 <div class="flex flex-col lg:flex-row">
-                    {{-- LEFT: FOTO + SOSMED --}}
+                    {{-- KIRI: foto + sosmed --}}
                     <div
-                        class="lg:w-2/5 bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] p-8 lg:p-12 flex flex-col items-center justify-center">
+                        class="lg:w-2/5 bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] px-8 py-10 lg:px-10 flex flex-col items-center justify-center gap-7">
                         @php
                             $fotoMua = $mua->foto
                                 ? asset('storage/' . $mua->foto)
@@ -288,25 +337,23 @@
 
                         <div class="relative">
                             <div
-                                class="w-56 h-56 rounded-full overflow-hidden shadow-2xl ring-4 ring-[#f5d547] relative z-10">
+                                class="w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden shadow-2xl ring-4 ring-[#f5d547] relative z-10">
                                 <img src="{{ $fotoMua }}" alt="Foto MUA" class="w-full h-full object-cover">
                             </div>
 
-                            <div
-                                class="absolute -top-4 -right-4 w-24 h-24 bg-amber-200 rounded-full opacity-60 blur-2xl">
+                            <div class="absolute -top-4 -right-4 w-24 h-24 bg-amber-200 rounded-full opacity-60 blur-2xl">
                             </div>
-                            <div
-                                class="absolute -bottom-4 -left-4 w-32 h-32 bg-rose-200 rounded-full opacity-60 blur-2xl">
+                            <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-rose-200 rounded-full opacity-60 blur-2xl">
                             </div>
                         </div>
 
                         <div
-                            class="mt-6 px-6 py-2 rounded-full bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white text-xs font-bold uppercase tracking-wider badge-glow">
-                            ✨ {{ $mua->tagline ?? 'MUA Professional' }}
+                            class="px-6 py-2 rounded-full bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] badge-glow text-center">
+                            ✨ {{ $mua->tagline ?? 'MUA Profesional' }}
                         </div>
 
-                        {{-- Social Media --}}
-                        <div class="mt-8 flex flex-col gap-3 w-full max-w-xs">
+                        {{-- sosmed --}}
+                        <div class="flex flex-col gap-3 w-full max-w-xs">
                             @if (!empty($mua->instagram))
                                 <a href="https://instagram.com/{{ ltrim($mua->instagram, '@') }}" target="_blank"
                                     class="social-icon flex items-center gap-3 px-5 py-3 rounded-2xl bg-white text-slate-800 font-medium border border-rose-100">
@@ -314,7 +361,7 @@
                                         <path fill="currentColor"
                                             d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm5.25-3a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z" />
                                     </svg>
-                                    <span>{{ '@' . ltrim($mua->instagram, '@') }}</span>
+                                    <span class="text-sm">{{ '@' . ltrim($mua->instagram, '@') }}</span>
                                 </a>
                             @endif
 
@@ -325,29 +372,28 @@
                                         <path
                                             d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                                     </svg>
-                                    <span>{{ '@' . ltrim($mua->tiktok, '@') }}</span>
+                                    <span class="text-sm">{{ '@' . ltrim($mua->tiktok, '@') }}</span>
                                 </a>
                             @endif
                         </div>
                     </div>
 
-                    {{-- RIGHT: INFO --}}
-                    <div class="lg:w-3/5 p-8 lg:p-12 space-y-6">
+                    {{-- KANAN: info --}}
+                    <div class="lg:w-3/5 px-6 sm:px-8 lg:px-10 py-8 space-y-6">
                         <div>
                             <h1
-                                class="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-rose-700 to-rose-500 bg-clip-text text-transparent mb-3">
+                                class="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-rose-700 to-rose-500 bg-clip-text text-transparent mb-2">
                                 {{ $mua->nama ?? $mua->nama_usaha ?? $mua->nama_mua ?? 'Nama MUA' }}
                             </h1>
-
-                            <p class="text-slate-500 text-sm uppercase tracking-wider font-semibold">
-                                {{ $mua->tagline ?? $mua->deskripsi ?? 'MUA Profesional' }}
+                            <p class="text-sm sm:text-[13px] uppercase tracking-[0.18em] text-rose-500 font-semibold">
+                                Jasa Makeup, Baju Adat, dan Pelaminan
                             </p>
                         </div>
 
-                        <div class="space-y-4 pt-4">
+                        <div class="space-y-4 pt-3">
                             {{-- Lokasi --}}
                             <div
-                                class="flex items-start gap-4 p-4 rounded-2xl bg-rose-50/60 hover:bg-rose-50 transition-colors">
+                                class="flex items-start gap-4 p-4 rounded-2xl bg-rose-50/70 hover:bg-rose-50 transition-colors">
                                 <div
                                     class="flex-shrink-0 w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center">
                                     <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor"
@@ -359,9 +405,10 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-semibold text-rose-600 uppercase tracking-wide mb-1">Lokasi
+                                    <p class="text-[11px] font-semibold text-rose-600 uppercase tracking-wide mb-1">
+                                        Lokasi
                                     </p>
-                                    <p class="text-slate-700 font-medium">
+                                    <p class="text-slate-700 font-medium text-sm sm:text-base">
                                         {{ $mua->alamat ?? 'Alamat belum diisi' }}
                                     </p>
                                 </div>
@@ -376,7 +423,7 @@
                                     }
                                 @endphp
                                 <div
-                                    class="flex items-start gap-4 p-4 rounded-2xl bg-emerald-50/60 hover:bg-emerald-50 transition-colors">
+                                    class="flex items-start gap-4 p-4 rounded-2xl bg-emerald-50/70 hover:bg-emerald-50 transition-colors">
                                     <div
                                         class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
                                         <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
@@ -385,12 +432,13 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wide mb-1">
+                                        <p class="text-[11px] font-semibold text-emerald-600 uppercase tracking-wide mb-1">
                                             WhatsApp
                                         </p>
                                         <a href="https://wa.me/{{ $waNumber }}" target="_blank"
-                                            class="font-medium text-slate-800 hover:text-emerald-700 transition-colors">
-                                            {{ $mua->kontak_wa }} <span class="text-emerald-700">→ Chat Sekarang</span>
+                                            class="font-medium text-slate-800 hover:text-emerald-700 transition-colors text-sm">
+                                            {{ $mua->kontak_wa }}
+                                            <span class="text-emerald-700 font-semibold">— Chat Sekarang</span>
                                         </a>
                                     </div>
                                 </div>
@@ -398,44 +446,51 @@
                         </div>
 
                         {{-- Deskripsi --}}
-                        <div class="pt-4">
-                            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3">Tentang Kami</h3>
-                            <p class="text-slate-600 leading-relaxed">
-                                {{ $mua->deskripsi ?? 'Kami adalah tim makeup artist profesional siap membantu berbagai acara spesial Anda.' }}
+                        <div class="pt-3 pb-1">
+                            <h3 class="text-xs font-bold text-slate-700 uppercase tracking-[0.2em] mb-2">
+                                Tentang Kami
+                            </h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                {{ $mua->deskripsi ?? 'Kami adalah tim makeup artist profesional yang siap membantu berbagai acara spesial Anda dengan riasan dan busana adat terbaik.' }}
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {{-- SERVICES SECTION --}}
-            <section class="space-y-6">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {{-- LAYANAN --}}
+            <section class="space-y-5">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <div>
-                        <h2 class="text-3xl lg:text-4xl font-bold text-rose-700 mb-2">
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-rose-700">
                             Layanan Tersedia
                         </h2>
-                        <p class="text-slate-500">Pilih paket yang sesuai dengan kebutuhan Anda</p>
+                        <p class="text-slate-500 text-sm mt-1">
+                            Pilih paket yang sesuai dengan kebutuhan Anda ✨
+                        </p>
                     </div>
                 </div>
 
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @forelse ($layanan as $layanan)
                         <div class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100">
-                            <div class="image-overlay relative h-64">
+                            <div class="relative h-56 sm:h-60">
                                 <img src="{{ $layanan->foto ? asset('storage/' . $layanan->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($layanan->nama) }}"
                                     alt="{{ $layanan->nama }}" class="w-full h-full object-cover">
-                                <div class="absolute top-4 left-4">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent opacity-80">
+                                </div>
+                                <div class="absolute top-3 left-3">
                                     <span
-                                        class="px-3 py-1 rounded-full bg-[#f7e07b] text-[#8a6600] text-xs font-bold uppercase tracking-wide shadow-lg">
+                                        class="px-3 py-1 rounded-full bg-[#f7e07b] text-[#8a6600] text-[11px] font-bold uppercase tracking-wide shadow-lg">
                                         {{ strtoupper($layanan->kategori ?? 'MAKEUP') }}
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="p-6 space-y-4">
+                            <div class="p-5 sm:p-6 space-y-4 flex flex-col h-full">
                                 <div>
-                                    <h4 class="text-xl font-bold text-slate-800 mb-2">
+                                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">
                                         {{ $layanan->nama }}
                                     </h4>
                                     <p class="text-sm text-slate-600 leading-relaxed">
@@ -444,13 +499,15 @@
                                 </div>
 
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-xs text-slate-500 font-medium">Mulai dari</span>
-                                    <span class="text-2xl font-extrabold text-rose-600">
+                                    <span class="text-[11px] text-slate-500 font-medium uppercase tracking-wide">
+                                        Mulai dari
+                                    </span>
+                                    <span class="text-xl sm:text-2xl font-extrabold text-rose-600">
                                         Rp {{ number_format($layanan->harga, 0, ',', '.') }}
                                     </span>
                                 </div>
 
-                                {{-- FORM CEPAT: TAMBAH 1 ITEM KE KERANJANG --}}
+                                {{-- form hidden keranjang 1x --}}
                                 <form id="cart-form-{{ $layanan->id }}" method="POST" action="{{ route('cart.add') }}"
                                     class="hidden">
                                     @csrf
@@ -458,22 +515,20 @@
                                     <input type="hidden" name="jumlah" value="1">
                                 </form>
 
-                                <div class="flex gap-3">
-                                    {{-- Tombol + Keranjang --}}
+                                <div class="flex flex-col sm:flex-row gap-3 mt-auto">
                                     <button type="button"
                                         onclick="document.getElementById('cart-form-{{ $layanan->id }}').submit()"
-                                        class="flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
+                                        class="w-full sm:flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
                                         <span class="text-lg">＋</span>
                                         <span>Keranjang</span>
                                     </button>
 
-                                    {{-- Tombol Pesan Layanan Ini (popup jumlah) --}}
                                     <button type="button" onclick="openModal(
                                                         '{{ addslashes($layanan->nama) }}',
                                                         'Rp {{ number_format($layanan->harga, 0, ',', '.') }}',
                                                         '{{ $layanan->id }}'
                                                     )"
-                                        class="flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2">
+                                        class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                         Pesan Layanan Ini
                                     </button>
                                 </div>
@@ -487,22 +542,22 @@
                 </div>
             </section>
 
-            {{-- CTA SECTION --}}
+            {{-- CTA --}}
             <section
-                class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] rounded-3xl p-8 lg:p-12 text-center text-white shadow-2xl">
-                <h3 class="text-3xl font-bold mb-4">
+                class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] rounded-3xl p-7 sm:p-8 lg:p-10 text-center text-white shadow-2xl">
+                <h3 class="text-2xl sm:text-3xl font-bold mb-3">
                     Siap Mewujudkan Penampilan Impian Anda? ✨
                 </h3>
-                <p class="text-amber-50 mb-6 max-w-2xl mx-auto">
+                <p class="text-amber-50 text-sm sm:text-base mb-5 max-w-2xl mx-auto">
                     Hubungi kami sekarang untuk konsultasi gratis dan dapatkan penawaran terbaik untuk acara spesial
                     Anda.
                 </p>
 
-                @if (!empty($mua->whatsapp))
+                @if (!empty($mua->kontak_wa ?? null) && !empty($waNumber ?? null))
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="https://wa.me/{{ $waNumber ?? '' }}"
-                            class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white text-[#c98a00] font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <a href="https://wa.me/{{ $waNumber }}"
+                            class="inline-flex items-center justify-center gap-2 px-7 py-3 sm:px-9 sm:py-4 rounded-2xl bg-white text-[#c98a00] font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm sm:text-base">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                             </svg>
@@ -514,7 +569,7 @@
         </div>
     </main>
 
-    {{-- FOOTER --}}
+    {{-- ============ FOOTER ============ --}}
     <footer class="mt-6">
         <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
             <div
@@ -523,7 +578,6 @@
 
             <div class="relative max-w-6xl mx-auto">
                 <div class="grid md:grid-cols-3 gap-8 items-start">
-                    {{-- Brand & intro --}}
                     <div>
                         <h1
                             class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
@@ -535,20 +589,17 @@
                         </p>
                     </div>
 
-                    {{-- Link cepat --}}
                     <div class="text-sm">
                         <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
                         <ul class="space-y-1.5">
                             <li><a href="{{ route('home') }}" class="hover:text-[#f7e07b] transition">Beranda</a></li>
-                            <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
-                            <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
-                            <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
+                            <li><a href="{{ url('/daftarmua') }}" class="hover:text-[#f7e07b] transition">Daftar MUA</a>
+                            </li>
                             <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi
                                     Kami</a></li>
                         </ul>
                     </div>
 
-                    {{-- Kontak & kredit --}}
                     <div class="text-sm">
                         <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
                         <p class="text-[#f5e9df] text-[13px]">
@@ -569,7 +620,7 @@
                     </div>
                 </div>
 
-                <p class="mt-4 text-xs text-center text-[#e2c9bf] ">
+                <p class="mt-4 text-xs text-center text-[#e2c9bf]">
                     Dikembangkan oleh
                     <span class="font-semibold">Zidan Fahrezy Syafril</span>,
                     <span class="font-semibold">Cahyani Putri Sofari</span>,
@@ -582,14 +633,14 @@
         </div>
     </footer>
 
-    {{-- MODAL POPUP PESAN LAYANAN (TAMBAH KE KERANJANG) --}}
+    {{-- MODAL PESAN LAYANAN --}}
     <div id="orderModal" class="modal" onclick="closeModalOnBackdrop(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
-            {{-- Modal Header --}}
             <div
                 class="sticky top-0 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] p-6 flex items-center justify-between z-10">
                 <h2 class="text-2xl font-bold text-white">Buat Pesanan 🎉</h2>
-                <button onclick="closeModal()" class="text-white hover:bg-white/20 p-2 rounded-full transition-colors">
+                <button onclick="closeModal()"
+                    class="text-white hover:bg-white/20 p-2 rounded-full transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M6 18L18 6M6 6l12 12" />
@@ -597,16 +648,13 @@
                 </button>
             </div>
 
-            {{-- Modal Body --}}
             <div class="p-6 space-y-6">
-                {{-- Info Layanan --}}
                 <div class="border rounded-2xl p-4 bg-amber-50/70 border-amber-100">
                     <p id="modalServiceName" class="text-lg font-bold text-[#b45309] capitalize">-</p>
                     <p class="text-sm text-slate-600 mt-1">Mulai dari</p>
                     <p id="modalServicePrice" class="text-2xl font-extrabold text-rose-600">-</p>
                 </div>
 
-                {{-- Form Pesanan -> tambah ke keranjang --}}
                 <form id="orderForm" method="POST" action="{{ route('cart.add') }}" class="space-y-4">
                     @csrf
                     <input type="hidden" id="layananId" name="layanan_id">
@@ -618,32 +666,26 @@
                         <input type="number" name="jumlah" min="1" value="1" required
                             class="input-field w-full border border-gray-300 rounded-xl px-4 py-3"
                             placeholder="Masukkan jumlah">
-                        @error('jumlah')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <p class="text-[11px] text-slate-500">
                         Detail seperti tanggal booking & alamat akan kamu lengkapi saat checkout di halaman keranjang.
                     </p>
 
-                    <div class="flex gap-3 pt-4">
+                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
                         <button type="button" onclick="closeModal()"
-                            class="flex-1 px-6 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
+                            class="flex-1 px-6 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors text-sm">
                             Batal
                         </button>
                         <button type="submit"
-                            class="flex-1 btn-primary px-6 py-3 rounded-xl text-white font-semibold shadow-lg">
+                            class="flex-1 btn-primary px-6 py-3 rounded-xl text-white font-semibold shadow-lg text-sm">
                             Tambah ke Keranjang
                         </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
-
-    {{-- ... semua kode di atas TIDAK aku ubah ... --}}
 
     {{-- MODAL KERANJANG --}}
     <div id="cartModal" class="modal" onclick="closeCartOnBackdrop(event)">
@@ -669,39 +711,39 @@
                 @else
                     @if ($cartItems->isEmpty())
                         <p class="text-sm text-slate-600">
-                            Keranjangmu masih kosong. Pilih layanan dulu lalu tekan tombol <span class="font-semibold">＋
-                                Keranjang</span> ya ✨
+                            Keranjangmu masih kosong. Pilih layanan dulu lalu tekan tombol
+                            <span class="font-semibold">＋ Keranjang</span> ya ✨
                         </p>
                     @else
-                        {{-- Daftar item di keranjang --}}
                         <div class="space-y-3 max-h-72 overflow-y-auto pr-1">
                             @foreach ($cartItems as $item)
                                 @php
-                                    $layanan = $item->layanan;
-                                    if (!$layanan) {
+                                    $layananItem = $item->layanan;
+                                    if (!$layananItem) {
                                         continue;
                                     }
-                                    $subtotal = ($layanan->harga ?? 0) * $item->jumlah;
+                                    $subtotal = ($layananItem->harga ?? 0) * $item->jumlah;
                                 @endphp
                                 <div class="flex gap-3 p-3 rounded-2xl border border-amber-100 bg-amber-50/40">
-                                    @if ($layanan->foto)
-                                        <img src="{{ asset('storage/' . $layanan->foto) }}" alt="{{ $layanan->nama }}"
+                                    @if ($layananItem->foto)
+                                        <img src="{{ asset('storage/' . $layananItem->foto) }}"
+                                            alt="{{ $layananItem->nama }}"
                                             class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
                                     @else
                                         <div
                                             class="w-16 h-16 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-semibold flex-shrink-0">
-                                            {{ Str::limit($layanan->nama, 10) }}
+                                            {{ Str::limit($layananItem->nama, 10) }}
                                         </div>
                                     @endif
                                     <div class="flex-1">
                                         <p class="text-sm font-semibold text-slate-800">
-                                            {{ $layanan->nama }}
+                                            {{ $layananItem->nama }}
                                         </p>
                                         <p class="text-[11px] text-slate-500 uppercase tracking-wide">
-                                            {{ strtoupper($layanan->kategori ?? 'MAKEUP') }}
+                                            {{ strtoupper($layananItem->kategori ?? 'MAKEUP') }}
                                         </p>
                                         <p class="text-xs text-slate-600 mt-1">
-                                            Rp {{ number_format($layanan->harga, 0, ',', '.') }}
+                                            Rp {{ number_format($layananItem->harga, 0, ',', '.') }}
                                             <span class="text-slate-400">× {{ $item->jumlah }}</span>
                                         </p>
                                     </div>
@@ -715,8 +757,7 @@
                             @endforeach
                         </div>
 
-                        {{-- Total --}}
-                        <div class="border-t border-amber-100 pt-3 mt-2 flex items-center justify-between">
+                        <div class="border-top border-amber-100 pt-3 mt-2 flex items-center justify-between">
                             <span class="text-sm font-semibold text-slate-700">
                                 Total ({{ $cartCount }} item)
                             </span>
@@ -725,7 +766,6 @@
                             </span>
                         </div>
 
-                        {{-- 🔸 FORM CHECKOUT: TANGGAL + ALAMAT --}}
                         <form method="POST" action="{{ route('cart.checkout') }}" class="mt-4 space-y-3">
                             @csrf
 
@@ -736,9 +776,6 @@
                                 <input type="date" name="tanggal_booking"
                                     value="{{ old('tanggal_booking', now()->toDateString()) }}"
                                     class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400">
-                                @error('tanggal_booking')
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                                @enderror
                             </div>
 
                             <div>
@@ -748,17 +785,14 @@
                                 <textarea name="alamat" rows="2"
                                     class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                                     placeholder="Tulis alamat lengkap lokasi acara kamu...">{{ old('alamat') }}</textarea>
-                                @error('alamat')
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                                @enderror
                             </div>
 
-                            <button type="submit" class="w-full btn-primary py-3 rounded-xl text-white font-semibold shadow-lg">
+                            <button type="submit"
+                                class="w-full btn-primary py-3 rounded-xl text-white font-semibold shadow-lg text-sm">
                                 Buat Pesanan
                             </button>
                         </form>
 
-                        {{-- Siapkan teks WhatsApp untuk ringkasan pesanan --}}
                         @php
                             $waCheckoutText = null;
 
@@ -766,13 +800,13 @@
                                 $text = "Halo kak, saya mau booking layanan MUA di AdatKu:\n";
 
                                 foreach ($cartItems as $item) {
-                                    $layanan = $item->layanan;
-                                    if (!$layanan) {
+                                    $layananItem = $item->layanan;
+                                    if (!$layananItem) {
                                         continue;
                                     }
 
-                                    $subtotal = ($layanan->harga ?? 0) * $item->jumlah;
-                                    $text .= '- ' . $layanan->nama . ' x ' . $item->jumlah . ' (Rp '
+                                    $subtotal = ($layananItem->harga ?? 0) * $item->jumlah;
+                                    $text .= '- ' . $layananItem->nama . ' x ' . $item->jumlah . ' (Rp '
                                         . number_format($subtotal, 0, ',', '.') . ")\n";
                                 }
 
@@ -783,17 +817,16 @@
                             }
                         @endphp
 
-                        {{-- Tombol Checkout via WhatsApp (opsional) --}}
                         @if (!empty($mua->kontak_wa ?? null) && $waCheckoutText)
                             <a href="https://wa.me/{{ $waNumber ?? '' }}?text={{ $waCheckoutText }}" target="_blank"
-                                class="mt-3 block w-full bg-emerald-500 hover:bg-emerald-600 text-center py-3 rounded-xl text-white font-semibold shadow-lg">
+                                class="mt-3 block w-full bg-emerald-500 hover:bg-emerald-600 text-center py-3 rounded-xl text-white font-semibold shadow-lg text-sm">
                                 Checkout via WhatsApp
                             </a>
                         @endif
 
                         <p class="mt-2 text-[11px] text-slate-500 text-center">
-                            Setelah pesanan dibuat, kamu bisa lihat di menu <span class="font-semibold">Pesanan Saya</span>,
-                            cek status (pending / disetujui / ditolak), dan lanjut chat via WhatsApp di sana.
+                            Setelah pesanan dibuat, kamu bisa lihat di menu <span class="font-semibold">Pesanan
+                                Saya</span>.
                         </p>
                     @endif
                 @endguest
@@ -801,31 +834,29 @@
         </div>
     </div>
 
-    {{-- ... sisanya (icon melayang + script) tetap sama ... --}}
-
-
     {{-- ICON MELAYANG (4 bawah + 4 atas) --}}
-    <!-- Dari bawah -->
     <span class="floating-icon from-bottom icon-lg"
-        style="left: 10%; animation-duration: 22s; animation-delay: 0s;">❖</span>
+        style="left: 10%; animation: float-up 22s linear infinite 0s;">❖</span>
     <span class="floating-icon from-bottom icon-md"
-        style="left: 32%; animation-duration: 24s; animation-delay: 3s;">✿</span>
+        style="left: 32%; animation: float-up 24s linear infinite 3s;">✿</span>
     <span class="floating-icon from-bottom icon-xl"
-        style="left: 58%; animation-duration: 28s; animation-delay: 6s;">❁</span>
+        style="left: 58%; animation: float-up 28s linear infinite 6s;">❁</span>
     <span class="floating-icon from-bottom icon-lg"
-        style="left: 80%; animation-duration: 25s; animation-delay: 4s;">✥</span>
+        style="left: 80%; animation: float-up 25s linear infinite 4s;">✥</span>
 
-    <!-- Dari atas -->
     <span class="floating-icon from-top icon-md"
-        style="left: 15%; animation-duration: 23s; animation-delay: 2s;">✦</span>
+        style="left: 15%; animation: float-down 23s linear infinite 2s;">✦</span>
     <span class="floating-icon from-top icon-lg"
-        style="left: 42%; animation-duration: 27s; animation-delay: 5s;">❋</span>
+        style="left: 42%; animation: float-down 27s linear infinite 5s;">❋</span>
     <span class="floating-icon from-top icon-xl"
-        style="left: 68%; animation-duration: 30s; animation-delay: 8s;">◈</span>
+        style="left: 68%; animation: float-down 30s linear infinite 8s;">◈</span>
     <span class="floating-icon from-top icon-md"
-        style="left: 88%; animation-duration: 26s; animation-delay: 3s;">❂</span>
+        style="left: 88%; animation: float-down 26s linear infinite 3s;">❂</span>
 
     <script>
+        // animasi naik/turun icon
+        function floatKeyframes() { }
+
         // Modal Pesan Layanan
         function openModal(serviceName, servicePrice, layananId) {
             document.getElementById('modalServiceName').textContent = serviceName;
@@ -864,7 +895,6 @@
             }
         }
 
-        // Close kedua modal pakai ESC
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeModal();
@@ -873,6 +903,7 @@
         });
     </script>
 
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 
 </html>

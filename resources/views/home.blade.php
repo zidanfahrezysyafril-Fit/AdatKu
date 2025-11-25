@@ -16,7 +16,6 @@
   <style>
     [x-cloak] {
       display: none !important;
-      scroll-behavior: smooth;
     }
 
     html {
@@ -26,7 +25,6 @@
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #fff9fb;
-      /* pattern lembut */
       background-image:
         linear-gradient(135deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
         linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
@@ -37,7 +35,6 @@
       font-family: 'Great Vibes', cursive;
     }
 
-    /* --- animasi badge kecil di hero --- */
     @keyframes soft-float {
       0% {
         transform: translateY(0);
@@ -56,7 +53,6 @@
       animation: soft-float 5s ease-in-out infinite;
     }
 
-    /* --- slider galeri --- */
     @keyframes slide-gallery {
 
       0%,
@@ -92,8 +88,6 @@
       text-align: justify;
       text-justify: inter-word;
     }
-
-    /* ================= ICON MELAYANG ================= */
 
     .floating-icon {
       position: fixed;
@@ -164,16 +158,17 @@
 
 </head>
 
-<body class="text-gray-900" x-data="{ open:false, profileModal:false, editModal:false, applyMuaModal:false }">
+<body class="text-gray-900"
+  x-data="{ navOpen:false, userMenuOpen:false, profileModal:false, editModal:false, applyMuaModal:false }" x-cloak>
 
   {{-- FLASH MESSAGE --}}
   @if (session('success') || session('error'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2600)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-6 z-[9999]">
       <div class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
-                                    backdrop-blur-md border border-white/40
-                                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                backdrop-blur-md border border-white/40
+                @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -191,10 +186,13 @@
   <header class="sticky top-0 z-40">
     <div class="backdrop-blur-md bg-white/80 border-b border-amber-100/60 shadow-sm">
       <div class="max-w-7xl mx-auto px-5 md:px-8 py-3.5 flex items-center justify-between gap-4">
+
         {{-- Logo --}}
         <a href="{{ route('home') }}" class="flex items-center gap-3">
-          <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
-            class="w-12 h-12 rounded-full object-cover shadow-md border border-amber-200">
+          <div
+            class="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md border border-amber-200 overflow-hidden">
+            <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu" class="w-full h-full object-cover">
+          </div>
           <div class="leading-tight">
             <div
               class="logo-font text-2xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent">
@@ -211,22 +209,34 @@
           <a href="{{ route('home') }}" class="hover:text-amber-600 transition">Beranda</a>
           <a href="#tentang" class="hover:text-amber-600 transition">Tentang</a>
           <a href="#galeri" class="hover:text-amber-600 transition">Galeri</a>
-          <a href="#tim" class="hover:text-amber-600 transition">Tim</a> {{-- <== ini baru --}} <a
-            href="{{ route('hubungikami') }}" class="hover:text-amber-600 transition">Hubungi Kami</a>
-            @auth
-              <a href="{{ route('public.mua.index') }}" class="hover:text-amber-600 transition">
-                Daftar MUA
-              </a>
-            @endauth
+          <a href="#tim" class="hover:text-amber-600 transition">Tim</a>
+          <a href="{{ route('hubungikami') }}" class="hover:text-amber-600 transition">Hubungi Kami</a>
+          @auth
+            <a href="{{ route('public.mua.index') }}" class="hover:text-amber-600 transition">
+              Daftar MUA
+            </a>
+          @endauth
         </nav>
-
 
         {{-- Aksi kanan --}}
         <div class="flex items-center gap-3">
+
+          {{-- HAMBURGER (HANYA MOBILE) --}}
+          <button @click="navOpen = true" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/80
+                     shadow-sm hover:bg-amber-50 hover:border-amber-300 transition text-xs md:text-sm text-amber-800">
+            <span class="relative flex flex-col justify-between w-3.5 h-3">
+              <span class="block h-[2px] rounded-full bg-amber-500"></span>
+              <span class="block h-[2px] rounded-full bg-amber-400"></span>
+              <span class="block h-[2px] rounded-full bg-amber-500 w-2/3 self-end"></span>
+            </span>
+            <span class="hidden sm:inline">Menu</span>
+          </button>
+
           @guest
-            <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold
-                                                bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                text-white shadow-md hover:brightness-110 transition">
+            {{-- LOGIN MUNCUL DI SEMUA UKURAN --}}
+            <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold
+                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                             text-white shadow-md hover:brightness-110 transition">
               Masuk
             </a>
           @endguest
@@ -237,24 +247,21 @@
               $avatar = $user->avatar ? asset('storage/' . $user->avatar) : asset('default-avatar.png');
             @endphp
 
-            {{-- Tombol Pesanan (pengguna) --}}
-            @if ($user->role === 'Pengguna')
-              <a href="{{ route('pengguna.pesanan.index') }}"
-                class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100
-                                                                            text-amber-800 text-xs font-semibold shadow-sm border border-amber-200">
+            @if (strtolower($user->role ?? '') === 'pengguna')
+              <a href="{{ route('pengguna.pesanan.index') }}" class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100
+                                       text-amber-800 text-xs font-semibold shadow-sm border border-amber-200">
                 📦 Pesanan Saya
               </a>
             @endif
 
-            {{-- Dropdown user --}}
             <div class="relative">
-              <button @click="open = !open"
+              <button @click="userMenuOpen = !userMenuOpen"
                 class="w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300 shadow focus:outline-none">
                 <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
                   onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
               </button>
 
-              <div x-show="open" x-cloak x-transition @click.outside="open = false"
+              <div x-show="userMenuOpen" x-cloak x-transition @click.outside="userMenuOpen = false"
                 class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
                 <div class="px-4 py-3 border-b border-amber-50 bg-amber-50/40">
                   <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
@@ -262,7 +269,7 @@
                 </div>
                 <ul class="py-1 text-sm">
                   <li>
-                    <button type="button" @click="profileModal = true; open = false"
+                    <button type="button" @click="profileModal = true; userMenuOpen = false"
                       class="w-full text-left px-4 py-2 hover:bg-amber-50">
                       Profil Saya
                     </button>
@@ -284,16 +291,125 @@
     </div>
   </header>
 
+  {{-- NAV DRAWER (SLIDE DARI KANAN, SMOOTH) --}}
+  <div class="fixed inset-0 z-[9998] flex justify-end items-stretch transition-opacity duration-300" x-cloak
+    :class="navOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
+    @keydown.escape.window="navOpen = false">
+
+    {{-- overlay --}}
+    <div class="flex-1 h-full bg-black/40 backdrop-blur-sm" @click="navOpen = false"></div>
+
+    {{-- PANEL KANAN --}}
+    <div class="relative h-full w-[80%] max-w-xs sm:max-w-sm bg-white
+                shadow-[0_0_40px_rgba(0,0,0,0.4)] border-l border-amber-100
+                flex flex-col transform transition-transform duration-300 ease-out"
+      :class="navOpen ? 'translate-x-0' : 'translate-x-full'">
+
+      {{-- HEADER DRAWER --}}
+      <div
+        class="px-4 py-3 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-9 h-9 rounded-full bg-white/95 flex items-center justify-center shadow-md border border-amber-100">
+            <span class="logo-font text-xl text-[#c98a00]">A</span>
+          </div>
+          <div class="leading-tight text-white">
+            <p class="text-[11px] uppercase tracking-[0.2em] opacity-90">Navigasi</p>
+            <p class="text-sm font-semibold">AdatKu</p>
+          </div>
+        </div>
+
+        <button type="button" @click="navOpen = false"
+          class="w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-amber-700 shadow-sm hover:bg-amber-50">
+          ✕
+        </button>
+      </div>
+
+      {{-- MENU LIST --}}
+      <div class="flex-1 overflow-y-auto px-4 py-3 text-sm text-slate-800 space-y-1">
+        <button @click="navOpen = false; window.location='{{ route('home') }}'"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">🏠</span><span>Beranda</span>
+        </button>
+
+        <button @click="navOpen = false; document.getElementById('tentang').scrollIntoView({behavior:'smooth'})"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">📜</span><span>Tentang</span>
+        </button>
+
+        <button @click="navOpen = false; document.getElementById('galeri').scrollIntoView({behavior:'smooth'})"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">🖼️</span><span>Galeri</span>
+        </button>
+
+        <button @click="navOpen = false; document.getElementById('tim').scrollIntoView({behavior:'smooth'})"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">👥</span><span>Tim Pengembang</span>
+        </button>
+
+        <button @click="navOpen = false; window.location='{{ route('hubungikami') }}'"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">✉️</span><span>Hubungi Kami</span>
+        </button>
+
+        @auth
+          <button @click="navOpen = false; window.location='{{ route('public.mua.index') }}'"
+            class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+            <span class="text-lg">💄</span><span>Daftar MUA</span>
+          </button>
+
+          @php $userNav = auth()->user(); @endphp
+          @if (strtolower($userNav->role ?? '') === 'pengguna')
+            <button @click="navOpen = false; window.location='{{ route('pengguna.pesanan.index') }}'"
+              class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+              <span class="text-lg">📦</span><span>Pesanan Saya</span>
+            </button>
+          @endif
+
+          <button @click="navOpen = false; profileModal = true"
+            class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+            <span class="text-lg">👤</span><span>Profil Saya</span>
+          </button>
+        @endauth
+      </div>
+
+      {{-- CTA BAWAH DALAM DRAWER --}}
+      @auth
+        @php
+          $userSheet = auth()->user();
+          $isMuaSheet = strtolower($userSheet->role ?? '') === 'mua';
+        @endphp
+
+        @if (!$isMuaSheet)
+          <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
+            <button @click="navOpen = false; applyMuaModal = true" class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
+                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                     text-white shadow-md hover:brightness-110">
+              Daftarkan jasa MUA kamu di sini
+            </button>
+          </div>
+        @endif
+      @else
+        <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
+          <button @click="navOpen = false; window.location='{{ route('login') }}'" class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
+                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                           text-white shadow-md hover:brightness-110">
+            Daftarkan jasa MUA kamu di sini
+          </button>
+        </div>
+      @endauth
+    </div>
+  </div>
+
   {{-- HERO --}}
   <section class="relative overflow-hidden">
-    {{-- background image --}}
     <div class="relative h-[520px] md:h-[560px]">
+      {{-- NOTE: pastikan nama file tidak ada spasi di folder public --}}
       <img src="{{ asset('logoss3 .jpg') }}" alt="AdatKu Hero" class="w-full h-full object-cover brightness-[0.55]">
       <div
         class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/35 to-black/55 mix-blend-multiply pointer-events-none">
       </div>
 
-      {{-- konten --}}
       <div class="absolute inset-0 flex items-center">
         <div class="max-w-6xl mx-auto px-6 md:px-10 grid md:grid-cols-[1.4fr,1fr] gap-10 items-center">
           <div class="text-white">
@@ -312,58 +428,162 @@
 
             <div class="mt-6 flex flex-wrap gap-3">
               <a href="{{ route('public.mua.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold
-                                bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                text-white shadow-lg hover:brightness-110 transition">
+                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                       text-white shadow-lg hover:brightness-110 transition">
                 Jelajahi MUA & Busana
               </a>
 
               @guest
-                <a href="{{ route('login') }}"
-                  class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
-                                                        bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
+                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
+                                 bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
                   Masuk / Daftar
                 </a>
               @endguest
             </div>
           </div>
 
-          {{-- kartu stats / info kenapa AdatKu --}}
+          {{-- kartu info hero - DESKTOP --}}
           <div class="hidden md:block relative h-full">
-            <div class="absolute top-10 right-0 w-[360px]
-           bg-white/90 backdrop-blur-xl
-           rounded-3xl shadow-[0_18px_45px_rgba(0,0,0,0.35)]
-           border border-amber-100/80 p-6
-           floating-badge">
+            <div class="absolute top-10 right-0 w-[380px]
+              bg-white/5 backdrop-blur-xl
+              rounded-[32px] shadow-[0_18px_45px_rgba(0,0,0,0.55)]
+              border border-amber-200/60 px-7 py-6
+              floating-badge">
 
-              <p class="text-xs font-semibold text-amber-700 mb-2 uppercase tracking-[0.16em]">
-                KENAPA ADATKU?
+              <p class="text-[11px] font-semibold text-amber-300 mb-2 uppercase tracking-[0.18em]">
+                Kenapa AdatKu?
               </p>
-              <p class="text-sm text-gray-600 mb-5 leading-relaxed">
+
+              <p class="text-sm text-slate-100 leading-relaxed mb-5">
                 Kami membantu menghubungkanmu dengan penyedia jasa adat yang
                 terpercaya di daerahmu, tanpa ribet dan tetap elegan.
               </p>
 
-              <div class="grid grid-cols-3 gap-3 text-center text-xs">
-                <div class="bg-amber-50/90 rounded-2xl py-3 px-2">
-                  <div class="text-lg font-bold text-amber-700">+25</div>
-                  <div class="text-[11px] text-amber-800/80">MUA Terdaftar</div>
+              <div class="grid grid-cols-4 gap-3 text-center text-sm">
+                {{-- MUA --}}
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                  shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
+                  <span class="text-xl mb-1">✨</span>
+                  <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
+                    +{{ $totalMua ?? 0 }}
+                  </p>
+                  <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+                    Mua Terdaftar
+                  </p>
                 </div>
-                <div class="bg-amber-50/90 rounded-2xl py-3 px-2">
-                  <div class="text-lg font-bold text-amber-700">+40</div>
-                  <div class="text-[11px] text-amber-800/80">Busana Adat</div>
+
+                {{-- BUSANA --}}
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                  shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
+                  <span class="text-xl mb-1">👗</span>
+                  <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
+                    +{{ $totalBusana ?? 0 }}
+                  </p>
+                  <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+                    Busana Adat
+                  </p>
                 </div>
-                <div class="bg-amber-50/90 rounded-2xl py-3 px-2">
-                  <div class="text-lg font-bold text-amber-700">+15</div>
-                  <div class="text-[11px] text-amber-800/80">Pelaminan</div>
+
+                {{-- MAKEUP --}}
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                  shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
+                  <span class="text-xl mb-1">💄</span>
+                  <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
+                    +{{ $totalMakeup ?? 0 }}
+                  </p>
+                  <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+                    Make Up
+                  </p>
+                </div>
+
+                {{-- PELAMINAN --}}
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                  shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
+                  <span class="text-xl mb-1">💍</span>
+                  <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
+                    +{{ $totalPelaminan ?? 0 }}
+                  </p>
+                  <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+                    Pelaminan
+                  </p>
                 </div>
               </div>
 
-              <p class="text-[10px] text-amber-700/80 mt-4 border-t border-amber-100 pt-3 leading-relaxed">
-                *Data hanya ilustrasi, bisa kamu sesuaikan dengan data asli dari sistemmu.
+              <p class="mt-4 text-[10px] text-amber-200">
+                *Data otomatis diambil dari sistem AdatKu dan bisa disesuaikan lewat dashboard admin.
               </p>
             </div>
           </div>
+
         </div>
+      </div>
+    </div>
+
+    {{-- KARTU STAT – MOBILE --}}
+    <div class="md:hidden px-5 -mt-10 pb-4 relative z-20">
+      <div class="mx-auto max-w-md bg-[#1f2933]/95 backdrop-blur-xl rounded-[28px] border border-amber-200/70
+                shadow-[0_12px_40px_rgba(0,0,0,0.55)] px-5 py-5">
+        <p class="text-[11px] font-semibold text-amber-300 mb-1 uppercase tracking-[0.18em]">
+          Kenapa AdatKu?
+        </p>
+        <p class="text-[13px] text-slate-100 leading-relaxed mb-4">
+          Kami membantu menghubungkanmu dengan penyedia jasa adat yang terpercaya di daerahmu, tanpa ribet dan tetap
+          elegan.
+        </p>
+
+        <div class="grid grid-cols-2 gap-3 text-center text-sm">
+          {{-- MUA --}}
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+            <span class="text-lg mb-0.5">✨</span>
+            <p class="text-xl font-extrabold text-[#c98a00]">
+              +{{ $totalMua ?? 0 }}
+            </p>
+            <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+              Mua Terdaftar
+            </p>
+          </div>
+
+          {{-- BUSANA --}}
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+            <span class="text-lg mb-0.5">👗</span>
+            <p class="text-xl font-extrabold text-[#c98a00]">
+              +{{ $totalBusana ?? 0 }}
+            </p>
+            <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+              Busana Adat
+            </p>
+          </div>
+
+          {{-- MAKEUP --}}
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+            <span class="text-lg mb-0.5">💄</span>
+            <p class="text-xl font-extrabold text-[#c98a00]">
+              +{{ $totalMakeup ?? 0 }}
+            </p>
+            <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+              Make Up
+            </p>
+          </div>
+
+          {{-- PELAMINAN --}}
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+            <span class="text-lg mb-0.5">💍</span>
+            <p class="text-xl font-extrabold text-[#c98a00]">
+              +{{ $totalPelaminan ?? 0 }}
+            </p>
+            <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+              Pelaminan
+            </p>
+          </div>
+        </div>
+
+        <p class="mt-3 text-[10px] text-amber-200 text-center">
+          *Data diambil otomatis dari sistem AdatKu.
+        </p>
       </div>
     </div>
   </section>
@@ -438,14 +658,26 @@
     </h2>
 
     <main class="space-y-16 max-w-6xl mx-auto px-6 md:px-10">
+
       {{-- Baju Adat --}}
       <section class="flex flex-col md:flex-row items-center gap-10">
         <div class="relative w-full md:w-[460px] h-[320px] overflow-hidden rounded-3xl shadow-lg">
           <div class="flex w-[400%] animate-gallery">
-            <img src="{{ asset('bajuminang.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Minang">
-            <img src="{{ asset('bajumelayu.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Melayu">
-            <img src="{{ asset('bajujawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Jawa">
-            <img src="{{ asset('bajusunda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Sunda">
+            @php
+              $itemsBaju = $galleryBaju ?? collect();
+            @endphp
+
+            @if ($itemsBaju->isNotEmpty())
+              @foreach ($itemsBaju as $item)
+                <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
+                  alt="{{ $item->judul }}">
+              @endforeach
+            @else
+              <img src="{{ asset('bajuminang.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Minang">
+              <img src="{{ asset('bajumelayu.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Melayu">
+              <img src="{{ asset('bajujawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Jawa">
+              <img src="{{ asset('bajusunda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Sunda">
+            @endif
           </div>
         </div>
         <div class="md:w-[420px]">
@@ -461,10 +693,21 @@
       <section class="flex flex-col md:flex-row-reverse items-center gap-10">
         <div class="relative w-full md:w-[460px] h-[320px] overflow-hidden rounded-3xl shadow-lg">
           <div class="flex w-[400%] animate-gallery">
-            <img src="{{ asset('makeupjawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Jawa">
-            <img src="{{ asset('makeupnikah.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Nikah">
-            <img src="{{ asset('makeuplamaran.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Lamaran">
-            <img src="{{ asset('makeupwisuda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Wisuda">
+            @php
+              $itemsMakeup = $galleryMakeup ?? collect();
+            @endphp
+
+            @if ($itemsMakeup->isNotEmpty())
+              @foreach ($itemsMakeup as $item)
+                <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
+                  alt="{{ $item->judul }}">
+              @endforeach
+            @else
+              <img src="{{ asset('makeupjawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Jawa">
+              <img src="{{ asset('makeupnikah.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Nikah">
+              <img src="{{ asset('makeuplamaran.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Lamaran">
+              <img src="{{ asset('makeupwisuda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Wisuda">
+            @endif
           </div>
         </div>
         <div class="md:w-[420px]">
@@ -480,10 +723,21 @@
       <section class="flex flex-col md:flex-row items-center gap-10">
         <div class="relative w-full md:w-[460px] h-[320px] overflow-hidden rounded-3xl shadow-lg">
           <div class="flex w-[400%] animate-gallery">
-            <img src="{{ asset('pelamin1.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 1">
-            <img src="{{ asset('pelamin2.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 2">
-            <img src="{{ asset('pelamin3.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 3">
-            <img src="{{ asset('pelamin4.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 4">
+            @php
+              $itemsPelamin = $galleryPelaminan ?? collect();
+            @endphp
+
+            @if ($itemsPelamin->isNotEmpty())
+              @foreach ($itemsPelamin as $item)
+                <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
+                  alt="{{ $item->judul }}">
+              @endforeach
+            @else
+              <img src="{{ asset('pelamin1.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 1">
+              <img src="{{ asset('pelamin2.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 2">
+              <img src="{{ asset('pelamin3.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 3">
+              <img src="{{ asset('pelamin4.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 4">
+            @endif
           </div>
         </div>
         <div class="md:w-[420px]">
@@ -510,7 +764,6 @@
       </div>
 
       @php
-        // kalau admin belum isi apa-apa, kita seed fallback manual dulu
         $teamToShow = $team ?? collect();
 
         if ($teamToShow->isEmpty()) {
@@ -539,56 +792,52 @@
 
       <div class="grid md:grid-cols-3 gap-6 md:gap-8 items-stretch">
         @foreach ($teamToShow as $index => $member)
-              @php
-                $isCenter = ($loop->count >= 3 && $loop->iteration == 2); // orang ke-2 jadi kartu tengah/hightlight
-                $photoUrl = $member->photo
-                  ? asset('storage/' . $member->photo)
-                  : 'https://placehold.co/300x300?text=' . urlencode(Str::limit($member->name, 2, ''));
-              @endphp
+          @php
+            $isCenter = $loop->count >= 3 && $loop->iteration == 2;
+            $photoUrl = $member->photo
+              ? asset('storage/' . $member->photo)
+              : 'https://placehold.co/600x400?text=Tim';
+          @endphp
 
-              <div class="
-                                                      bg-white rounded-3xl border px-5 md:px-6 py-6 md:py-7 flex flex-col items-center text-center 
-                                                      {{ $isCenter
-          ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2'
-          : 'shadow-md border-amber-100/80' }}
-                                                    ">
-                <div
-                  class="w-20 h-20 {{ $isCenter ? 'w-24 h-24' : '' }}
-                                                             rounded-full overflow-hidden bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                             flex items-center justify-center text-white text-2xl md:text-3xl font-bold mb-3 shadow-lg">
-                  <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
-                    onerror="this.onerror=null;this.src='https://placehold.co/300x300?text=Tim';">
-                </div>
+          <div
+            class="bg-white rounded-3xl border px-5 md:px-6 pt-5 pb-6 md:pb-7 flex flex-col
+                    {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
+            <div class="w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4 border border-amber-100/70 bg-slate-100">
+              <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Tim';">
+            </div>
 
-                <h3 class="font-semibold text-amber-800 text-sm md:text-base">
-                  {{ $member->name }}
-                </h3>
+            <div class="flex-1 flex flex-col items-center text-center">
+              <h3 class="font-semibold text-amber-800 text-sm md:text-base">
+                {{ $member->name }}
+              </h3>
 
-                @if (!empty($member->role))
-                  <p class="text-[12px] text-gray-500 mt-1">
-                    {{ $member->role }}
-                  </p>
-                @endif
+              @if (!empty($member->role))
+                <p class="text-[12px] text-gray-500 mt-1">
+                  {{ $member->role }}
+                </p>
+              @endif
 
-                @if (!empty($member->division))
-                  <p class="text-[12px] text-gray-500 mt-1">
-                    {{ $member->division }}
-                  </p>
-                @endif
-              </div>
+              @if (!empty($member->division))
+                <p class="text-[12px] text-gray-500 mt-1">
+                  {{ $member->division }}
+                </p>
+              @endif
+            </div>
+          </div>
         @endforeach
       </div>
 
       <p class="text-[11px] text-center text-gray-500 mt-5">
-        *Data tim bisa diubah dari dashboard admin (nama, peran, dan foto).
+        *Tim Pengembang di Balik website Adatku✨.
       </p>
     </div>
   </section>
 
-  {{-- CTA STRIP MODERN --}}
+  {{-- CTA STRIP --}}
   <section class="py-10">
-    <div
-      class="max-w-6xl mx-auto mx-4 md:mx-auto px-6 md:px-10 py-7 rounded-3xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="max-w-6xl mx-auto px-6 md:px-10 py-7 rounded-3xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+             shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
       <div>
         <p class="text-xs font-semibold tracking-[0.18em] text-white/80 uppercase mb-1">SIAP MULAI?</p>
         <h3 class="text-lg md:text-2xl font-semibold text-white">
@@ -654,8 +903,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                            bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                            hover:opacity-90 transition">
+                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                           hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -666,10 +915,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal = false" class="bg-white rounded-[32px] shadow-2xl border border-amber-100
-                                    w-[92%] max-w-3xl p-8 md:p-10 relative">
+                       w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal = false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                                        hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -683,9 +932,9 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32
-                                                rounded-full p-[3px]
-                                                bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                shadow-xl">
+                             rounded-full p-[3px]
+                             bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                             shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -696,10 +945,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                                    file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                                    file:border file:border-amber-200 file:bg-white
-                                                    file:text-slate-700 file:cursor-pointer
-                                                    hover:file:bg-amber-50">
+                               file:mr-3 file:rounded-lg file:px-4 file:py-2
+                               file:border file:border-amber-200 file:bg-white
+                               file:text-slate-700 file:cursor-pointer
+                               hover:file:bg-amber-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -711,20 +960,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                                text-sm md:text-base
-                                                focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                                focus:border-[#c98a00]">
+                             text-sm md:text-base
+                             focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                             focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                                hover:bg-slate-200 transition">
+                             hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                                bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                hover:opacity-90 transition">
+                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                             hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -733,102 +982,7 @@
     </div>
   @endauth
 
-  {{-- FOOTER --}}
-  <footer class="mt-6">
-    <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
-      <div
-        class="absolute inset-0 opacity-[0.09] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
-      </div>
-
-      <div class="relative max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-3 gap-8 items-start">
-          {{-- Brand & intro --}}
-          <div>
-            <h1
-              class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
-              AdatKu
-            </h1>
-            <p class="text-sm mt-2 text-[#f5e9df] leading-relaxed">
-              Platform penyewaan MUA, busana adat, dan pelaminan untuk mempercantik acara istimewa kamu.
-              Budaya tetap hidup, tampilan tetap elegan ✨
-            </p>
-          </div>
-
-          {{-- Link cepat --}}
-          <div class="text-sm">
-            <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
-            <ul class="space-y-1.5">
-              <li><a href="{{ route('home') }}" class="hover:text-[#f7e07b] transition">Beranda</a></li>
-              <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
-              <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
-              <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
-              <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi Kami</a></li>
-            </ul>
-          </div>
-
-          {{-- Kontak & kredit --}}
-          <div class="text-sm">
-            <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
-            <p class="text-[#f5e9df] text-[13px]">
-              Email: <a href="mailto:adatku11@gmail.com" class="hover:text-[#f7e07b]">adatku11@gmail.com</a><br>
-              Instagram: <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl" target="_blank"
-                class="hover:text-[#f7e07b]">@_.adatku</a>
-            </p>
-
-            <div class="mt-4 text-[11px] text-[#e2c9bf] leading-relaxed">
-              <p>Dikembangkan oleh:</p>
-              <p class="mt-1">
-                <span class="font-semibold">Zidan Fahrezy Syafril</span> (Koordinator & Fullstack)<br>
-                <span class="font-semibold">Cahyani Putri Sofari</span> (Frontend & Dokumentasi)<br>
-                <span class="font-semibold">Fetty Ratna Dewi</span> (Frontend & Dokumentasi)
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <p class="mt-4 text-xs text-center text-[#e2c9bf] ">
-          Dikembangkan oleh
-          <span class="font-semibold">Zidan Fahrezy Syafril</span>,
-          <span class="font-semibold">Cahyani Putri Sofari</span>,
-          dan <span class="font-semibold">Fetty Ratna Dewi</span>.
-        </p>
-        <p class="mt-2 text-xs text-center text-[#f7e07b]">
-          &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
-        </p>
-
-      </div>
-    </div>
-  </footer>
-
-  {{-- BUTTON DAFTARKAN MUA --}}
-  @auth
-    @php
-      $user = auth()->user();
-      $isMua = strtolower($user->role ?? '') === 'mua';
-    @endphp
-
-    {{-- Kalau BELUM jadi MUA, tombolnya muncul --}}
-    @if (!$isMua)
-      <div class="fixed left-5 bottom-5 z-40">
-        <a href="{{ route('mua.request.index') }}" @click.prevent="applyMuaModal = true" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                              text-white px-5 md:px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl
-                              hover:from-[#f8e48c] hover:to-[#e0a100] transition text-sm md:text-[15px] font-medium">
-          Daftarkan jasa MUA kamu di sini
-        </a>
-      </div>
-    @endif
-  @else
-    {{-- Kalau belum login, tetap munculin, tapi arahkan ke login dulu --}}
-    <div class="fixed left-5 bottom-5 z-40">
-      <a href="{{ route('login') }}" class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                      text-white px-5 md:px-6 py-2.5 rounded-full shadow-lg hover:shadow-xl
-                      hover:from-[#f8e48c] hover:to-[#e0a100] transition text-sm md:text-[15px] font-medium">
-        Daftarkan jasa MUA kamu di sini
-      </a>
-    </div>
-  @endauth
-
-  {{-- MODAL AJUKAN SEBAGAI MUA (POPUP DI HOME) --}}
+  {{-- MODAL AJUKAN SEBAGAI MUA --}}
   @auth
     @php
       $requestMua = $requestMua ?? null;
@@ -840,7 +994,7 @@
     <div x-show="applyMuaModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="applyMuaModal = false" class="bg-white rounded-[28px] shadow-2xl border border-amber-100
-                    w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
+                       w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
 
         <button type="button" @click="applyMuaModal = false" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100
                          hover:bg-slate-200 flex items-center justify-center text-slate-500">
@@ -932,7 +1086,7 @@
             </div>
           </div>
 
-          @if($isMuaReq)
+          @if ($isMuaReq)
             <div class="mt-6 text-center">
               <a href="{{ route('mua.panel') }}"
                 class="px-6 py-2.5 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-semibold inline-block">
@@ -958,8 +1112,74 @@
     </div>
   @endauth
 
-  {{-- ICON MELAYANG (4 bawah + 4 atas) --}}
-  <!-- Dari bawah -->
+  {{-- FOOTER --}}
+  <footer class="mt-6">
+    <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
+      <div
+        class="absolute inset-0 opacity-[0.09] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+      </div>
+
+      <div class="relative max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8 items-start">
+          {{-- Brand & intro --}}
+          <div>
+            <h1
+              class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+              AdatKu
+            </h1>
+            <p class="text-sm mt-2 text-[#f5e9df] leading-relaxed">
+              Platform penyewaan MUA, busana adat, dan pelaminan untuk mempercantik acara istimewa kamu.
+              Budaya tetap hidup, tampilan tetap elegan ✨
+            </p>
+          </div>
+
+          {{-- Link cepat --}}
+          <div class="text-sm">
+            <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
+            <ul class="space-y-1.5">
+              <li><a href="{{ route('home') }}" class="hover:text-[#f7e07b] transition">Beranda</a></li>
+              <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
+              <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
+              <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
+              <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi Kami</a></li>
+            </ul>
+          </div>
+
+          {{-- Kontak & kredit --}}
+          <div class="text-sm">
+            <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
+            <p class="text-[#f5e9df] text-[13px]">
+              Email: <a href="mailto:adatku11@gmail.com" class="hover:text-[#f7e07b]">adatku11@gmail.com</a><br>
+              Instagram: <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl" target="_blank"
+                class="hover:text-[#f7e07b]">@_.adatku</a>
+            </p>
+
+            <div class="mt-4 text-[11px] text-[#e2c9bf] leading-relaxed">
+              <p>Dikembangkan oleh:</p>
+              <p class="mt-1">
+                <span class="font-semibold">Zidan Fahrezy Syafril</span> (Koordinator & Fullstack)<br>
+                <span class="font-semibold">Cahyani Putri Sofari</span> (Frontend & Dokumentasi)<br>
+                <span class="font-semibold">Fetty Ratna Dewi</span> (Frontend & Dokumentasi)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-4 text-xs text-center text-[#e2c9bf] ">
+          Dikembangkan oleh
+          <span class="font-semibold">Zidan Fahrezy Syafril</span>,
+          <span class="font-semibold">Cahyani Putri Sofari</span>,
+          dan <span class="font-semibold">Fetty Ratna Dewi</span>.
+        </p>
+        <p class="mt-2 text-xs text-center text-[#f7e07b]">
+          &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
+        </p>
+
+      </div>
+    </div>
+  </footer>
+
+  {{-- ICON MELAYANG --}}
   <span class="floating-icon from-bottom icon-lg"
     style="left: 10%; animation-duration: 22s; animation-delay: 0s;">❖</span>
   <span class="floating-icon from-bottom icon-md"
@@ -969,13 +1189,56 @@
   <span class="floating-icon from-bottom icon-lg"
     style="left: 80%; animation-duration: 25s; animation-delay: 4s;">✥</span>
 
-  <!-- Dari atas -->
   <span class="floating-icon from-top icon-md" style="left: 15%; animation-duration: 23s; animation-delay: 2s;">✦</span>
   <span class="floating-icon from-top icon-lg" style="left: 42%; animation-duration: 27s; animation-delay: 5s;">❋</span>
   <span class="floating-icon from-top icon-xl" style="left: 68%; animation-duration: 30s; animation-delay: 8s;">◈</span>
   <span class="floating-icon from-top icon-md" style="left: 88%; animation-duration: 26s; animation-delay: 3s;">❂</span>
 
+  {{-- ALPINE --}}
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  {{-- COUNT-UP ANIMATION (kalau mau dipakai tinggal kasih class "countup" & data-target) --}}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const counters = document.querySelectorAll('.countup');
+      if (!('IntersectionObserver' in window)) {
+        counters.forEach(el => runCountUp(el));
+        return;
+      }
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            if (!el.dataset.counted) {
+              el.dataset.counted = 'true';
+              runCountUp(el);
+            }
+            observer.unobserve(el);
+          }
+        });
+      }, { threshold: 0.4 });
+
+      counters.forEach(el => observer.observe(el));
+
+      function runCountUp(el) {
+        const target = parseInt(el.dataset.target || '0', 10);
+        let current = 0;
+        const duration = 1400;
+        const start = performance.now();
+
+        function update(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          current = Math.floor(progress * target);
+          el.textContent = current.toString();
+          if (progress < 1) requestAnimationFrame(update);
+          else el.textContent = target.toString();
+        }
+
+        requestAnimationFrame(update);
+      }
+    });
+  </script>
 </body>
 
 </html>
