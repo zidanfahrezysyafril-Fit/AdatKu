@@ -64,11 +64,34 @@ class MuaApprovalController extends Controller
      */
     public function show(MuaRequest $muaRequest)
     {
-        // nanti kalau sudah bikin: resources/views/admin/mua_request_show.blade.php
-        return view('admin.mua_request_show', [
-            'muaRequest' => $muaRequest,
-        ]);
+        // load relasi user
+        $muaRequest->load('user');
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'id'                    => $muaRequest->id,
+                'nama_usaha'            => $muaRequest->nama_usaha,
+                'kontak_wa'             => $muaRequest->kontak_wa,
+                'alamat'                => $muaRequest->alamat,
+                'deskripsi'             => $muaRequest->deskripsi,
+                'instagram'             => $muaRequest->instagram,
+                'tiktok'                => $muaRequest->tiktok,
+                'status'                => $muaRequest->status,
+                'catatan_admin'         => $muaRequest->catatan_admin,
+                'created_at_formatted'  => optional($muaRequest->created_at)->format('d M Y H:i'),
+                'updated_at_formatted'  => optional($muaRequest->updated_at)->format('d M Y H:i'),
+                'user'                  => [
+                    'id'    => optional($muaRequest->user)->id,
+                    'name'  => optional($muaRequest->user)->name,
+                    'email' => optional($muaRequest->user)->email,
+                ],
+            ]);
+        }
+
+        // kalau diakses langsung via URL tanpa Accept JSON, balikin ke index aja
+        return redirect()->route('admin.mua-requests.index');
     }
+
 
     /**
      * Approve pengajuan MUA.

@@ -154,6 +154,43 @@
       animation-timing-function: linear;
       animation-iteration-count: infinite;
     }
+
+    /* ANIMASI TOMBOL FLOATING CTA */
+    @keyframes cta-pop {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+      }
+
+      60% {
+        opacity: 1;
+        transform: translateY(-4px) scale(1.03);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes cta-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+      }
+
+      50% {
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.40);
+      }
+    }
+
+    .cta-mua-floating {
+      animation:
+        cta-pop 0.9s ease-out forwards,
+        cta-glow 2.8s ease-in-out infinite;
+      transform-origin: center;
+    }
   </style>
 
 </head>
@@ -166,9 +203,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2600)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-6 z-[9999]">
       <div class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
-                backdrop-blur-md border border-white/40
-                @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                                  backdrop-blur-md border border-white/40
+                                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -210,11 +247,28 @@
           <a href="#tentang" class="hover:text-amber-600 transition">Tentang</a>
           <a href="#galeri" class="hover:text-amber-600 transition">Galeri</a>
           <a href="#tim" class="hover:text-amber-600 transition">Tim</a>
+          <a href="#faq" class="hover:text-amber-600 transition">FAQ</a>
           <a href="{{ route('hubungikami') }}" class="hover:text-amber-600 transition">Hubungi Kami</a>
+
           @auth
+            @php
+              $navUser = auth()->user();
+              $roleNavDesktop = strtolower($navUser->role ?? '');
+            @endphp
+
             <a href="{{ route('public.mua.index') }}" class="hover:text-amber-600 transition">
               Daftar MUA
             </a>
+
+            @if ($roleNavDesktop === 'mua')
+              <a href="{{ route('mua.panel') }}" class="hover:text-amber-600 transition">
+                Dashboard MUA
+              </a>
+            @elseif ($roleNavDesktop === 'admin')
+              <a href="{{ route('admin.dashboard') }}" class="hover:text-amber-600 transition">
+                Dashboard Admin
+              </a>
+            @endif
           @endauth
         </nav>
 
@@ -223,7 +277,7 @@
 
           {{-- HAMBURGER (HANYA MOBILE) --}}
           <button @click="navOpen = true" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/80
-                     shadow-sm hover:bg-amber-50 hover:border-amber-300 transition text-xs md:text-sm text-amber-800">
+             shadow-sm hover:bg-amber-50 hover:border-amber-300 transition text-xs md:text-sm text-amber-800">
             <span class="relative flex flex-col justify-between w-3.5 h-3">
               <span class="block h-[2px] rounded-full bg-amber-500"></span>
               <span class="block h-[2px] rounded-full bg-amber-400"></span>
@@ -231,16 +285,7 @@
             </span>
             <span class="hidden sm:inline">Menu</span>
           </button>
-
-          @guest
-            {{-- LOGIN MUNCUL DI SEMUA UKURAN --}}
-            <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold
-                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                             text-white shadow-md hover:brightness-110 transition">
-              Masuk
-            </a>
-          @endguest
-
+          {{-- AVATAR / MENU USER (TETAP) --}}
           @auth
             @php
               $user = auth()->user();
@@ -248,8 +293,9 @@
             @endphp
 
             @if (strtolower($user->role ?? '') === 'pengguna')
-              <a href="{{ route('pengguna.pesanan.index') }}" class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100
-                                       text-amber-800 text-xs font-semibold shadow-sm border border-amber-200">
+              <a href="{{ route('pengguna.pesanan.index') }}"
+                class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100
+                                                                   text-amber-800 text-xs font-semibold shadow-sm border border-amber-200">
                 📦 Pesanan Saya
               </a>
             @endif
@@ -261,6 +307,7 @@
                   onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
               </button>
 
+              {{-- DROPDOWN PROFIL --}}
               <div x-show="userMenuOpen" x-cloak x-transition @click.outside="userMenuOpen = false"
                 class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
                 <div class="px-4 py-3 border-b border-amber-50 bg-amber-50/40">
@@ -274,7 +321,7 @@
                       Profil Saya
                     </button>
                   </li>
-                  <li class="border-t border-amber-50">
+                  <li class="border-top border-amber-50">
                     <form method="POST" action="{{ route('logout') }}">
                       @csrf
                       <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
@@ -285,8 +332,10 @@
                 </ul>
               </div>
             </div>
+
           @endauth
         </div>
+
       </div>
     </div>
   </header>
@@ -347,22 +396,45 @@
           <span class="text-lg">👥</span><span>Tim Pengembang</span>
         </button>
 
+        {{-- FAQ MOBILE --}}
+        <button @click="navOpen = false; document.getElementById('faq').scrollIntoView({behavior:'smooth'})"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">❓</span><span>FAQ</span>
+        </button>
+
         <button @click="navOpen = false; window.location='{{ route('hubungikami') }}'"
           class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
           <span class="text-lg">✉️</span><span>Hubungi Kami</span>
         </button>
 
         @auth
+          @php
+            $userNav = auth()->user();
+            $roleNav = strtolower($userNav->role ?? '');
+          @endphp
+
           <button @click="navOpen = false; window.location='{{ route('public.mua.index') }}'"
             class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
             <span class="text-lg">💄</span><span>Daftar MUA</span>
           </button>
 
-          @php $userNav = auth()->user(); @endphp
-          @if (strtolower($userNav->role ?? '') === 'pengguna')
+          @if ($roleNav === 'pengguna')
             <button @click="navOpen = false; window.location='{{ route('pengguna.pesanan.index') }}'"
               class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
               <span class="text-lg">📦</span><span>Pesanan Saya</span>
+            </button>
+          @endif
+
+          {{-- DASHBOARD SESUAI ROLE --}}
+          @if ($roleNav === 'mua')
+            <button @click="navOpen = false; window.location='{{ route('mua.panel') }}'"
+              class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+              <span class="text-lg">📊</span><span>Dashboard MUA</span>
+            </button>
+          @elseif ($roleNav === 'admin')
+            <button @click="navOpen = false; window.location='{{ route('admin.dashboard') }}'"
+              class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+              <span class="text-lg">🛡️</span><span>Dashboard Admin</span>
             </button>
           @endif
 
@@ -371,6 +443,7 @@
             <span class="text-lg">👤</span><span>Profil Saya</span>
           </button>
         @endauth
+
       </div>
 
       {{-- CTA BAWAH DALAM DRAWER --}}
@@ -383,8 +456,8 @@
         @if (!$isMuaSheet)
           <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
             <button @click="navOpen = false; applyMuaModal = true" class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                     text-white shadow-md hover:brightness-110">
+                                                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                         text-white shadow-md hover:brightness-110">
               Daftarkan jasa MUA kamu di sini
             </button>
           </div>
@@ -392,8 +465,8 @@
       @else
         <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
           <button @click="navOpen = false; window.location='{{ route('login') }}'" class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                           text-white shadow-md hover:brightness-110">
+                                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                             text-white shadow-md hover:brightness-110">
             Daftarkan jasa MUA kamu di sini
           </button>
         </div>
@@ -434,8 +507,9 @@
               </a>
 
               @guest
-                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
-                                 bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
+                <a href="{{ route('login') }}"
+                  class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
+                                                   bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
                   Masuk / Daftar
                 </a>
               @endguest
@@ -589,7 +663,7 @@
   </section>
 
   {{-- TENTANG ADATKU --}}
-  <section id="tentang" class="max-w-5xl mx-auto px-6 md:px-10 py-14 scroll-mt-24 md:scroll-mt-32">
+  <section id="tentang" class="max-w-5xl mx_auto px-6 md:px-10 py-14 scroll-mt-24 md:scroll-mt-32">
     <div class="text-center mb-7">
       <h2 class="logo-font text-4xl text-[#5c2b33] mb-2">Sekilas Tentang AdatKu</h2>
       <p class="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
@@ -801,7 +875,7 @@
 
           <div
             class="bg-white rounded-3xl border px-5 md:px-6 pt-5 pb-6 md:pb-7 flex flex-col
-                    {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
+                                      {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
             <div class="w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4 border border-amber-100/70 bg-slate-100">
               <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
                 onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Tim';">
@@ -903,8 +977,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                           hover:opacity-90 transition">
+                                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                             hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -915,10 +989,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal = false" class="bg-white rounded-[32px] shadow-2xl border border-amber-100
-                       w-[92%] max-w-3xl p-8 md:p-10 relative">
+                                         w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal = false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -932,9 +1006,9 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32
-                             rounded-full p-[3px]
-                             bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                             shadow-xl">
+                                               rounded-full p-[3px]
+                                               bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                               shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -945,10 +1019,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                               file:mr-3 file:rounded-lg file:px-4 file:py-2
-                               file:border file:border-amber-200 file:bg-white
-                               file:text-slate-700 file:cursor-pointer
-                               hover:file:bg-amber-50">
+                                                 file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                                 file:border file:border-amber-200 file:bg-white
+                                                 file:text-slate-700 file:cursor-pointer
+                                                 hover:file:bg-amber-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -960,20 +1034,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                             text-sm md:text-base
-                             focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                             focus:border-[#c98a00]">
+                                               text-sm md:text-base
+                                               focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                               focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                             hover:bg-slate-200 transition">
+                                               hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                             hover:opacity-90 transition">
+                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                               hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -994,10 +1068,10 @@
     <div x-show="applyMuaModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="applyMuaModal = false" class="bg-white rounded-[28px] shadow-2xl border border-amber-100
-                       w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
+                                         w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
 
         <button type="button" @click="applyMuaModal = false" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100
-                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -1112,6 +1186,142 @@
     </div>
   @endauth
 
+  {{-- FAQ --}}
+  <section id="faq" class="max-w-6xl mx-auto px-6 md:px-10 py-14">
+    <div class="text-center mb-5">
+      <p class="text-xs font-semibold tracking-[0.2em] text-amber-700/80 uppercase mb-1">
+        FAQ ADATKU
+      </p>
+      <h2 class="logo-font text-4xl text-[#5c2b33] mb-2">
+        Pertanyaan yang Sering Diajukan
+      </h2>
+      <p class="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
+        Masih bingung cara pakainya? Berikut beberapa pertanyaan yang sering ditanyain
+        seputar pemesanan di AdatKu.
+      </p>
+    </div>
+
+    <div x-data="{ open: 1 }" class="space-y-3">
+      {{-- Q1 --}}
+      <div class="bg-white/95 rounded-2xl border border-amber-100/80 shadow-sm overflow-hidden">
+        <button type="button" class="w-full flex items-center justify-between gap-3 px-5 md:px-6 py-4 text-left"
+          @click="open = open === 1 ? null : 1">
+          <div>
+            <p class="text-sm md:text-base font-semibold text-[#5c2b33]">
+              Bagaimana cara memesan layanan di AdatKu?
+            </p>
+            <p class="text-[11px] text-amber-600 uppercase tracking-[0.18em]">
+              PEMESANAN LAYANAN
+            </p>
+          </div>
+          <span class="text-amber-600 text-xl" x-text="open === 1 ? '−' : '+'"></span>
+        </button>
+        <div x-show="open === 1" x-collapse class="px-5 md:px-6 pb-4 text-sm text-gray-600 leading-relaxed">
+          1. Pilih <span class="font-semibold">MUA / layanan</span> yang kamu suka di menu Daftar MUA. <br>
+          2. Klik <span class="font-semibold">“Keranjang”</span> atau <span class="font-semibold">“Pesan Layanan
+            Ini”</span>. <br>
+          3. Isi detail pesanan di halaman keranjang, lalu konfirmasi pemesanan. <br>
+          4. Kamu juga bisa menghubungi MUA lewat tombol <span class="font-semibold">WhatsApp</span> untuk finalisasi.
+        </div>
+      </div>
+
+      {{-- Q2 --}}
+      <div class="bg-white/95 rounded-2xl border border-amber-100/80 shadow-sm overflow-hidden">
+        <button type="button" class="w-full flex items-center justify-between gap-3 px-5 md:px-6 py-4 text-left"
+          @click="open = open === 2 ? null : 2">
+          <div>
+            <p class="text-sm md:text-base font-semibold text-[#5c2b33]">
+              Apakah harus punya akun untuk memesan?
+            </p>
+            <p class="text-[11px] text-amber-600 uppercase tracking-[0.18em]">
+              AKUN PENGGUNA
+            </p>
+          </div>
+          <span class="text-amber-600 text-xl" x-text="open === 2 ? '−' : '+'"></span>
+        </button>
+        <div x-show="open === 2" x-collapse class="px-5 md:px-6 pb-4 text-sm text-gray-600 leading-relaxed">
+          Iya, kamu perlu <span class="font-semibold">mendaftar / login</span> dulu supaya data pesananmu
+          bisa tercatat dengan rapi dan riwayat pemesanan dapat kamu lihat di menu
+          <span class="font-semibold">“Pesanan Saya”</span>.
+        </div>
+      </div>
+
+      {{-- Q3 --}}
+      <div class="bg-white/95 rounded-2xl border border-amber-100/80 shadow-sm overflow-hidden">
+        <button type="button" class="w-full flex items-center justify-between gap-3 px-5 md:px-6 py-4 text-left"
+          @click="open = open === 3 ? null : 3">
+          <div>
+            <p class="text-sm md:text-base font-semibold text-[#5c2b33]">
+              Pembayarannya lewat AdatKu atau langsung ke MUA?
+            </p>
+            <p class="text-[11px] text-amber-600 uppercase tracking-[0.18em]">
+              PEMBAYARAN
+            </p>
+          </div>
+          <span class="text-amber-600 text-xl" x-text="open === 3 ? '−' : '+'"></span>
+        </button>
+        <div x-show="open === 3" x-collapse class="px-5 md:px-6 pb-4 text-sm text-gray-600 leading-relaxed">
+          Saat ini sistem AdatKu fokus sebagai <span class="font-semibold">platform penghubung</span>.
+          Detail pembayaran (DP, pelunasan, dan lain-lain) akan disepakati
+          langsung antara kamu dan pihak MUA / penyedia jasa melalui WhatsApp.
+        </div>
+      </div>
+
+      {{-- Q4 --}}
+      <div class="bg-white/95 rounded-2xl border border-amber-100/80 shadow-sm overflow-hidden">
+        <button type="button" class="w-full flex items-center justify-between gap-3 px-5 md:px-6 py-4 text-left"
+          @click="open = open === 4 ? null : 4">
+          <div>
+            <p class="text-sm md:text-base font-semibold text-[#5c2b33]">
+              Apakah AdatKu punya jasa sendiri atau hanya penghubung?
+            </p>
+            <p class="text-[11px] text-amber-600 uppercase tracking-[0.18em]">
+              TENTANG PLATFORM
+            </p>
+          </div>
+          <span class="text-amber-600 text-xl" x-text="open === 4 ? '−' : '+'"></span>
+        </button>
+        <div x-show="open === 4" x-collapse class="px-5 md:px-6 pb-4 text-sm text-gray-600 leading-relaxed">
+          AdatKu berperan sebagai <span class="font-semibold">platform penghubung</span> antara pengguna
+          dan penyedia jasa (MUA, busana adat, pelaminan). Tim AdatKu membantu
+          mengkurasi dan mengelola data penyedia jasa supaya kamu lebih mudah
+          menemukan layanan yang tepat.
+        </div>
+      </div>
+
+      {{-- Q5 --}}
+      <div class="bg-white/95 rounded-2xl border border-amber-100/80 shadow-sm overflow-hidden">
+        <button type="button" class="w-full flex items-center justify-between gap-3 px-5 md:px-6 py-4 text-left"
+          @click="open = open === 5 ? null : 5">
+          <div>
+            <p class="text-sm md:text-base font-semibold text-[#5c2b33]">
+              Kenapa saya tidak menerima email ganti password?
+            </p>
+            <p class="text-[11px] text-amber-600 uppercase tracking-[0.18em]">
+              RESET PASSWORD
+            </p>
+          </div>
+          <span class="text-amber-600 text-xl" x-text="open === 5 ? '−' : '+'"></span>
+        </button>
+        <div x-show="open === 5" x-collapse class="px-5 md:px-6 pb-4 text-sm text-gray-600 leading-relaxed">
+          Untuk mendapatkan email ganti password, kamu harus memastikan
+          <span class="font-semibold">alamat email yang dimasukkan adalah email yang benar-benar terdaftar di
+            Google</span>.
+          <br><br>
+          Jika kamu registrasi akun secara manual (tanpa login menggunakan Google),
+          kamu dapat menghubungi admin website AdatKu melalui menu
+          <span class="font-semibold">Hubungi Kami</span> untuk meminta pergantian password.
+          Dengan catatan, alamat email yang kamu kirim ke admin harus
+          <span class="font-semibold">email yang terdaftar di Google</span>
+          agar pesan kamu bisa terkirim dengan baik.
+          <br><br>
+          Setelah itu, silakan tunggu email dari admin AdatKu berisi
+          <span class="font-semibold">password barumu</span>.
+        </div>
+      </div>
+    </div>
+  </section>
+
   {{-- FOOTER --}}
   <footer class="mt-6">
     <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
@@ -1179,6 +1389,37 @@
     </div>
   </footer>
 
+  {{-- FLOATING CTA: Daftarkan jasa MUA (pojok kiri bawah, hanya desktop) --}}
+  @auth
+    @php
+      $userFloat = auth()->user();
+      $isMuaFloat = strtolower($userFloat->role ?? '') === 'mua';
+    @endphp
+
+    @if (!$isMuaFloat)
+      <button type="button" @click="applyMuaModal = true" class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
+                                       items-center justify-center px-6 py-2.5 rounded-full
+                                       text-sm font-semibold
+                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                       text-white hover:brightness-110 transition
+                                       hover:-translate-y-0.5 hover:scale-[1.02]
+                                       cta-mua-floating">
+        Daftarkan jasa MUA kamu di sini
+      </button>
+    @endif
+  @else
+    <a href="{{ route('login') }}" class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
+                         items-center justify-center px-6 py-2.5 rounded-full
+                         text-sm font-semibold
+                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                         text-white hover:brightness-110 transition
+                         hover:-translate-y-0.5 hover:scale-[1.02]
+                         cta-mua-floating">
+      Daftarkan jasa MUA kamu di sini
+    </a>
+  @endauth
+
+
   {{-- ICON MELAYANG --}}
   <span class="floating-icon from-bottom icon-lg"
     style="left: 10%; animation-duration: 22s; animation-delay: 0s;">❖</span>
@@ -1197,7 +1438,7 @@
   {{-- ALPINE --}}
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  {{-- COUNT-UP ANIMATION (kalau mau dipakai tinggal kasih class "countup" & data-target) --}}
+  {{-- COUNT-UP ANIMATION --}}
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const counters = document.querySelectorAll('.countup');

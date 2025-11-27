@@ -166,10 +166,10 @@
     {{-- ================= KONTEN PESANAN ================= --}}
     <main class="flex-1">
         <section class="max-w-6xl mx-auto px-6 pt-8">
-            <p class="text-[11px] font-semibold tracking-[0.26em] uppercase text-rose-400">
+            <p class="text-[11px] font-semibold tracking-[0.26em] uppercase text-amber-400">
                 Pengguna
             </p>
-            <h1 class="text-3xl md:text-4xl font-semibold text-rose-700 mb-1.5">
+            <h1 class="text-3xl md:text-4xl font-semibold text-amber-500 mb-1.5">
                 Pesanan Saya
             </h1>
             <p class="text-sm md:text-base text-slate-600 max-w-xl">
@@ -281,11 +281,11 @@
 
                             {{-- KIRI: RINCIAN PESANAN --}}
                             <div class="flex-1 px-6 md:px-8 py-5 md:py-7 space-y-2">
-                                <p class="text-[10px] font-semibold tracking-[0.26em] uppercase text-rose-400">
+                                <p class="text-[10px] font-semibold tracking-[0.26em] uppercase text-amber-600">
                                     Rincian Pesanan
                                 </p>
 
-                                <h2 class="text-xl md:text-2xl font-semibold text-rose-700">
+                                <h2 class="text-xl md:text-2xl font-semibold text-amber-400">
                                     {{ $namaDisplay }}
                                 </h2>
 
@@ -299,14 +299,15 @@
 
                                 <div class="mt-3 space-y-1.5 text-sm">
                                     <div class="flex">
-                                        <span class="w-32 text-slate-500">Booking</span>
+                                        <span class="w-32 text-slate-500">Tanggal Booking :</span>
                                         <span class="flex-1 font-medium text-slate-800">
                                             {{ $tanggalBooking }}
                                         </span>
                                     </div>
 
                                     <div class="flex">
-                                        <span class="w-32 text-slate-500">Status</span>
+                                        <span class="w-32 text-slate-500">Status &emsp14;&emsp14;&emsp14;&emsp14; &emsp14;&emsp14;
+                                            &emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14; :</span>
                                         <span class="flex-1">
                                             <span
                                                 class="status-dot inline-flex items-center px-3 py-1 rounded-full text-[11px] font-medium border {{ $statusClass }}">
@@ -350,7 +351,7 @@
                                 </div>
 
                                 <button type="button"
-                                    class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-rose-500 hover:text-rose-600 hover:underline underline-offset-2"
+                                    class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-amber-600 hover:text-amber-300 hover:underline underline-offset-2"
                                     onclick='openDetailModal(@json($detailPayload))'>
                                     <span>Detail pesanan</span>
                                     <span>↗</span>
@@ -361,7 +362,7 @@
                             <div
                                 class="md:w-72 bg-gradient-to-b from-rose-50/80 to-amber-50/60 border-t md:border-t-0 md:border-l border-rose-100 px-6 md:px-7 py-5 md:py-7 flex flex-col justify-between">
                                 <div class="space-y-3 text-right md:text-left">
-                                    <p class="text-[10px] font-semibold tracking-[0.26em] uppercase text-rose-400">
+                                    <p class="text-[10px] font-semibold tracking-[0.26em] uppercase text-amber-600">
                                         Ringkasan
                                     </p>
 
@@ -404,7 +405,7 @@
                                             @method('DELETE')
                                             <button type="button"
                                                 class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
-                                                                                bg-rose-500 text-white hover:bg-rose-600 transition btn-cancel-pesanan"
+                                                                                bg-red text-white hover:bg-rose-600 transition btn-cancel-pesanan"
                                                 data-id="{{ $first->id }}">
                                                 Batalkan Pesanan
                                             </button>

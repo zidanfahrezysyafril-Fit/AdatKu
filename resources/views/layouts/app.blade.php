@@ -130,50 +130,16 @@
                 </div>
             </div>
 
-            {{-- Kanan: profil user --}}
+            {{-- Kanan: tombol beranda saja (profil & logout dipindah ke sidebar) --}}
             @auth
-                @php
-                    $user = auth()->user();
-                    $avatar = $user->avatar
-                        ? asset('storage/' . $user->avatar)
-                        : asset('default-avatar.png');
-                @endphp
-
-                <div x-data="{ openProfile:false }" class="relative">
-                    <button @click="openProfile = !openProfile"
-                        class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-200">
-                        <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
-                            onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
-                    </button>
-
-                    <div x-show="openProfile" x-transition.opacity @click.outside="openProfile = false"
-                        class="absolute right-0 mt-3 w-64 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
-                        <div class="px-4 py-3 border-b">
-                            <p class="text-sm font-semibold text-gray-800 truncate">
-                                {{ $user->name }}
-                            </p>
-                            <p class="text-xs text-gray-500 truncate">
-                                {{ $user->email }}
-                            </p>
-                        </div>
-                        <ul class="py-1 text-sm">
-                            <li>
-                                <a href="{{ route('profile.show') }}"
-                                    class="block px-4 py-2 hover:bg-slate-50 text-slate-700">
-                                    Profil Saya
-                                </a>
-                            </li>
-                            <li class="border-t">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
-                                        Logout
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold
+                               bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
+                               hover:bg-amber-100 hover:border-amber-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3 3 11h2v9h6v-6h2v6h6v-9h2z" />
+                    </svg>
+                    <span>Kembali ke Beranda</span>
+                </a>
             @endauth
 
         </div>
@@ -202,8 +168,8 @@
     <aside x-cloak x-show="open" x-transition:enter="transition ease-out duration-300 transform"
         x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
         x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="translate-x-0"
-        x-transition:leave-end="-translate-x-full" class="fixed top-16 left-0 z-40 w-72 h-[calc(100vh-4rem)] bg-[#1e1723] text-white border-r border-white/10
-               lg:hidden">
+        x-transition:leave-end="-translate-x-full"
+        class="fixed top-16 left-0 z-40 w-72 h-[calc(100vh-4rem)] bg-[#1e1723] text-white border-r border-white/10 lg:hidden">
 
         <div class="flex flex-col h-full">
             <!-- Brand / title -->
@@ -216,9 +182,9 @@
             <nav class="flex-1 px-3 py-4 text-sm space-y-1 overflow-y-auto">
                 @php
                     $role = strtolower(auth()->user()->role ?? '');
-                    $isMuaActive = request()->routeIs('mua.*')
-                        || request()->routeIs('profilemua.*')
-                        || request()->routeIs('panelmua.layanan.*');
+                    $isMuaActive = request()->routeIs('mua.*') ||
+                        request()->routeIs('profilemua.*') ||
+                        request()->routeIs('panelmua.layanan.*');
                 @endphp
 
                 {{-- DASHBOARD --}}
@@ -236,9 +202,9 @@
                 @if ($role === 'mua')
                     <div x-data="{ openMua: {{ $isMuaActive ? 'true' : 'false' }} }" class="pt-2 space-y-1">
                         <button @click="openMua = !openMua" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl
-                                        bg-white/5 border-l-4 border-[#e0ac33]/30
-                                        hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-                                        {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                                                bg-white/5 border-l-4 border-[#e0ac33]/30
+                                                hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                                                {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
@@ -254,14 +220,15 @@
                         </button>
 
                         <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
-                            <a href="{{ route('mua.panel') }}" class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                        {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                            <a href="{{ route('mua.panel') }}"
+                                class="block px-3 py-2 rounded-lg hover:bg-white/10
+                                                {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Profil MUA
                             </a>
 
                             <a href="{{ route('panelmua.layanan.index') }}"
                                 class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                        {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                                {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Layanan
                             </a>
                         </div>
@@ -304,6 +271,40 @@
                         <span>Pembayaran</span>
                     </a>
                 </div>
+
+                {{-- AKUN: BERANDA + LOGOUT --}}
+                <div class="pt-3 mt-2 border-t border-white/10 space-y-1">
+                    <p class="px-3 text-[11px] uppercase tracking-[0.18em] text-white/40">
+                        Akun
+                    </p>
+
+                    {{-- Kembali ke beranda --}}
+                    <a href="{{ route('home') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                               bg-white/5 border-l-4 border-[#e0ac33]/30
+                               hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/80 group-hover:text-white"
+                            viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M10 19a1 1 0 0 0 1-1v-4h8v-4h-8V6a1 1 0 0 0-1.64-.77l-7 6a1 1 0 0 0 0 1.54l7 6A1 1 0 0 0 10 19Z" />
+                        </svg>
+                        <span>Beranda</span>
+                    </a>
+
+                    {{-- Logout --}}
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                   bg-white/5 border-l-4 border-[#e3342f]/40
+                                   hover:bg-[#f8717180] hover:border-[#fca5a5] hover:shadow-sm transition text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-200 group-hover:text-white"
+                                viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M10 4a1 1 0 0 1 1 1v3h5a1 1 0 0 1 .8 1.6L14.5 12l2.3 2.4A1 1 0 0 1 16 16h-5v3a1 1 0 0 1-2 0V5a1 1 0 0 1 1-1Z" />
+                            </svg>
+                            <span class="text-red-100 group-hover:text-white font-medium">Logout</span>
+                        </button>
+                    </form>
+                </div>
             </nav>
 
             <!-- FOOTER SIDEBAR -->
@@ -330,9 +331,9 @@
             <nav class="flex-1 px-3 py-4 text-sm space-y-1 overflow-y-auto">
                 @php
                     $role = strtolower(auth()->user()->role ?? '');
-                    $isMuaActive = request()->routeIs('mua.*')
-                        || request()->routeIs('profilemua.*')
-                        || request()->routeIs('panelmua.layanan.*');
+                    $isMuaActive = request()->routeIs('mua.*') ||
+                        request()->routeIs('profilemua.*') ||
+                        request()->routeIs('panelmua.layanan.*');
                 @endphp
 
                 {{-- DASHBOARD --}}
@@ -350,9 +351,9 @@
                 @if ($role === 'mua')
                     <div x-data="{ openMua: {{ $isMuaActive ? 'true' : 'false' }} }" class="pt-2 space-y-1">
                         <button @click="openMua = !openMua" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl
-                                        bg-white/5 border-l-4 border-[#e0ac33]/30
-                                        hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-                                        {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                                                bg-white/5 border-l-4 border-[#e0ac33]/30
+                                                hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                                                {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
@@ -368,14 +369,15 @@
                         </button>
 
                         <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
-                            <a href="{{ route('mua.panel') }}" class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                        {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                            <a href="{{ route('mua.panel') }}"
+                                class="block px-3 py-2 rounded-lg hover:bg-white/10
+                                                {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Profil MUA
                             </a>
 
                             <a href="{{ route('panelmua.layanan.index') }}"
                                 class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                        {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                                {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Layanan
                             </a>
                         </div>
@@ -417,6 +419,27 @@
                         </svg>
                         <span>Pembayaran</span>
                     </a>
+                </div>
+
+                {{-- AKUN: BERANDA + LOGOUT --}}
+                <div class="pt-3 mt-2 border-t border-white/10 space-y-1">
+                    <p class="px-3 text-[11px] uppercase tracking-[0.18em] text-white/40">
+                        Akun
+                    </p>
+                    {{-- Logout --}}
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                                   bg-white/5 border-l-4 border-[#e3342f]/40
+                                   hover:bg-[#f8717180] hover:border-[#fca5a5] hover:shadow-sm transition text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-200 group-hover:text-white"
+                                viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M10 4a1 1 0 0 1 1 1v3h5a1 1 0 0 1 .8 1.6L14.5 12l2.3 2.4A1 1 0 0 1 16 16h-5v3a1 1 0 0 1-2 0V5a1 1 0 0 1 1-1Z" />
+                            </svg>
+                            <span class="text-red-100 group-hover:text-white font-medium">Logout</span>
+                        </button>
+                    </form>
                 </div>
             </nav>
 
