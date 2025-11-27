@@ -6,39 +6,55 @@
     <main class="w-full px-4 sm:px-6 lg:px-10 py-6 sm:py-8">
         <div class="max-w-6xl mx-auto">
 
-            {{-- FLASH MESSAGE --}}
+            {{-- FLASH MESSAGE (gold / merah) --}}
             @if (session('success') || session('error'))
                 <div x-data="{show:true}" x-show="show" x-init="setTimeout(()=>show=false,4000)" x-transition.opacity
                      class="mb-5 flex items-start gap-3 px-4 py-3 rounded-2xl border text-sm shadow-sm
-                         @if(session('success')) bg-emerald-50 border-emerald-200 text-emerald-800
-                         @else bg-red-50 border-red-200 text-red-700 @endif">
-                    <div class="font-semibold">
+                         @if(session('success'))
+                            bg-[#FFF8E0] border-[#FACC6B] text-[#8A4B00]
+                         @else
+                            bg-red-50 border-red-200 text-red-700
+                         @endif">
+                    <div
+                        class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full
+                               @if(session('success'))
+                                   bg-[#FFF1BF] text-[#D97706]
+                               @else
+                                   bg-red-100 text-red-600
+                               @endif text-base">
+                        @if(session('success')) ✓ @else ! @endif
+                    </div>
+                    <div class="flex-1 font-medium">
                         {{ session('success') ?? session('error') }}
                     </div>
-                    <button @click="show=false" class="ml-auto text-xs font-semibold uppercase tracking-wide">Tutup</button>
+                    <button @click="show=false"
+                            class="ml-auto text-[11px] font-semibold uppercase tracking-wide
+                                   @if(session('success')) text-[#9A5A00] @else text-red-700 @endif">
+                        Tutup
+                    </button>
                 </div>
             @endif
 
             {{-- KOTAK UTAMA --}}
-            <div class="bg-white/95 rounded-3xl ring-1 ring-rose-50 shadow-sm overflow-hidden">
+            <div class="bg-white/95 rounded-3xl ring-1 ring-[#FACC6B]/40 shadow-sm overflow-hidden">
 
                 {{-- HEADER --}}
                 <div
-                    class="px-5 sm:px-8 py-5 sm:py-6 bg-gradient-to-r from-[#fff5f7] via-[#fff9fb] to-[#fffdfd] border-b border-rose-50">
+                    class="px-5 sm:px-8 py-5 sm:py-6 bg-gradient-to-r from-[#fff7f9] via-[#fff8ef] to-[#fffaf3] border-b border-rose-50">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
-                            <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] text-rose-500 uppercase">
+                            <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] text-amber-500 uppercase">
                                 MUA Panel
                             </p>
-                            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mt-1">
+                            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mt-1" style="color:#C98A00;">
                                 Daftar Pembayaran
                             </h2>
                         </div>
-                        <span class="text-[11px] sm:text-xs text-slate-500">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-amber-50 text-amber-800 border border-amber-100">
                             Total data: {{ $pembayaran->count() }}
                         </span>
                     </div>
-                    <div class="h-[3px] w-14 sm:w-16 bg-gradient-to-r from-rose-500/80 to-orange-300/80 rounded-full mt-3"></div>
+                    <div class="h-[3px] w-14 sm:w-16 bg-gradient-to-r from-amber-300/90 via-amber-400/90 to-rose-300/80 rounded-full mt-3"></div>
                 </div>
 
                 @if ($pembayaran->isEmpty())
@@ -51,8 +67,8 @@
                     <div class="hidden sm:block">
                         <div class="overflow-x-auto">
                             <table class="min-w-full text-sm">
-                                <thead class="bg-rose-50/70 text-slate-600 text-[13px]">
-                                <tr class="border-b border-rose-100">
+                                <thead class="bg-amber-50/80 text-amber-800 text-[13px]">
+                                <tr class="border-b border-amber-100">
                                     <th class="px-5 py-3 text-left">#</th>
                                     <th class="px-5 py-3 text-left">Tgl Bayar</th>
                                     <th class="px-5 py-3 text-left">Pesanan</th>
@@ -66,7 +82,7 @@
                                 </tr>
                                 </thead>
 
-                                <tbody class="divide-y divide-rose-50 text-[13.5px]">
+                                <tbody class="divide-y divide-amber-50 text-[13.5px]">
                                 @foreach ($pembayaran as $index => $bayar)
                                     @php
                                         $pesanan   = $bayar->pesanan;
@@ -74,7 +90,7 @@
                                         $layanan   = $pesanan?->layanan;
                                     @endphp
 
-                                    <tr class="hover:bg-rose-50/50 transition-colors">
+                                    <tr class="hover:bg-[#FFF8E8] transition-colors">
                                         <td class="px-5 py-4 align-top text-slate-500">
                                             {{ $index + 1 }}
                                         </td>
@@ -131,7 +147,7 @@
                                         <td class="px-5 py-4 align-top text-center">
                                             @if ($bayar->bukti_transfer)
                                                 <a href="{{ asset('storage/' . $bayar->bukti_transfer) }}" target="_blank"
-                                                   class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-slate-100 text-slate-700 hover:bg-slate-200">
+                                                   class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/60">
                                                     Lihat Bukti
                                                 </a>
                                             @else
@@ -159,12 +175,13 @@
                                         <td class="px-5 py-4 align-top text-center">
                                             <div class="inline-flex gap-2">
                                                 <a href="{{ route('panelmua.pembayaran.show', $bayar->id) }}"
-                                                   class="px-3 py-1.5 rounded-full text-xs bg-slate-50 text-slate-700 hover:bg-slate-100">
+                                                   class="px-3 py-1.5 rounded-full text-xs bg-[#FFFBF3] text-slate-700 border border-amber-100 hover:bg-amber-50/60">
                                                     Detail
                                                 </a>
 
                                                 <a href="{{ route('panelmua.pembayaran.edit', $bayar->id) }}"
-                                                   class="px-3 py-1.5 rounded-full text-xs bg-amber-50 text-amber-700 hover:bg-amber-100">
+                                                   class="px-3 py-1.5 rounded-full text-xs text-[#7A4600] font-semibold shadow-sm hover:brightness-110 active:brightness-95 transition"
+                                                   style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                                                     Edit
                                                 </a>
                                             </div>
@@ -185,7 +202,7 @@
                                 $layanan   = $pesanan?->layanan;
                             @endphp
 
-                            <div class="border border-rose-100 rounded-2xl bg-white/90 p-4 space-y-3 shadow-sm">
+                            <div class="border border-[#FACC6B]/40 rounded-2xl bg-white/95 p-4 space-y-3 shadow-sm">
                                 {{-- Top: No / Tgl bayar --}}
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="text-[11px] text-slate-400">#{{ $index + 1 }}</span>
@@ -256,12 +273,13 @@
                                 {{-- Actions --}}
                                 <div class="pt-2 flex flex-wrap gap-2">
                                     <a href="{{ route('panelmua.pembayaran.show', $bayar->id) }}"
-                                       class="flex-1 min-w-[120px] inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-[11px] bg-slate-50 text-slate-700 hover:bg-slate-100">
+                                       class="flex-1 min-w-[120px] inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-[11px] bg-[#FFFBF3] text-slate-700 border border-amber-100 hover:bg-amber-50/60">
                                         Detail
                                     </a>
 
                                     <a href="{{ route('panelmua.pembayaran.edit', $bayar->id) }}"
-                                       class="flex-1 min-w-[120px] inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-[11px] bg-amber-50 text-amber-700 hover:bg-amber-100">
+                                       class="flex-1 min-w-[120px] inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-[11px] text-[#7A4600] font-semibold shadow-sm hover:brightness-110 active:brightness-95 transition"
+                                       style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                                         Edit
                                     </a>
                                 </div>

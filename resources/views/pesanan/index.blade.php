@@ -4,43 +4,52 @@
     <main class="w-full px-4 sm:px-6 lg:px-10 py-6 sm:py-8">
         <div class="max-w-6xl mx-auto">
 
-            {{-- FLASH SUCCESS --}}
+            {{-- FLASH SUCCESS (tema kuning emas) --}}
             @if (session('success'))
                 <div x-data="{show:true}" x-show="show" x-init="setTimeout(()=>show=false,3500)" x-transition.opacity
-                    class="mb-5 flex items-start gap-3 px-4 py-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm shadow-sm">
-                    <div class="font-semibold">
+                    class="mb-5 flex items-start gap-3 px-4 py-3 rounded-2xl bg-[#FFF8E0] border border-[#FACC6B] text-[#8A4B00] text-sm shadow-sm">
+                    <div
+                        class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#FFF1BF] text-[#D97706] text-base">
+                        ✓
+                    </div>
+                    <div class="flex-1 font-medium">
                         {{ session('success') }}
                     </div>
-                    <button @click="show=false" class="ml-auto text-xs font-semibold uppercase tracking-wide">Tutup</button>
+                    <button @click="show=false"
+                        class="ml-auto text-[11px] font-semibold uppercase tracking-wide text-[#9A5A00]">
+                        Tutup
+                    </button>
                 </div>
             @endif
 
             @if ($groupedPesanans->isEmpty())
                 <div
-                    class="bg-white/95 rounded-3xl ring-1 ring-rose-50 shadow-sm px-6 sm:px-8 py-10 text-center text-sm text-slate-500">
+                    class="bg-white/95 rounded-3xl ring-1 ring-[#FACC6B]/40 shadow-sm px-6 sm:px-8 py-10 text-center text-sm text-slate-500">
                     Belum ada pesanan untuk MUA ini.
                 </div>
             @else
                     {{-- KOTAK UTAMA --}}
-                    <div class="bg-white/95 rounded-3xl ring-1 ring-rose-50 shadow-sm overflow-hidden">
+                    <div class="bg-white/95 rounded-3xl ring-1 ring-[#FACC6B]/40 shadow-sm overflow-hidden">
 
                         {{-- HEADER --}}
                         <div
-                            class="px-5 sm:px-8 py-5 sm:py-6 bg-gradient-to-r from-[#fff5f7] via-[#fff9fb] to-[#fffdfd] border-b border-rose-50">
+                            class="px-5 sm:px-8 py-5 sm:py-6 bg-gradient-to-r from-[#fff7f9] via-[#fff8ef] to-[#fffaf3] border-b border-rose-50">
                             <div class="flex flex-wrap items-center justify-between gap-2">
                                 <div>
-                                    <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] text-rose-500 uppercase">
+                                    <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] text-amber-500 uppercase">
                                         MUA Panel
                                     </p>
-                                    <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mt-1">
+                                    <h1 class="text-xl sm:text-2xl md:text-3xl font-bold mt-1" style="color:#C98A00;">
                                         Pesanan Masuk
                                     </h1>
                                 </div>
-                                <span class="text-[11px] sm:text-xs text-slate-500">
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-amber-50 text-amber-800 border border-amber-100">
                                     Total pesanan: {{ $groupedPesanans->count() }}
                                 </span>
                             </div>
-                            <div class="h-[3px] w-14 sm:w-16 bg-gradient-to-r from-rose-500/80 to-orange-300/80 rounded-full mt-3">
+                            <div
+                                class="h-[3px] w-14 sm:w-16 bg-gradient-to-r from-amber-300/90 via-amber-400/90 to-rose-300/80 rounded-full mt-3">
                             </div>
                         </div>
 
@@ -48,8 +57,8 @@
                         <div class="hidden sm:block">
                             <div class="overflow-x-auto">
                                 <table class="min-w-full text-sm">
-                                    <thead class="bg-rose-50/80 text-rose-700 text-[13px]">
-                                        <tr class="border-b border-rose-100">
+                                    <thead class="bg-amber-50/80 text-amber-800 text-[13px]">
+                                        <tr class="border-b border-amber-100">
                                             <th class="px-5 py-3 text-left">#</th>
                                             <th class="px-5 py-3 text-left">Tanggal Booking</th>
                                             <th class="px-5 py-3 text-left">Pengguna</th>
@@ -60,29 +69,26 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody class="divide-y divide-rose-50 text-[13.5px]">
+                                    <tbody class="divide-y divide-amber-50 text-[13.5px]">
                                         @foreach ($groupedPesanans as $group)
                                             @php
                                                 $first = $group->first(); // baris wakil
 
-                                                // list nama layanan dalam 1 checkout
                                                 $layananList = $group->map(function ($p) {
                                                     return optional($p->layanan)->nama;
                                                 })->filter()->values();
 
-                                                // tampilkan semua nama layanan, dipisah koma
                                                 $namaDisplay = $layananList->isNotEmpty()
                                                     ? $layananList->implode(', ')
                                                     : '-';
 
-                                                // total harga semua layanan di checkout itu
                                                 $totalGroup = $group->sum('total_harga');
 
                                                 $status = $first->status_pembayaran;
                                             @endphp
 
-                                            <tr class="hover:bg-rose-50/60 transition-colors">
-                                                {{-- # pakai loop iteration, tanpa + --}}
+                                            <tr class="hover:bg-[#FFF8E8] transition-colors">
+                                                {{-- # --}}
                                                 <td class="px-5 py-4 align-top text-slate-500">
                                                     {{ $loop->iteration }}
                                                 </td>
@@ -115,13 +121,13 @@
                                                 {{-- Status Pembayaran --}}
                                                 <td class="px-5 py-4 align-top">
                                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold
-                                                                @if ($status === 'Belum_Lunas')
-                                                                    bg-yellow-50 text-yellow-700
-                                                                @elseif ($status === 'Lunas')
-                                                                    bg-emerald-50 text-emerald-700
-                                                                @else
-                                                                    bg-rose-50 text-rose-700
-                                                                @endif">
+                                                                    @if ($status === 'Belum_Lunas')
+                                                                        bg-yellow-50 text-yellow-700
+                                                                    @elseif ($status === 'Lunas')
+                                                                        bg-emerald-50 text-emerald-700
+                                                                    @else
+                                                                        bg-rose-50 text-rose-700
+                                                                    @endif">
                                                         {{ str_replace('_', ' ', $status) }}
                                                     </span>
                                                 </td>
@@ -132,7 +138,7 @@
 
                                                         @if ($status === 'Lunas')
                                                             <a href="{{ route('panelmua.pembayaran.create', $first->id) }}" class="inline-flex items-center justify-center px-3 py-1.5 rounded-full text-[11px] font-medium
-                                                                                  bg-emerald-50 text-emerald-600 hover:bg-emerald-100">
+                                                                                      bg-emerald-50 text-emerald-600 hover:bg-emerald-100">
                                                                 Input Pembayaran
                                                             </a>
                                                         @endif
@@ -144,7 +150,7 @@
                                                             @method('PATCH')
 
                                                             <select name="status_pembayaran"
-                                                                class="border border-slate-200 rounded-xl px-2 py-1 text-[11px] text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                                                class="border border-amber-200/70 rounded-xl px-2 py-1 text-[11px] text-slate-700 bg-[#FFFBF3] focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]">
                                                                 <option value="Belum_Lunas" @selected($status === 'Belum_Lunas')>
                                                                     Belum Lunas
                                                                 </option>
@@ -157,7 +163,8 @@
                                                             </select>
 
                                                             <button type="submit"
-                                                                class="px-3 py-1.5 text-[11px] rounded-xl bg-rose-600 text-white hover:bg-rose-700 font-semibold">
+                                                                class="px-3 py-1.5 text-[11px] rounded-xl text-[#7A4600] font-semibold shadow-sm hover:brightness-110 active:brightness-95 transition"
+                                                                style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                                                                 Update
                                                             </button>
                                                         </form>
@@ -199,7 +206,7 @@
                                     $status = $first->status_pembayaran;
                                 @endphp
 
-                                <div class="border border-rose-100 rounded-2xl bg-white/90 p-4 space-y-3 shadow-sm">
+                                <div class="border border-[#FACC6B]/40 rounded-2xl bg-white/95 p-4 space-y-3 shadow-sm">
                                     {{-- Baris atas: tanggal + status --}}
                                     <div class="flex items-center justify-between gap-2">
                                         <p class="text-xs text-slate-500">
@@ -256,7 +263,7 @@
                                             @method('PATCH')
 
                                             <select name="status_pembayaran"
-                                                class="flex-1 min-w-[120px] border border-slate-200 rounded-xl px-2 py-1 text-[11px] text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
+                                                class="flex-1 min-w-[120px] border border-amber-200/70 rounded-xl px-2 py-1 text-[11px] text-slate-700 bg-[#FFFBF3] focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]">
                                                 <option value="Belum_Lunas" @selected($status === 'Belum_Lunas')>
                                                     Belum Lunas
                                                 </option>
@@ -269,7 +276,8 @@
                                             </select>
 
                                             <button type="submit"
-                                                class="px-3 py-1.5 text-[11px] rounded-xl bg-rose-600 text-white hover:bg-rose-700 font-semibold">
+                                                class="px-3 py-1.5 text-[11px] rounded-xl w-auto text-[#7A4600] font-semibold shadow-sm hover:brightness-110 active:brightness-95 transition"
+                                                style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                                                 Update
                                             </button>
                                         </form>

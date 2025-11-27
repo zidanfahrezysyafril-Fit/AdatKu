@@ -261,21 +261,6 @@
                             x-cloak>
                             Akun
                         </p>
-
-                        {{-- Kembali ke Beranda (frontend) --}}
-                        <a href="{{ route('home') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition
-                                      text-slate-100 hover:bg-[#231729]">
-                            <span class="w-8 h-8 rounded-xl flex items-center justify-center border text-xs
-                                           bg-[#1d1426] text-[#facc6b] border-[#2d1b38] group-hover:border-[#facc6b]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                    fill="currentColor">
-                                    <path
-                                        d="M10 19a1 1 0 0 0 1-1v-4h8v-4h-8V6a1 1 0 0 0-1.64-.77l-7 6a1 1 0 0 0 0 1.54l7 6A1 1 0 0 0 10 19Z" />
-                                </svg>
-                            </span>
-                            <span x-show="openSidebar" x-cloak>Beranda</span>
-                        </a>
-
                         {{-- Logout --}}
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

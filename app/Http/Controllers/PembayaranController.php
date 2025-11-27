@@ -31,10 +31,6 @@ class PembayaranController extends Controller
         if (! $mua || $pesanan->layanan->mua_id !== $mua->id) {
             abort(403);
         }
-        if ($pesanan->pembayaran) {
-            return redirect()
-                ->route('pembayaran.show', $pesanan->pembayaran->id);
-        }
 
         return view('pembayaran.create', compact('pesanan', 'mua'));
     }

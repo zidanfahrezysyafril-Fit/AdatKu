@@ -6,26 +6,26 @@
     <main class="w-full px-4 sm:px-6 lg:px-10 py-6 sm:py-8">
         <div class="max-w-3xl mx-auto">
 
-            {{-- Notif sukses --}}
+            {{-- Notif sukses (gold) --}}
             @if (session('success'))
-                <div class="mb-4 px-4 py-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm">
+                <div class="mb-4 px-4 py-3 rounded-2xl bg-[#FFF8E0] border border-[#FACC6B] text-[#8A4B00] text-sm">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="bg-white/95 rounded-3xl ring-1 ring-rose-50 shadow-sm overflow-hidden">
+            <div class="bg-white/95 rounded-3xl ring-1 ring-[#FACC6B]/40 shadow-sm overflow-hidden">
                 {{-- HEADER --}}
                 <div
-                    class="px-5 sm:px-7 py-5 bg-gradient-to-r from-[#fff5f7] via-[#fff9fb] to-[#fffdfd] border-b border-rose-50">
-                    <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] text-rose-500 uppercase">
+                    class="px-5 sm:px-7 py-5 bg-gradient-to-r from-[#fff7f9] via-[#fff8ef] to-[#fffaf3] border-b border-rose-50">
+                    <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] text-amber-500 uppercase">
                         MUA Panel
                     </p>
-                    <h1 class="text-xl sm:text-2xl font-bold text-rose-700 mt-1">
+                    <h1 class="text-xl sm:text-2xl font-bold mt-1" style="color:#C98A00;">
                         Detail Pembayaran
                     </h1>
                 </div>
 
-                {{-- BODY --}}
+            {{-- BODY --}}
                 <div class="px-5 sm:px-7 py-5 sm:py-6 space-y-5">
                     <h2 class="text-sm sm:text-base font-semibold text-slate-800">
                         Pesanan: {{ $pembayaran->pesanan->layanan->nama ?? '-' }}

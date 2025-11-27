@@ -402,7 +402,7 @@
                                 d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
                         </svg>
-                        <span>PESANAN</span>
+                        <span>Pesanan</span>
                     </a>
 
                     {{-- PEMBAYARAN --}}

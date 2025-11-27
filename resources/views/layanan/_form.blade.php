@@ -1,7 +1,9 @@
 @php
-    $inp = 'w-full rounded-xl border border-slate-300 px-3 py-2.5 
-                focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 placeholder:text-slate-400';
-    $lab = 'block text-sm font-medium text-slate-700 mb-1.5';
+    $inp = 'w-full rounded-2xl border border-amber-200/70 bg-[#FFFBF3]
+            px-3.5 py-2.5 text-sm
+            focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]
+            placeholder:text-slate-400 shadow-[0_1px_0_rgba(248,250,252,0.7)]';
+    $lab = 'block text-sm font-medium text-slate-800 mb-1.5';
 @endphp
 
 <div class="grid gap-5">
@@ -28,12 +30,14 @@
                 <option value="baju" {{ $kat == 'baju' ? 'selected' : '' }}>Baju Adat</option>
                 <option value="pelamin" {{ $kat == 'pelamin' ? 'selected' : '' }}>Pelamin</option>
             </select>
+            @error('kategori') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
         </div>
     </div>
 
     <div>
         <label class="{{ $lab }}">Deskripsi</label>
         <textarea name="deskripsi" rows="4" class="{{ $inp }}">{{ old('deskripsi', $item->deskripsi ?? '') }}</textarea>
+        @error('deskripsi') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
     </div>
 
     <div>
@@ -42,7 +46,7 @@
         @error('foto') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
 
         @if(!empty($item?->foto))
-            <img src="{{ asset('storage/' . $item->foto) }}" class="w-28 h-28 rounded-xl border mt-2 object-cover">
+            <img src="{{ asset('storage/' . $item->foto) }}" class="w-28 h-28 rounded-2xl border border-amber-200 mt-2 object-cover">
         @endif
     </div>
 
