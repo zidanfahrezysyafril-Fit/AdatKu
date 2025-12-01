@@ -317,7 +317,6 @@
                 <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
                   onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
               </button>
-              ...
             </div>
           @endauth
         </div>
