@@ -1363,12 +1363,6 @@
           </div>
         </div>
 
-        <p class="mt-4 text-xs text-center text-[#e2c9bf] ">
-          Dikembangkan oleh
-          <span class="font-semibold">Zidan Fahrezy Syafril</span>,
-          <span class="font-semibold">Cahyani Putri Sofari</span>,
-          dan <span class="font-semibold">Fetty Ratna Dewi</span>.
-        </p>
         <p class="mt-2 text-xs text-center text-[#f7e07b]">
           &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
         </p>
