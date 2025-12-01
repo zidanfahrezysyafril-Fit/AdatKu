@@ -203,9 +203,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2600)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-6 z-[9999]">
       <div class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
-                                    backdrop-blur-md border border-white/40
-                                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                                      backdrop-blur-md border border-white/40
+                                      @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                      @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -285,7 +285,18 @@
             </span>
             <span class="hidden sm:inline">Menu</span>
           </button>
-          {{-- AVATAR / MENU USER (TETAP) --}}
+
+          {{-- TOMBOL LOGIN (HANYA SAAT BELUM LOGIN) --}}
+          @guest
+            <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold
+               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] border border-amber-300 text-[white] shadow-sm
+               hover:bg-amber-500 hover:brightness-105
+                          transition text-sm font-semibold">
+              Masuk
+            </a>
+          @endguest
+
+          {{-- AVATAR / MENU USER (SETELAH LOGIN) --}}
           @auth
             @php
               $user = auth()->user();
@@ -306,35 +317,11 @@
                 <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
                   onerror="this.onerror=null;this.src='{{ asset('default-avatar.png') }}'">
               </button>
-
-              {{-- DROPDOWN PROFIL --}}
-              <div x-show="userMenuOpen" x-cloak x-transition @click.outside="userMenuOpen = false"
-                class="absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
-                <div class="px-4 py-3 border-b border-amber-50 bg-amber-50/40">
-                  <p class="text-sm font-semibold text-gray-800 truncate">{{ $user->name }}</p>
-                  <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
-                </div>
-                <ul class="py-1 text-sm">
-                  <li>
-                    <button type="button" @click="profileModal = true; userMenuOpen = false"
-                      class="w-full text-left px-4 py-2 hover:bg-amber-50">
-                      Profil Saya
-                    </button>
-                  </li>
-                  <li class="border-top border-amber-50">
-                    <form method="POST" action="{{ route('logout') }}">
-                      @csrf
-                      <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">
-                        Logout
-                      </button>
-                    </form>
-                  </li>
-                </ul>
-              </div>
+              ...
             </div>
-
           @endauth
         </div>
+
 
       </div>
     </div>
@@ -455,9 +442,10 @@
 
         @if (!$isMuaSheet)
           <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
-            <button @click="navOpen = false; applyMuaModal = true" class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                                                                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                             text-white shadow-md hover:brightness-110">
+            <button @click="navOpen = false; applyMuaModal = true"
+              class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
+                                                                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                                 text-white shadow-md hover:brightness-110">
               Daftarkan jasa MUA kamu di sini
             </button>
           </div>
@@ -465,8 +453,8 @@
       @else
         <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
           <button @click="navOpen = false; window.location='{{ route('login') }}'" class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                               text-white shadow-md hover:brightness-110">
+                                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                 text-white shadow-md hover:brightness-110">
             Daftarkan jasa MUA kamu di sini
           </button>
         </div>
@@ -509,7 +497,7 @@
               @guest
                 <a href="{{ route('login') }}"
                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
-                                                     bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
+                                                       bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
                   Masuk / Daftar
                 </a>
               @endguest
@@ -875,7 +863,7 @@
 
           <div
             class="bg-white rounded-3xl border px-5 md:px-6 pt-5 pb-6 md:pb-7 flex flex-col
-                                        {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
+                                          {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
             <div class="w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4 border border-amber-100/70 bg-slate-100">
               <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
                 onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Tim';">
@@ -977,8 +965,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                               hover:opacity-90 transition">
+                                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                 hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -989,10 +977,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal = false" class="bg-white rounded-[32px] shadow-2xl border border-amber-100
-                                           w-[92%] max-w-3xl p-8 md:p-10 relative">
+                                             w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal = false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                                             hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                               hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -1006,9 +994,9 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32
-                                                 rounded-full p-[3px]
-                                                 bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                 shadow-xl">
+                                                   rounded-full p-[3px]
+                                                   bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                   shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -1019,10 +1007,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                                   file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                                   file:border file:border-amber-200 file:bg-white
-                                                   file:text-slate-700 file:cursor-pointer
-                                                   hover:file:bg-amber-50">
+                                                     file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                                     file:border file:border-amber-200 file:bg-white
+                                                     file:text-slate-700 file:cursor-pointer
+                                                     hover:file:bg-amber-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -1034,20 +1022,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                                 text-sm md:text-base
-                                                 focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                                 focus:border-[#c98a00]">
+                                                   text-sm md:text-base
+                                                   focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                                   focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                                 hover:bg-slate-200 transition">
+                                                   hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                 hover:opacity-90 transition">
+                                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                   hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -1068,10 +1056,10 @@
     <div x-show="applyMuaModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="applyMuaModal = false" class="bg-white rounded-[28px] shadow-2xl border border-amber-100
-                                           w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
+                                             w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
 
         <button type="button" @click="applyMuaModal = false" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100
-                                             hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                               hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -1398,23 +1386,23 @@
 
     @if (!$isMuaFloat)
       <button type="button" @click="applyMuaModal = true" class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
-                                           items-center justify-center px-6 py-2.5 rounded-full
-                                           text-sm font-semibold
-                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                           text-white hover:brightness-110 transition
-                                           hover:-translate-y-0.5 hover:scale-[1.02]
-                                           cta-mua-floating">
+                                               items-center justify-center px-6 py-2.5 rounded-full
+                                               text-sm font-semibold
+                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                               text-white hover:brightness-110 transition
+                                               hover:-translate-y-0.5 hover:scale-[1.02]
+                                               cta-mua-floating">
         Daftarkan jasa MUA kamu di sini
       </button>
     @endif
   @else
     <a href="{{ route('login') }}" class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
-                           items-center justify-center px-6 py-2.5 rounded-full
-                           text-sm font-semibold
-                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                           text-white hover:brightness-110 transition
-                           hover:-translate-y-0.5 hover:scale-[1.02]
-                           cta-mua-floating">
+                             items-center justify-center px-6 py-2.5 rounded-full
+                             text-sm font-semibold
+                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                             text-white hover:brightness-110 transition
+                             hover:-translate-y-0.5 hover:scale-[1.02]
+                             cta-mua-floating">
       Daftarkan jasa MUA kamu di sini
     </a>
   @endauth

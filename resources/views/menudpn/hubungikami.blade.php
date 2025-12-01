@@ -260,7 +260,7 @@
             <a href="{{ route('pengguna.home') }}" class="hidden md:inline-flex bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
                           text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
                           transition text-sm font-semibold">
-              Sign In
+              Masuk
             </a>
           @endguest
 
