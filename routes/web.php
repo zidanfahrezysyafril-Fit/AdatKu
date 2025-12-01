@@ -19,6 +19,7 @@ use App\Http\Controllers\PublicMuaController;
 use App\Http\Controllers\MuaRequestController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\MuaPortfolioController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TeamMemberController;
@@ -252,4 +253,15 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('galleries', GalleryController::class);
     Route::resource('team-members', TeamMemberController::class);
+});
+
+Route::middleware(['auth', CheckRole::class . ':mua'])->group(function () {
+    Route::get('/mua/portfolio', [MuaPortfolioController::class, 'index'])
+        ->name('mua.portfolio.index');
+
+    Route::post('/mua/portfolio', [MuaPortfolioController::class, 'store'])
+        ->name('mua.portfolio.store');
+
+    Route::delete('/mua/portfolio/{portfolio}', [MuaPortfolioController::class, 'destroy'])
+        ->name('mua.portfolio.destroy');
 });

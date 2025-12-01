@@ -419,6 +419,21 @@
                         </svg>
                         <span>Pembayaran</span>
                     </a>
+
+                    {{-- Dokumentasi --}}
+                    <a href="{{ route('mua.portfolio.index') }}"
+                        class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                            bg-white/5 border-l-4 border-[#e0ac33]/30
+                            hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                            {{ request()->routeIs('mua.portfolio.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5 text-white/80 group-hover:text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 8a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M9 14h2.5" />
+                        </svg>
+                        <span>Dokumentasi</span>
+                    </a>
                 </div>
 
                 {{-- AKUN: BERANDA + LOGOUT --}}

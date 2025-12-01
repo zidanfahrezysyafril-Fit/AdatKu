@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Detail MUA - {{ $mua->nama_studio ?? 'AdatKu MUA' }}</title>
+    <title>Detail MUA - {{ $mua->nama_usaha ?? $mua->nama ?? 'AdatKu MUA' }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {{-- FONTS & TAILWIND --}}
@@ -357,7 +357,7 @@
                 // foto & nomor wa
                 $fotoMua = $mua->foto
                     ? asset('storage/' . $mua->foto)
-                    : 'https://placehold.co/400x400/FFF1F2/E11D48?text=' . urlencode($mua->nama_studio ?? 'MUA');
+                    : 'https://placehold.co/400x400/FFF1F2/E11D48?text=' . urlencode($mua->nama_usaha ?? $mua->nama ?? 'MUA');
 
                 $waNumber = null;
                 if (!empty($mua->kontak_wa)) {
@@ -442,7 +442,7 @@
 
                                     <h1
                                         class="font-['Cormorant_Garamond'] text-[42px] sm:text-[52px] lg:text-[62px] font-semibold leading-[1.1]
-    bg-gradient-to-r from-[#f1cd57] via-[#d79c21] to-[#b67811] bg-clip-text text-transparent drop-shadow-[0_2px_5px_rgba(150,90,10,0.45)]">
+                                        bg-gradient-to-r from-[#f1cd57] via-[#d79c21] to-[#b67811] bg-clip-text text-transparent drop-shadow-[0_2px_5px_rgba(150,90,10,0.45)]">
                                         {{ $mua->nama ?? $mua->nama_usaha ?? $mua->nama_mua ?? 'Nama MUA' }}
                                     </h1>
 
@@ -519,95 +519,432 @@
                         </div>
                     </div>
                 </div>
-
                 {{-- LAYANAN TERSEDIA --}}
-                <div class="max-w-7xl mx-auto px-1">
+                @php
+                    // kelompokkan layanan berdasarkan kategori (dibikin fleksibel huruf besar/kecil)
+                    $makeupLayanan = $layanan->filter(function ($item) {
+                        return strtolower($item->kategori ?? '') === 'makeup';
+                    });
+
+                    $bajuLayanan = $layanan->filter(function ($item) {
+                        return in_array(strtolower($item->kategori ?? ''), ['baju', 'baju adat']);
+                    });
+
+                    $pelaminLayanan = $layanan->filter(function ($item) {
+                        return in_array(strtolower($item->kategori ?? ''), ['pelamin', 'pelaminan']);
+                    });
+
+                    // kalau ada kategori lain, masuk ke "Lainnya"
+                    $lainnyaLayanan = $layanan->filter(function ($item) use ($makeupLayanan, $bajuLayanan, $pelaminLayanan) {
+                        if (!$item->kategori)
+                            return false;
+                        return !$makeupLayanan->contains('id', $item->id)
+                            && !$bajuLayanan->contains('id', $item->id)
+                            && !$pelaminLayanan->contains('id', $item->id);
+                    });
+                @endphp
+
+                <div class="max-w-7xl mx-auto px-1 mt-4">
                     <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-4">
                         <div>
                             <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-600">
                                 Layanan Tersedia
                             </h2>
                             <p class="text-slate-500 text-sm mt-1">
-                                Pilih paket yang sesuai dengan kebutuhan Anda ✨
+                                Pilih layanan yang sesuai dengan kebutuhan Anda ✨
                             </p>
                         </div>
                     </div>
 
-                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        @forelse ($layanan as $layanan)
-                            <div
-                                class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
-                                {{-- FOTO --}}
-                                <div class="relative h-52 sm:h-56">
-                                    <img src="{{ $layanan->foto ? asset('storage/' . $layanan->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($layanan->nama) }}"
-                                        alt="{{ $layanan->nama }}" class="w-full h-full object-cover">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
+                    @if ($layanan->isEmpty())
+                        <p class="text-slate-500 text-sm">
+                            Belum ada layanan yang terdaftar untuk MUA ini.
+                        </p>
+                    @else
+                        <div class="space-y-8">
+
+                            {{-- MAKEUP --}}
+                            @if ($makeupLayanan->count())
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-xl font-semibold text-slate-900">Makeup</h3>
+                                        <span
+                                            class="text-[11px] px-3 py-0.5 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-100 font-semibold">
+                                            {{ $makeupLayanan->count() }} layanan
+                                        </span>
                                     </div>
 
-                                    <div class="absolute top-3 left-3">
-                                        <span
-                                            class="px-3 py-1 rounded-full bg-[#f7e07b] text-[#8a6600] text-[10px] font-bold uppercase tracking-wide">
-                                            {{ strtoupper($layanan->kategori ?? 'MAKEUP') }}
-                                        </span>
+                                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                        @foreach ($makeupLayanan as $item)
+                                            <div
+                                                class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
+                                                {{-- FOTO --}}
+                                                <div class="relative h-52 sm:h-56">
+                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                        alt="{{ $item->nama }}" class="w-full h-full object-cover">
+                                                    <div
+                                                        class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
+                                                    </div>
+
+                                                    <div class="absolute top-3 left-3">
+                                                        <span
+                                                            class="px-3 py-1 rounded-full bg-[#f7e07b] text-[#8a6600] text-[10px] font-bold uppercase tracking-wide">
+                                                            {{ strtoupper($item->kategori ?? 'MAKEUP') }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {{-- ISI --}}
+                                                <div class="p-5 sm:p-6 flex flex-col gap-4 flex-1">
+                                                    <div>
+                                                        <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">
+                                                            {{ $item->nama }}
+                                                        </h4>
+                                                        <p class="text-sm text-slate-600 leading-relaxed line-clamp-3">
+                                                            {{ $item->deskripsi ?? 'Layanan makeup untuk berbagai acara spesial Anda.' }}
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="flex items-baseline gap-2">
+                                                        <span
+                                                            class="text-[11px] text-slate-500 font-medium uppercase tracking-wide">
+                                                            Mulai dari
+                                                        </span>
+                                                        <span class="text-xl sm:text-2xl font-extrabold text-rose-600">
+                                                            Rp {{ number_format($item->harga, 0, ',', '.') }}
+                                                        </span>
+                                                    </div>
+
+                                                    {{-- form keranjang hidden --}}
+                                                    <form id="cart-form-{{ $item->id }}" method="POST"
+                                                        action="{{ route('cart.add') }}" class="hidden">
+                                                        @csrf
+                                                        <input type="hidden" name="layanan_id" value="{{ $item->id }}">
+                                                        <input type="hidden" name="jumlah" value="1">
+                                                    </form>
+
+                                                    <div class="flex flex-col sm:flex-row gap-3 mt-auto">
+                                                        <button type="button"
+                                                            onclick="document.getElementById('cart-form-{{ $item->id }}').submit()"
+                                                            class="w-full sm:flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
+                                                            <span class="text-lg">＋</span>
+                                                            <span>Keranjang</span>
+                                                        </button>
+
+                                                        <button type="button" onclick="openModal(
+                                                                        '{{ addslashes($item->nama) }}',
+                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                        '{{ $item->id }}'
+                                                                    )"
+                                                            class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
+                                                            Pesan Layanan Ini
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
+                            @endif
 
-                                {{-- ISI --}}
-                                <div class="p-5 sm:p-6 flex flex-col gap-4 flex-1">
-                                    <div>
-                                        <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">
-                                            {{ $layanan->nama }}
-                                        </h4>
-                                        <p class="text-sm text-slate-600 leading-relaxed line-clamp-3">
-                                            {{ $layanan->deskripsi ?? 'Layanan makeup untuk berbagai acara spesial Anda.' }}
-                                        </p>
-                                    </div>
-
-                                    <div class="flex items-baseline gap-2">
-                                        <span class="text-[11px] text-slate-500 font-medium uppercase tracking-wide">
-                                            Mulai dari
-                                        </span>
-                                        <span class="text-xl sm:text-2xl font-extrabold text-rose-600">
-                                            Rp {{ number_format($layanan->harga, 0, ',', '.') }}
+                            {{-- BAJU ADAT --}}
+                            @if ($bajuLayanan->count())
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-xl font-semibold text-slate-900">Baju Adat</h3>
+                                        <span
+                                            class="text-[11px] px-3 py-0.5 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-100 font-semibold">
+                                            {{ $bajuLayanan->count() }} layanan
                                         </span>
                                     </div>
 
-                                    {{-- form keranjang hidden --}}
-                                    <form id="cart-form-{{ $layanan->id }}" method="POST" action="{{ route('cart.add') }}"
-                                        class="hidden">
-                                        @csrf
-                                        <input type="hidden" name="layanan_id" value="{{ $layanan->id }}">
-                                        <input type="hidden" name="jumlah" value="1">
-                                    </form>
+                                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                        @foreach ($bajuLayanan as $item)
+                                            {{-- KARTU LAYANAN (SAMA SEPERTI DI ATAS) --}}
+                                            <div
+                                                class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
+                                                <div class="relative h-52 sm:h-56">
+                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                        alt="{{ $item->nama }}" class="w-full h-full object-cover">
+                                                    <div
+                                                        class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
+                                                    </div>
 
-                                    <div class="flex flex-col sm:flex-row gap-3 mt-auto">
-                                        <button type="button"
-                                            onclick="document.getElementById('cart-form-{{ $layanan->id }}').submit()"
-                                            class="w-full sm:flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
-                                            <span class="text-lg">＋</span>
-                                            <span>Keranjang</span>
-                                        </button>
+                                                    <div class="absolute top-3 left-3">
+                                                        <span
+                                                            class="px-3 py-1 rounded-full bg-[#f7e07b] text-[#8a6600] text-[10px] font-bold uppercase tracking-wide">
+                                                            {{ strtoupper($item->kategori ?? 'BAJU') }}
+                                                        </span>
+                                                    </div>
+                                                </div>
 
-                                        <button type="button"
-                                            onclick="openModal(
-                                                                                                                                    '{{ addslashes($layanan->nama) }}',
-                                                                                                                                    'Rp {{ number_format($layanan->harga, 0, ',', '.') }}',
-                                                                                                                                    '{{ $layanan->id }}'
-                                                                                                                                )"
-                                            class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
-                                            Pesan Layanan Ini
-                                        </button>
+                                                <div class="p-5 sm:p-6 flex flex-col gap-4 flex-1">
+                                                    <div>
+                                                        <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">
+                                                            {{ $item->nama }}
+                                                        </h4>
+                                                        <p class="text-sm text-slate-600 leading-relaxed line-clamp-3">
+                                                            {{ $item->deskripsi ?? 'Paket penyewaan baju adat untuk berbagai acara.' }}
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="flex items-baseline gap-2">
+                                                        <span
+                                                            class="text-[11px] text-slate-500 font-medium uppercase tracking-wide">
+                                                            Mulai dari
+                                                        </span>
+                                                        <span class="text-xl sm:text-2xl font-extrabold text-rose-600">
+                                                            Rp {{ number_format($item->harga, 0, ',', '.') }}
+                                                        </span>
+                                                    </div>
+
+                                                    <form id="cart-form-{{ $item->id }}" method="POST"
+                                                        action="{{ route('cart.add') }}" class="hidden">
+                                                        @csrf
+                                                        <input type="hidden" name="layanan_id" value="{{ $item->id }}">
+                                                        <input type="hidden" name="jumlah" value="1">
+                                                    </form>
+
+                                                    <div class="flex flex-col sm:flex-row gap-3 mt-auto">
+                                                        <button type="button"
+                                                            onclick="document.getElementById('cart-form-{{ $item->id }}').submit()"
+                                                            class="w-full sm:flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
+                                                            <span class="text-lg">＋</span>
+                                                            <span>Keranjang</span>
+                                                        </button>
+
+                                                        <button type="button" onclick="openModal(
+                                                                        '{{ addslashes($item->nama) }}',
+                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                        '{{ $item->id }}'
+                                                                    )"
+                                                            class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
+                                                            Pesan Layanan Ini
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
+                                </div>
+                            @endif
+
+                            {{-- PELAMINAN --}}
+                            @if ($pelaminLayanan->count())
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-xl font-semibold text-slate-900">Pelaminan</h3>
+                                        <span
+                                            class="text-[11px] px-3 py-0.5 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-100 font-semibold">
+                                            {{ $pelaminLayanan->count() }} layanan
+                                        </span>
+                                    </div>
+
+                                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                        @foreach ($pelaminLayanan as $item)
+                                            {{-- KARTU LAYANAN (SAMA) --}}
+                                            <div
+                                                class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
+                                                <div class="relative h-52 sm:h-56">
+                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                        alt="{{ $item->nama }}" class="w-full h-full object-cover">
+                                                    <div
+                                                        class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
+                                                    </div>
+
+                                                    <div class="absolute top-3 left-3">
+                                                        <span
+                                                            class="px-3 py-1 rounded-full bg-[#f7e07b] text-[#8a6600] text-[10px] font-bold uppercase tracking-wide">
+                                                            {{ strtoupper($item->kategori ?? 'PELAMIN') }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="p-5 sm:p-6 flex flex-col gap-4 flex-1">
+                                                    <div>
+                                                        <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">
+                                                            {{ $item->nama }}
+                                                        </h4>
+                                                        <p class="text-sm text-slate-600 leading-relaxed line-clamp-3">
+                                                            {{ $item->deskripsi ?? 'Paket dekorasi dan pelaminan untuk hari spesialmu.' }}
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="flex items-baseline gap-2">
+                                                        <span
+                                                            class="text-[11px] text-slate-500 font-medium uppercase tracking-wide">
+                                                            Mulai dari
+                                                        </span>
+                                                        <span class="text-xl sm:text-2xl font-extrabold text-rose-600">
+                                                            Rp {{ number_format($item->harga, 0, ',', '.') }}
+                                                        </span>
+                                                    </div>
+
+                                                    <form id="cart-form-{{ $item->id }}" method="POST"
+                                                        action="{{ route('cart.add') }}" class="hidden">
+                                                        @csrf
+                                                        <input type="hidden" name="layanan_id" value="{{ $item->id }}">
+                                                        <input type="hidden" name="jumlah" value="1">
+                                                    </form>
+
+                                                    <div class="flex flex-col sm:flex-row gap-3 mt-auto">
+                                                        <button type="button"
+                                                            onclick="document.getElementById('cart-form-{{ $item->id }}').submit()"
+                                                            class="w-full sm:flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
+                                                            <span class="text-lg">＋</span>
+                                                            <span>Keranjang</span>
+                                                        </button>
+
+                                                        <button type="button" onclick="openModal(
+                                                                        '{{ addslashes($item->nama) }}',
+                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                        '{{ $item->id }}'
+                                                                    )"
+                                                            class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
+                                                            Pesan Layanan Ini
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- LAINNYA (jika ada kategori lain) --}}
+                            @if ($lainnyaLayanan->count())
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-xl font-semibold text-slate-900">Layanan Lainnya</h3>
+                                        <span
+                                            class="text-xs px-3 py-0.5 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-100 font-semibold">
+                                            {{ $lainnyaLayanan->count() }} layanan
+                                        </span>
+                                    </div>
+
+                                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                        @foreach ($lainnyaLayanan as $item)
+                                            {{-- KARTU LAYANAN (SAMA) --}}
+                                            <div
+                                                class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
+                                                <div class="relative h-52 sm:h-56">
+                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                        alt="{{ $item->nama }}" class="w-full h-full object-cover">
+                                                    <div
+                                                        class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
+                                                    </div>
+
+                                                    <div class="absolute top-3 left-3">
+                                                        <span
+                                                            class="px-3 py-1 rounded-full bg-[#f7e07b] text-[#8a6600] text-[10px] font-bold uppercase tracking-wide">
+                                                            {{ strtoupper($item->kategori ?? 'LAINNYA') }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="p-5 sm:p-6 flex flex-col gap-4 flex-1">
+                                                    <div>
+                                                        <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-1">
+                                                            {{ $item->nama }}
+                                                        </h4>
+                                                        <p class="text-sm text-slate-600 leading-relaxed line-clamp-3">
+                                                            {{ $item->deskripsi ?? 'Layanan tambahan untuk melengkapi kebutuhan acara.' }}
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="flex items-baseline gap-2">
+                                                        <span
+                                                            class="text-[11px] text-slate-500 font-medium uppercase tracking-wide">
+                                                            Mulai dari
+                                                        </span>
+                                                        <span class="text-xl sm:text-2xl font-extrabold text-rose-600">
+                                                            Rp {{ number_format($item->harga, 0, ',', '.') }}
+                                                        </span>
+                                                    </div>
+
+                                                    <form id="cart-form-{{ $item->id }}" method="POST"
+                                                        action="{{ route('cart.add') }}" class="hidden">
+                                                        @csrf
+                                                        <input type="hidden" name="layanan_id" value="{{ $item->id }}">
+                                                        <input type="hidden" name="jumlah" value="1">
+                                                    </form>
+
+                                                    <div class="flex flex-col sm:flex-row gap-3 mt-auto">
+                                                        <button type="button"
+                                                            onclick="document.getElementById('cart-form-{{ $item->id }}').submit()"
+                                                            class="w-full sm:flex-1 px-3 py-3 rounded-xl border border-amber-200 bg-white text-[#b48a00] text-sm font-semibold hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-center gap-2">
+                                                            <span class="text-lg">＋</span>
+                                                            <span>Keranjang</span>
+                                                        </button>
+
+                                                        <button type="button" onclick="openModal(
+                                                                        '{{ addslashes($item->nama) }}',
+                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                        '{{ $item->id }}'
+                                                                    )"
+                                                            class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
+                                                            Pesan Layanan Ini
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                        </div>
+                    @endif
+                </div>
+
+            </section>
+
+            {{-- GALERI DOKUMENTASI MUA --}}
+            @if ($mua->portfolios && $mua->portfolios->count())
+                <section class="mt-10 max-w-7xl mx-auto px-1">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-600">
+                                Dokumentasi Kerja MUA
+                            </h2>
+                            <p class="text-slate-500 text-sm mt-1">
+                                Beberapa hasil kerja dari {{ $mua->nama_usaha}} ✨
+                            </p>
+                        </div>
+                        <span
+                            class="self-start inline-flex items-center px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-[11px] font-semibold tracking-wide border border-amber-100">
+                            {{ $mua->portfolios->count() }} foto
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        @foreach ($mua->portfolios as $portfolio)
+                            <div class="relative bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 group">
+                                <img src="{{ asset('storage/' . $portfolio->foto_path) }}"
+                                    alt="Dokumentasi MUA {{ $mua->nama ?? $mua->nama_usaha ?? '' }}"
+                                    class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 </div>
                             </div>
-                        @empty
-                            <p class="text-slate-500 text-sm">
-                                Belum ada layanan yang terdaftar untuk MUA ini.
-                            </p>
-                        @endforelse
+                        @endforeach
                     </div>
-                </div>
-            </section>
+                </section>
+            @else
+                {{-- kalau belum ada dokumentasi, tetap tampilkan judul + info --}}
+                <section class="mt-10 max-w-7xl mx-auto px-1">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-3">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-600">
+                                Dokumentasi Kerja MUA
+                            </h2>
+                            <p class="text-slate-500 text-sm mt-1">
+                                Belum ada dokumentasi yang diunggah untuk MUA ini.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            @endif
 
             {{-- CTA --}}
             <section
@@ -919,9 +1256,6 @@
         style="left: 88%; animation: float-down 26s linear infinite 3s;">❂</span>
 
     <script>
-        // animasi naik/turun icon
-        function floatKeyframes() { }
-
         // Modal Pesan Layanan
         function openModal(serviceName, servicePrice, layananId) {
             document.getElementById('modalServiceName').textContent = serviceName;

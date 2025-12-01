@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
+
 class Mua extends Model
 {
-
-    public $incrementing = false;
-    protected $keyType = 'string';
 
     protected $fillable = [
         'user_id',
@@ -30,5 +28,10 @@ class Mua extends Model
     public function layanan()
     {
         return $this->hasMany(Layanan::class, 'mua_id');
+    }
+
+    public function portfolios()
+    {
+        return $this->hasMany(MuaPortfolio::class, 'mua_id');
     }
 }

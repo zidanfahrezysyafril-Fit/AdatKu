@@ -9,16 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class PesananController extends Controller
 {
+    /* ===================== PENGGUNA ===================== */
+
     public function indexUser()
     {
         $pesanan = Pesanan::where('id_pengguna', Auth::id())
-            ->with(['layanan', 'pengguna']) // sekalian load relasi biar ga N+1
+            ->with(['layanan', 'pengguna'])
             ->latest()
-            ->get(); // <-- ini COLLECTION
+            ->get(); // collection
 
         return view('pengguna.pesanan.index', compact('pesanan'));
     }
-
 
     public function showUser(Pesanan $pesanan)
     {
@@ -26,65 +27,98 @@ class PesananController extends Controller
             abort(403);
         }
 
-        // Kalau mau, bisa sekalian load relasi (opsional)
         $pesanan->load('layanan', 'pengguna');
 
-        // Balikkan saja ke halaman daftar pesanan
-        return redirect()->route('pengguna.pesanan.show');
+        // untuk sekarang kamu memang cuma punya halaman list,
+        // jadi balikin lagi ke index
+        return redirect()->route('pengguna.pesanan.index');
     }
 
-
+    /**
+     * Pengguna membatalkan pesanan.
+     * - 1 kartu = 1 group kode_checkout
+     * - HANYA yang statusnya Belum_Lunas yang di-set jadi Dibatalkan
+     */
     public function destroyUser(Pesanan $pesanan)
     {
         $userId = Auth::id();
 
-        // Pastikan ini pesanan milik user yang login
+        // Pastikan pesanan milik user yang login
         if ($pesanan->id_pengguna !== $userId) {
             abort(403);
         }
 
-        // Ambil kode_checkout dari pesanan yang diklik
         $kodeCheckout = $pesanan->kode_checkout;
 
         if ($kodeCheckout) {
-            // 🔸 Ambil SEMUA pesanan dalam 1 checkout (1 kartu)
+            // semua pesanan dengan kode_checkout yang sama milik user ini
             $group = Pesanan::where('id_pengguna', $userId)
                 ->where('kode_checkout', $kodeCheckout)
                 ->get();
         } else {
-            // 🔸 Fallback: kalau belum ada kode_checkout, batalin satuan saja
+            // tidak punya kode_checkout → pesanan single
             $group = collect([$pesanan]);
         }
 
-        // Cek: ada yang sudah Lunas / Dibatalkan?
-        $nonCancelable = $group->filter(function ($p) {
-            return $p->status_pembayaran !== 'Belum_Lunas';
-        });
+        // Ambil hanya yang masih bisa dibatalkan
+        $bisaDibatalkan = $group->where('status_pembayaran', 'Belum_Lunas');
 
-        if ($nonCancelable->isNotEmpty()) {
+        if ($bisaDibatalkan->isEmpty()) {
             return back()->with(
                 'error',
-                'Ada layanan di pesanan ini yang sudah dibayar / dibatalkan, jadi tidak bisa dibatalkan.'
+                'Tidak ada layanan yang bisa dibatalkan pada pesanan ini.'
             );
         }
 
-        // Set SEMUA dalam grup jadi Dibatalkan
-        foreach ($group as $p) {
+        foreach ($bisaDibatalkan as $p) {
             $p->status_pembayaran = 'Dibatalkan';
             $p->save();
         }
 
         return redirect()
             ->route('pengguna.pesanan.index')
-            ->with('success', 'Pesanan berhasil dibatalkan untuk ' . $group->count() . ' layanan.');
+            ->with('success', 'Pesanan berhasil dibatalkan untuk ' . $bisaDibatalkan->count() . ' layanan.');
     }
+
+    public function storeUser(Request $request)
+    {
+        $validated = $request->validate([
+            'layanan_id'      => ['required', 'exists:layanans,id'],
+            'tanggal_booking' => ['required', 'date', 'after_or_equal:today'],
+            'alamat'          => ['required', 'string', 'max:500'],
+            'catatan'         => ['nullable', 'string'],
+        ]);
+
+        $layanan = Layanan::findOrFail($validated['layanan_id']);
+
+        Pesanan::create([
+            'id_pengguna'       => Auth::id(),
+            'id_layanan'        => $layanan->id,
+            'tanggal_booking'   => $validated['tanggal_booking'],
+            'alamat'            => $validated['alamat'],
+            'catatan'           => $validated['catatan'] ?? null,
+            'total_harga'       => $layanan->harga,
+            'status_pembayaran' => 'Belum_Lunas',
+        ]);
+
+        return redirect()
+            ->route('pengguna.pesanan.index')
+            ->with('success', 'Pesanan berhasil dibuat.');
+    }
+
+    public function createUser(Layanan $layanan)
+    {
+        return view('pengguna.pesanan.create', compact('layanan'));
+    }
+
+    /* ===================== PANEL MUA ===================== */
 
     public function indexMua()
     {
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (! $mua) {
+        if (!$mua) {
             return redirect()
                 ->route('dashboard')
                 ->with('error', 'Profil MUA kamu belum dibuat.');
@@ -97,7 +131,7 @@ class PesananController extends Controller
             ->latest()
             ->get();
 
-        // 🔹 Group per checkout (1 checkout = 1 baris)
+        // group per checkout
         $groupedPesanans = $pesanans->groupBy(function ($p) {
             return $p->kode_checkout ?: ('single-' . $p->id);
         });
@@ -107,67 +141,54 @@ class PesananController extends Controller
             'groupedPesanans' => $groupedPesanans,
         ]);
     }
+
+    /**
+     * MUA update status pembayaran.
+     * - status 1 group checkout di-set sama semua
+     *   biar tampilan panel MUA & pengguna selalu sinkron
+     */
     public function updateStatusMua(Request $request, Pesanan $pesanan)
     {
         $user = Auth::user();
         $mua  = $user->mua;
-        if (! $mua || $pesanan->layanan->mua_id !== $mua->id) {
+
+        if (!$mua || $pesanan->layanan->mua_id !== $mua->id) {
             abort(403);
         }
 
-        $request->validate([
+        $data = $request->validate([
             'status_pembayaran' => 'required|in:Belum_Lunas,Lunas,Dibatalkan',
         ]);
 
-        $pesanan->status_pembayaran = $request->status_pembayaran;
-        $pesanan->save();
+        $kodeCheckout = $pesanan->kode_checkout;
+
+        if ($kodeCheckout) {
+            // update semua pesanan dalam 1 checkout untuk MUA ini
+            Pesanan::where('kode_checkout', $kodeCheckout)
+                ->whereHas('layanan', function ($q) use ($mua) {
+                    $q->where('mua_id', $mua->id);
+                })
+                ->update(['status_pembayaran' => $data['status_pembayaran']]);
+        } else {
+            // pesanan single (tanpa kode_checkout)
+            $pesanan->status_pembayaran = $data['status_pembayaran'];
+            $pesanan->save();
+        }
 
         return back()->with('success', 'Status pembayaran berhasil diperbarui.');
     }
+
     public function destroyMua(Pesanan $pesanan)
     {
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (! $mua || $pesanan->layanan->mua_id !== $mua->id) {
+        if (!$mua || $pesanan->layanan->mua_id !== $mua->id) {
             abort(403);
         }
 
         $pesanan->delete();
 
         return back()->with('success', 'Pesanan berhasil dihapus.');
-    }
-    public function storeUser(Request $request)
-    {
-        // 1) VALIDASI TERMASUK layanan_id
-        $validated = $request->validate([
-            'layanan_id'      => ['required', 'exists:layanans,id'],
-            'tanggal_booking' => ['required', 'date', 'after_or_equal:today'],
-            'alamat'          => ['required', 'string', 'max:500'],
-            'catatan'         => ['nullable', 'string'],
-        ]);
-
-        // 2) AMBIL DATA LAYANAN DARI DATABASE
-        $layanan = Layanan::findOrFail($validated['layanan_id']);
-
-        // 3) SIMPAN PESANAN
-        $pesanan = Pesanan::create([
-            'id_pengguna'       => Auth::id(),              // id user yang login
-            'id_layanan'        => $layanan->id,
-            'tanggal_booking'   => $validated['tanggal_booking'],
-            'alamat'            => $validated['alamat'],
-            'catatan'           => $validated['catatan'] ?? null,
-            'total_harga'       => $layanan->harga,
-            'status_pembayaran' => 'Belum_Lunas',
-        ]);
-
-        // 4) ARAHKAN KE HALAMAN DETAIL PESANAN
-        return redirect()
-            ->route('pengguna.pesanan.index')
-            ->with('success', 'Pesanan berhasil dibuat.');
-    }
-    public function createUser(Layanan $layanan)
-    {
-        return view('pengguna.pesanan.create', compact('layanan'));
     }
 }

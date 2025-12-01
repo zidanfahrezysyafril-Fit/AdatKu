@@ -34,7 +34,6 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #fff9fb;
-            /* pattern lembut seperti home */
             background-image:
                 linear-gradient(135deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%),
                 linear-gradient(225deg, rgba(200, 150, 160, 0.06) 25%, transparent 25%, transparent 50%, rgba(200, 150, 160, 0.06) 50%, rgba(200, 150, 160, 0.06) 75%, transparent 75%, transparent 100%);
@@ -58,8 +57,6 @@
         .card-shadow {
             box-shadow: 0 22px 60px rgba(15, 23, 42, 0.10);
         }
-
-        /* ============ ICON MELAYANG (sama kayak home) ============ */
 
         .floating-icon {
             position: fixed;
@@ -148,7 +145,7 @@
                 </a>
             </div>
 
-            {{-- KANAN: MENU BERANDA & DAFTAR MUA --}}
+            {{-- KANAN: MENU --}}
             <nav class="flex items-center gap-6 text-sm md:text-base font-medium text-[#b48a00]">
                 <a href="{{ url('/') }}" class="hover:text-[#eab308] flex items-center gap-1 transition">
                     <span class="text-lg">←</span>
@@ -165,6 +162,28 @@
 
     {{-- ================= KONTEN PESANAN ================= --}}
     <main class="flex-1">
+        {{-- FLASH MESSAGE --}}
+        @if (session('success') || session('error'))
+            <div class="max-w-6xl mx-auto px-6 mt-4">
+                <div class="mb-4 flex items-start gap-3 px-4 py-3 rounded-2xl text-sm shadow-sm
+                    @if(session('success'))
+                        bg-emerald-50 border border-emerald-200 text-emerald-800
+                    @else
+                        bg-rose-50 border border-rose-200 text-rose-800
+                    @endif">
+                    <div class="mt-0.5">
+                        @if (session('success')) ✓ @else ! @endif
+                    </div>
+                    <div class="flex-1 font-medium">
+                        {{ session('success') ?? session('error') }}
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()"
+                        class="ml-auto text-[11px] font-semibold uppercase tracking-wide">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        @endif
         <section class="max-w-6xl mx-auto px-6 pt-8">
             <p class="text-[11px] font-semibold tracking-[0.26em] uppercase text-amber-400">
                 Pengguna
@@ -180,8 +199,7 @@
 
         <section class="max-w-6xl mx-auto px-6 mt-7 mb-20">
             @php
-                // GROUPING: 1 checkout = 1 kartu pesanan
-                // Kalau kolom kode_pesanan belum ada/terisi, fallback ke id (tetap 1 layanan = 1 kartu)
+                // 1 checkout = 1 kartu
                 $groupedPesanan = $pesanan->groupBy(function ($p) {
                     return $p->kode_checkout ?: ('single-' . $p->id);
                 });
@@ -206,28 +224,24 @@
                         @php
                             $first = $group->first();
 
-                            // list layanan dalam 1 pesanan
+                            // list layanan di checkout ini
                             $layananList = $group
-                                ->map(function ($p) {
-                                    return optional($p->layanan)->nama;
-                                })
+                                ->map(fn($p) => optional($p->layanan)->nama)
                                 ->filter()
                                 ->values();
 
                             $jumlahLayanan = $layananList->count();
                             $namaUtama = $layananList->first() ?? '-';
 
-                            // judul di kartu (mis: "Baju Adat + 1 layanan lain")
                             if ($jumlahLayanan > 1) {
                                 $namaDisplay = $namaUtama . ' + ' . ($jumlahLayanan - 1) . ' layanan lain';
                             } else {
                                 $namaDisplay = $namaUtama;
                             }
 
-                            // total harga dalam 1 pesanan (semua layanan)
                             $totalHarga = $group->sum('total_harga');
 
-                            // MUA
+                            // MUA pertama (buat teks WA)
                             $mua = optional(optional($first->layanan)->mua);
                             if ($mua) {
                                 $waNumber = $mua->kontak_wa ?? null;
@@ -242,18 +256,28 @@
 
                             $namaUser = optional($first->pengguna)->name ?? 'Pelanggan';
 
-                            // teks WA berisi semua layanan
                             $waText = $mua
                                 ? urlencode(
                                     "Halo Kak $namaMua, saya $namaUser ingin melanjutkan / konfirmasi pembayaran pesanan (" .
                                     $layananList->implode(', ') .
                                     ") untuk tanggal {$tanggalBookingLong} dengan total Rp " .
                                     number_format($totalHarga, 0, ',', '.') .
-                                    '.',
+                                    '.'
                                 )
                                 : '';
 
-                            $status = $first->status_pembayaran;
+                            // ====== AGREGASI STATUS SE-KELOMPOK ======
+                            $statusSet = $group->pluck('status_pembayaran')->unique();
+
+                            if ($statusSet->count() === 1 && $statusSet->first() === 'Lunas') {
+                                $status = 'Lunas';
+                            } elseif ($statusSet->count() === 1 && $statusSet->first() === 'Dibatalkan') {
+                                $status = 'Dibatalkan';
+                            } else {
+                                // campuran / ada yg belum lunas -> tampilkan "Belum Lunas"
+                                $status = 'Belum_Lunas';
+                            }
+
                             $statusLabel = str_replace('_', ' ', $status);
 
                             $statusClass =
@@ -263,7 +287,6 @@
                                     ? 'bg-amber-50 text-amber-700 border-amber-100'
                                     : 'bg-slate-50 text-slate-600 border-slate-100');
 
-                            // data untuk modal detail
                             $detailPayload = [
                                 'layanan' => $layananList->implode(', '),
                                 'tanggal' => $tanggalBookingLong,
@@ -275,11 +298,11 @@
                             ];
                         @endphp
 
-                        {{-- ================== KARTU PESANAN (1 group = 1 kartu) ================== --}}
+                        {{-- ================== KARTU PESANAN ================== --}}
                         <article
                             class="bg-white/95 rounded-[28px] card-shadow border border-rose-100 overflow-hidden flex flex-col md:flex-row">
 
-                            {{-- KIRI: RINCIAN PESANAN --}}
+                            {{-- KIRI --}}
                             <div class="flex-1 px-6 md:px-8 py-5 md:py-7 space-y-2">
                                 <p class="text-[10px] font-semibold tracking-[0.26em] uppercase text-amber-600">
                                     Rincian Pesanan
@@ -306,8 +329,7 @@
                                     </div>
 
                                     <div class="flex">
-                                        <span class="w-32 text-slate-500">Status &emsp14;&emsp14;&emsp14;&emsp14; &emsp14;&emsp14;
-                                            &emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14;&emsp14; :</span>
+                                        <span class="w-32 text-slate-500">Status :</span>
                                         <span class="flex-1">
                                             <span
                                                 class="status-dot inline-flex items-center px-3 py-1 rounded-full text-[11px] font-medium border {{ $statusClass }}">
@@ -317,7 +339,7 @@
                                     </div>
                                 </div>
 
-                                {{-- DAFTAR LAYANAN DALAM PESANAN INI --}}
+                                {{-- LAYANAN DI PESANAN INI --}}
                                 <div class="mt-4 space-y-2">
                                     @foreach ($group as $pItem)
                                         @php
@@ -326,7 +348,6 @@
 
                                         @if ($layananItem)
                                             <div class="flex items-center gap-3">
-                                                {{-- Thumbnail layanan --}}
                                                 @if ($layananItem->foto)
                                                     <img src="{{ asset('storage/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
                                                         class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
@@ -358,7 +379,7 @@
                                 </button>
                             </div>
 
-                            {{-- KANAN: RINGKASAN + AKSI --}}
+                            {{-- KANAN --}}
                             <div
                                 class="md:w-72 bg-gradient-to-b from-rose-50/80 to-amber-50/60 border-t md:border-t-0 md:border-l border-rose-100 px-6 md:px-7 py-5 md:py-7 flex flex-col justify-between">
                                 <div class="space-y-3 text-right md:text-left">
@@ -388,29 +409,29 @@
                                 </div>
 
                                 <div class="mt-4 flex flex-col items-stretch md:items-start gap-2">
-                                    @if ($waNumber && $first->status_pembayaran !== 'Dibatalkan')
+                                    @if ($waNumber && $status !== 'Dibatalkan')
                                         <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank"
                                             class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full
-                                                                            bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
+                                                                          bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
                                             <span>💬</span>
                                             <span>Chat MUA via WhatsApp</span>
                                         </a>
                                     @endif
 
-                                    @if ($first->status_pembayaran === 'Belum_Lunas')
-                                        {{-- FORM BATALKAN PESANAN (sekarang pakai id pesanan pertama di grup) --}}
+                                    @if ($status === 'Belum_Lunas')
+                                        {{-- FORM BATALKAN PESANAN (1 KARTU) --}}
                                         <form method="POST" action="{{ route('pengguna.destroy', $first->id) }}" class="cancel-form"
                                             id="cancel-form-{{ $first->id }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button"
-                                                class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
-                                                                                bg-red text-white hover:bg-rose-600 transition btn-cancel-pesanan"
-                                                data-id="{{ $first->id }}">
+
+                                            <button type="button" class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
+                                                                                   bg-rose-600 text-white hover:bg-rose-700 transition
+                                                                                   btn-cancel-pesanan" data-id="{{ $first->id }}">
                                                 Batalkan Pesanan
                                             </button>
                                         </form>
-                                    @elseif ($first->status_pembayaran === 'Dibatalkan')
+                                    @elseif ($status === 'Dibatalkan')
                                         <span
                                             class="inline-block px-4 py-2 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-500">
                                             Pesanan dibatalkan
@@ -420,19 +441,18 @@
 
                             </div>
                         </article>
-                        {{-- ================== END KARTU PESANAN ================== --}}
+                        {{-- ================== END KARTU ================== --}}
                     @endforeach
                 </div>
             @endif
         </section>
     </main>
 
-    {{-- =============== MODAL KONFIRMASI BATALKAN PESANAN =============== --}}
+    {{-- =============== MODAL KONFIRMASI BATALKAN ================= --}}
     <div id="cancelModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm">
         <div
             class="modal-card bg-white rounded-3xl shadow-2xl max-w-sm w-[90%] px-6 pt-6 pb-5 relative overflow-hidden">
 
-            {{-- Accent gradient --}}
             <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-rose-500 via-amber-400 to-pink-500"></div>
 
             <div class="flex items-start gap-3">
@@ -465,12 +485,11 @@
         </div>
     </div>
 
-    {{-- =============== MODAL DETAIL PESANAN =============== --}}
+    {{-- =============== MODAL DETAIL ================= --}}
     <div id="detailModal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/40 backdrop-blur-sm">
         <div class="modal-card bg-white/95 rounded-3xl border border-rose-100 card-shadow overflow-hidden
-                w-[95%] max-w-5xl flex flex-col lg:flex-row">
+                    w-[95%] max-w-5xl flex flex-col lg:flex-row">
 
-            {{-- Kiri: judul & info utama --}}
             <div class="lg:w-2/3 p-8 lg:p-10 space-y-4">
                 <p class="text-xs font-semibold tracking-[0.18em] uppercase text-rose-500">
                     Rincian Pesanan
@@ -507,7 +526,6 @@
                 </div>
             </div>
 
-            {{-- Kanan: ringkasan --}}
             <div class="lg:w-1/3 bg-gradient-to-b from-rose-50/80 to-amber-50/60 p-8 flex flex-col justify-between">
                 <div class="space-y-4">
                     <p class="text-xs font-semibold tracking-[0.18em] uppercase text-rose-500">
@@ -549,7 +567,6 @@
 
             <div class="relative max-w-6xl mx-auto">
                 <div class="grid md:grid-cols-3 gap-8 items-start">
-                    {{-- Brand & intro --}}
                     <div>
                         <h1
                             class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
@@ -561,7 +578,6 @@
                         </p>
                     </div>
 
-                    {{-- Link cepat --}}
                     <div class="text-sm">
                         <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
                         <ul class="space-y-1.5">
@@ -574,7 +590,6 @@
                         </ul>
                     </div>
 
-                    {{-- Kontak & kredit --}}
                     <div class="text-sm">
                         <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
                         <p class="text-[#f5e9df] text-[13px]">
@@ -609,7 +624,7 @@
         </div>
     </footer>
 
-    {{-- ICON MELAYANG --}}
+    {{-- ICON MELAYANG (biarin sama seperti sebelumnya) --}}
     <span class="floating-icon from-bottom icon-lg"
         style="left: 5%;  animation-duration: 22s; animation-delay: 0s;">❖</span>
     <span class="floating-icon from-bottom icon-xl"
@@ -644,6 +659,7 @@
     <span class="floating-icon from-top icon-lg"
         style="left: 82%; animation-duration: 27s; animation-delay: 3s;">◈</span>
 
+    {{-- SCRIPT BATALKAN --}}
     <script>
         let selectedPesananId = null;
 
@@ -669,11 +685,8 @@
 
         function confirmCancel() {
             if (!selectedPesananId) return;
-
             const form = document.getElementById(`cancel-form-${selectedPesananId}`);
-            if (form) {
-                form.submit();
-            }
+            if (form) form.submit();
             closeCancelModal();
         }
 
@@ -691,6 +704,7 @@
         });
     </script>
 
+    {{-- SCRIPT DETAIL --}}
     <script>
         function openDetailModal(data) {
             document.getElementById('dm-layanan').innerText = data.layanan;
