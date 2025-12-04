@@ -11,6 +11,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use App\Models\Pesanan;
+use App\Models\Layanan;
+use Carbon\Carbon;
 
 class MuaController extends Controller
 {
@@ -21,8 +24,8 @@ class MuaController extends Controller
             $user = \Illuminate\Support\Facades\Auth::user();
             if (!$user) abort(401);
 
-            $role = strtolower(trim($user->role ?? ''));           
-            if (!in_array($role, ['mua', 'admin'], true)) {     
+            $role = strtolower(trim($user->role ?? ''));
+            if (!in_array($role, ['mua', 'admin'], true)) {
                 abort(403, 'Akses khusus MUA');
             }
             return $next($request);
@@ -111,75 +114,99 @@ class MuaController extends Controller
     }
     public function dashboard()
     {
-        $userId = auth::id();
-        $mua = \App\Models\Mua::where('user_id', $userId)->first();
-        $tblLayanan = null;
-        if (Schema::hasTable('layanans')) $tblLayanan = 'layanans';
-        elseif (Schema::hasTable('layanan')) $tblLayanan = 'layanan';
-        elseif (Schema::hasTable('layanan_items')) $tblLayanan = 'layanan_items';
+        $user = Auth::user();
 
-        $totalBaju = $totalMakeup = $totalPelamin = 0;
+        // Profil MUA milik user ini
+        $mua = Mua::where('user_id', $user->id)->first();
 
-        if ($tblLayanan && $mua) {
-            $totalBaju    = DB::table($tblLayanan)->where('mua_id', $mua->id)->where('kategori', 'baju')->count();
-            $totalMakeup  = DB::table($tblLayanan)->where('mua_id', $mua->id)->where('kategori', 'makeup')->count();
-            $totalPelamin = DB::table($tblLayanan)->where('mua_id', $mua->id)->where('kategori', 'pelamin')->count();
-        }
-        $tblPesanan = Schema::hasTable('pesanan') ? 'pesanan' : (Schema::hasTable('orders') ? 'orders' : null);
+        // Nilai default kalau belum ada data
+        $totalPesanan       = 0;
+        $totalPending       = 0;
+        $totalProses        = 0; // kamu tidak pakai status "proses"
+        $totallunas         = 0;
+        $pendapatanBulanIni = 0;
+        $pesananTerbaru     = collect();
 
-        $totalPesanan = $pending = $proses = $selesai = 0;
-        $revenueBulanIni = 0;
-        $labels = [];
-        $series = [];
+        if ($mua) {
+            // semua layanan milik MUA ini
+            $layananIds = Layanan::where('mua_id', $mua->id)->pluck('id');
 
-        if ($tblPesanan && $mua) {
-            $totalPesanan = DB::table($tblPesanan)->where('mua_id', $mua->id)->count();
-            $pending      = DB::table($tblPesanan)->where('mua_id', $mua->id)->where('status', 'pending')->count();
-            $proses       = DB::table($tblPesanan)->where('mua_id', $mua->id)->where('status', 'proses')->count();
-            $selesai      = DB::table($tblPesanan)->where('mua_id', $mua->id)->where('status', 'selesai')->count();
+            if ($layananIds->isNotEmpty()) {
 
-            $revenueBulanIni = DB::table($tblPesanan)
-                ->where('mua_id', $mua->id)
-                ->where('status', 'selesai')
-                ->whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->sum('total_harga');
+                // ambil SEMUA baris pesanan untuk layanan-layanan ini
+                $allPesanan = Pesanan::whereIn('id_layanan', $layananIds)
+                    ->orderByDesc('tanggal_booking')
+                    ->get();
 
-            for ($i = 6; $i >= 0; $i--) {
-                $tgl = now()->subDays($i)->toDateString();
-                $labels[] = \Carbon\Carbon::parse($tgl)->format('d M');
-                $series[] = DB::table($tblPesanan)
-                    ->where('mua_id', $mua->id)
-                    ->whereDate('created_at', $tgl)
-                    ->count();
+                // group per kode_checkout (1 booking = 1 group)
+                $orders = $allPesanan->groupBy('kode_checkout');
+
+                // ----- COUNTER ATAS -----
+
+                // total pesanan = jumlah booking (bukan jumlah baris)
+                $totalPesanan = $orders->count();
+
+                // hitung pending & lunas dari status_pembayaran tiap booking
+                $totalPending = $orders->filter(function ($group) {
+                    $first  = $group->first();
+                    $status = strtolower(str_replace(' ', '_', $first->status_pembayaran ?? ''));
+                    return in_array($status, ['pending', 'belum_lunas'], true);
+                })->count();
+
+                $totallunas = $orders->filter(function ($group) {
+                    $first  = $group->first();
+                    $status = strtolower(str_replace(' ', '_', $first->status_pembayaran ?? ''));
+                    return $status === 'lunas';
+                })->count();
+
+                // totalProses tetap 0 karena kamu tidak punya status itu
+                $totalProses = 0;
+
+                // ----- PENDAPATAN (SEMUA WAKTU) -----
+
+                $pendapatanBulanIni = $orders->filter(function ($group) {
+                    $first  = $group->first();
+                    $status = strtolower(str_replace(' ', '_', $first->status_pembayaran ?? ''));
+
+                    return $status === 'lunas';
+                })->sum(function ($group) {
+                    // total 1 booking = jumlah total_harga semua layanan di dalamnya
+                    return $group->sum('total_harga');
+                });
+                // ----- PESANAN TERBARU (LIST BAWAH) -----
+
+                $pesananTerbaru = $orders
+                    ->sortByDesc(function ($group) {
+                        return $group->first()->tanggal_booking;
+                    })
+                    ->take(6)
+                    ->map(function ($group) {
+                        $first = $group->first();
+
+                        // buat properti khusus untuk dashboard
+                        $first->total_dashboard = $group->sum('total_harga');
+
+                        // kalau layanannya banyak, tulis "3 layanan", dll
+                        if ($group->count() > 1) {
+                            $first->layanan_dashboard = $group->count() . ' layanan';
+                        } else {
+                            $first->layanan_dashboard = optional($first->layanan)->nama;
+                        }
+
+                        return $first;
+                    })
+                    ->values();
             }
-
-            $pesananTerbaru = DB::table($tblPesanan)
-                ->where('mua_id', $mua->id)
-                ->latest()
-                ->take(6)
-                ->get();
-        } else {
-            for ($i = 6; $i >= 0; $i--) {
-                $labels[] = now()->subDays($i)->format('d M');
-                $series[] = 0;
-            }
-            $pesananTerbaru = collect();
         }
 
-        return view('dashboard', compact(
-            'mua',
-            'totalBaju',
-            'totalMakeup',
-            'totalPelamin',
-            'totalPesanan',
-            'pending',
-            'proses',
-            'selesai',
-            'revenueBulanIni',
-            'labels',
-            'series',
-            'pesananTerbaru'
-        ));
+        return view('dashboard', [
+            'mua'                => $mua,
+            'totalPesanan'       => $totalPesanan,
+            'totalPending'       => $totalPending,
+            'totalProses'        => $totalProses,
+            'totallunas'         => $totallunas,
+            'pendapatanBulanIni' => $pendapatanBulanIni,
+            'pesananTerbaru'     => $pesananTerbaru,
+        ]);
     }
 }

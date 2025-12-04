@@ -6,20 +6,40 @@ use App\Models\Mua;
 use App\Models\Keranjang;
 use App\Models\KeranjangActive;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
 
 class PublicMuaController extends Controller
 {
     /**
      * Halaman daftar semua MUA (public).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $muas = Mua::whereNotNull('nama_usaha')
-            ->orderBy('nama_usaha')
-            ->get();
+        // ambil keyword dari input ?search=
+        $search = $request->input('search');
 
-        return view('menudpn.mua', compact('muas'));
+        $query = Mua::whereNotNull('nama_usaha');
+
+        // kalau ada keyword, filter berdasarkan nama_usaha atau alamat
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_usaha', 'like', '%' . $search . '%')
+                    ->orWhere('alamat', 'like', '%' . $search . '%');
+            });
+        }
+
+        // kalau mau, bisa tambahkan filter status disetujui:
+        // $query->where('status', 'disetujui');
+
+        $muas = $query->orderBy('nama_usaha')->get();
+
+        return view('menudpn.mua', [
+            'muas'   => $muas,
+            'search' => $search,
+        ]);
     }
+
 
     /**
      * Halaman detail satu MUA

@@ -195,17 +195,25 @@
 
 </head>
 
-<body class="text-gray-900"
-  x-data="{ navOpen:false, userMenuOpen:false, profileModal:false, editModal:false, applyMuaModal:false }" x-cloak>
+<body class="text-gray-900" x-data="{
+      navOpen:false,
+      userMenuOpen:false,
+      profileModal:false,
+      editModal:false,
+      applyMuaModal: {{ session('open_mua') ? 'true' : 'false' }},
+      verifyModal: {{ (session('show_verify_modal') && auth()->check() && is_null(optional(auth()->user())->email_verified_at)) ? 'true' : 'false' }},
+      mustVerifyEmail: {{ auth()->check() && is_null(optional(auth()->user())->email_verified_at) ? 'true' : 'false' }}
+  }" x-cloak>
 
   {{-- FLASH MESSAGE --}}
   @if (session('success') || session('error'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2600)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-6 z-[9999]">
-      <div class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
-                                                backdrop-blur-md border border-white/40
-                                                @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                                                @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+      <div
+        class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
+                                                                  backdrop-blur-md border border-white/40
+                                                                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                                                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -218,6 +226,72 @@
       </div>
     </div>
   @endif
+
+  {{-- POPUP VERIFIKASI EMAIL (BISA DIPANGGIL KAPAN SAJA) --}}
+  @auth
+    @if (is_null(auth()->user()->email_verified_at))
+      <div x-show="verifyModal" x-cloak x-transition.opacity
+        class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div @click.outside="verifyModal = false" class="bg-[#fffdf7]/95 w-full max-w-lg mx-4 rounded-[28px]
+                       shadow-[0_18px_55px_rgba(190,143,43,0.35)]
+                       border border-[#f4ddab] px-6 py-7 md:px-8 md:py-8 relative">
+
+          {{-- Tombol close kecil --}}
+          <button type="button" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200
+                         flex items-center justify-center text-slate-500 text-sm" @click="verifyModal = false">
+            ✕
+          </button>
+
+          {{-- Logo --}}
+          <div class="flex justify-center mb-4 mt-2">
+            <div class="flex items-center justify-center w-28 h-10 rounded-full
+                              border border-[#f4c970] bg-white shadow-md">
+              <img src="{{ asset('logos3.jpg') }}" class="h-8 object-contain" alt="AdatKu">
+            </div>
+          </div>
+
+          <h1 class="text-center text-xl md:text-2xl font-bold text-[#d68e00] mb-2">
+            Verifikasi Email Kamu Dulu, ya ✉️
+          </h1>
+
+          <p class="text-sm text-gray-700 leading-relaxed text-justify mb-3">
+            Kami sudah mengirimkan link verifikasi ke alamat email:
+            <span class="font-semibold text-[#c27b00]">{{ auth()->user()->email }}</span>.
+            Silakan buka email tersebut, lalu klik tombol atau link
+            <span class="font-semibold">"Verifikasi Email"</span>.
+          </p>
+
+          <p class="text-xs text-gray-500 mb-4 text-justify">
+            Setelah terverifikasi, kamu bisa menggunakan fitur penting seperti pemesanan layanan
+            dan pengajuan MUA. Belum menerima email? Coba cek folder
+            <span class="font-semibold">Spam</span> atau <span class="font-semibold">Promosi</span>.
+          </p>
+
+          {{-- Form kirim ulang --}}
+          <form method="POST" action="{{ route('verification.send') }}" class="space-y-3">
+            @csrf
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
+                           text-white font-semibold text-sm shadow-lg hover:brightness-110 transition">
+              Kirim Ulang Email Verifikasi
+            </button>
+          </form>
+
+          <div class="mt-4 flex items-center justify-between text-[12px] text-gray-700">
+            <button type="button" class="text-[#b57400] hover:underline" @click="verifyModal = false">
+              Nanti dulu
+            </button>
+
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button type="submit" class="text-red-600 hover:underline">
+                Ganti akun / logout
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    @endif
+  @endauth
 
   {{-- HEADER --}}
   <header class="sticky top-0 z-40">
@@ -265,7 +339,7 @@
                 Dashboard MUA
               </a>
             @elseif ($roleNavDesktop === 'admin')
-              <a href="{{ route('admin.dashboard') }}" class="hover:text-amber-600 transition">
+              <a href="{{ route('admin.dashboard_a') }}" class="hover:text-amber-600 transition">
                 Dashboard Admin
               </a>
             @endif
@@ -289,9 +363,9 @@
           {{-- TOMBOL LOGIN (HANYA SAAT BELUM LOGIN) --}}
           @guest
             <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold
-                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] border border-amber-300 text-[white] shadow-sm
-                         hover:bg-amber-500 hover:brightness-105
-                                    transition text-sm font-semibold">
+                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] border border-amber-300 text-[white] shadow-sm
+                                           hover:bg-amber-500 hover:brightness-105
+                                                      transition text-sm font-semibold">
               Masuk
             </a>
           @endguest
@@ -305,8 +379,7 @@
 
             @if (strtolower($user->role ?? '') === 'pengguna')
               <a href="{{ route('pengguna.pesanan.index') }}"
-                class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100
-                                                                               text-amber-800 text-xs font-semibold shadow-sm border border-amber-200 mr-2">
+                class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold shadow-sm border border-amber-200 mr-2">
                 📦 Pesanan Saya
               </a>
             @endif
@@ -348,14 +421,42 @@
                 </form>
               </div>
             </div>
-
           @endauth
         </div>
-
-
       </div>
     </div>
   </header>
+
+  {{-- ALERT EMAIL BELUM TERVERIFIKASI --}}
+  @auth
+    @if (is_null(auth()->user()->email_verified_at))
+      <div class="bg-amber-50 border-b border-amber-200">
+        <div
+          class="max-w-7xl mx-auto px-5 md:px-8 py-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs md:text-sm text-amber-900">
+
+          <div class="flex items-start gap-2">
+            <div
+              class="mt-[2px] inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-amber-700 text-sm">
+              !
+            </div>
+            <p>
+              <span class="font-semibold">Email kamu belum terverifikasi.</span><br class="hidden md:block">
+              Cek inbox / folder spam untuk mencari email verifikasi dari <span class="font-semibold">AdatKu</span>.
+              Kalau belum menerima, kamu bisa kirim ulang lewat tombol di samping.
+            </p>
+          </div>
+
+          <form method="POST" action="{{ route('verification.send') }}" class="flex-shrink-0">
+            @csrf
+            <button type="submit"
+              class="inline-flex items-center px-3 py-1.5 rounded-full bg-amber-600 text-white text-[11px] md:text-xs font-semibold shadow-sm hover:bg-amber-700 transition">
+              Kirim Ulang Email Verifikasi
+            </button>
+          </form>
+        </div>
+      </div>
+    @endif
+  @endauth
 
   {{-- NAV DRAWER (SLIDE DARI KANAN, SMOOTH) --}}
   <div class="fixed inset-0 z-[9998] flex justify-end items-stretch transition-opacity duration-300" x-cloak
@@ -449,7 +550,7 @@
               <span class="text-lg">📊</span><span>Dashboard MUA</span>
             </button>
           @elseif ($roleNav === 'admin')
-            <button @click="navOpen = false; window.location='{{ route('admin.dashboard') }}'"
+            <button @click="navOpen = false; window.location='{{ route('admin.dashboard_a') }}'"
               class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
               <span class="text-lg">🛡️</span><span>Dashboard Admin</span>
             </button>
@@ -472,19 +573,26 @@
 
         @if (!$isMuaSheet)
           <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
-            <button @click="navOpen = false; applyMuaModal = true"
-              class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                                                                                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                                                     text-white shadow-md hover:brightness-110">
+            <button @click="
+                        navOpen = false;
+                        if (mustVerifyEmail) {
+                          verifyModal = true;
+                        } else {
+                          applyMuaModal = true;
+                        }
+                      " class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
+                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                             text-white shadow-md hover:brightness-110">
               Daftarkan jasa MUA kamu di sini
             </button>
+
           </div>
         @endif
       @else
         <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
           <button @click="navOpen = false; window.location='{{ route('login') }}'" class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                           text-white shadow-md hover:brightness-110">
+                                                                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                             text-white shadow-md hover:brightness-110">
             Daftarkan jasa MUA kamu di sini
           </button>
         </div>
@@ -527,7 +635,7 @@
               @guest
                 <a href="{{ route('login') }}"
                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
-                                                                 bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
+                                                                                   bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
                   Masuk / Daftar
                 </a>
               @endguest
@@ -893,7 +1001,7 @@
 
           <div
             class="bg-white rounded-3xl border px-5 md:px-6 pt-5 pb-6 md:pb-7 flex flex-col
-                                                    {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
+                                                                      {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
             <div class="w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4 border border-amber-100/70 bg-slate-100">
               <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
                 onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Tim';">
@@ -940,10 +1048,24 @@
         </p>
       </div>
       <div class="flex flex-wrap gap-3">
-        <a href="{{ route('login') }}"
-          class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-semibold bg-white text-[#c98a00] shadow-md hover:bg-amber-50">
-          Daftarkan Jasa Sekarang
-        </a>
+        @auth
+          <button type="button" @click="
+                    if (mustVerifyEmail) {
+                      verifyModal = true;
+                    } else {
+                      window.location = '{{ route('mua.entry') }}';
+                    }
+                  "
+            class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-semibold bg-white text-[#c98a00] shadow-md hover:bg-amber-50">
+            Daftarkan Jasa Sekarang
+          </button>
+        @else
+          <a href="{{ route('login') }}"
+            class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-semibold bg-white text-[#c98a00] shadow-md hover:bg-amber-50">
+            Daftarkan Jasa Sekarang
+          </a>
+        @endauth
+
         <a href="{{ route('hubungikami') }}"
           class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-semibold border border-white/70 text-white hover:bg-white/10">
           Tanya Tim AdatKu
@@ -995,8 +1117,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                           hover:opacity-90 transition">
+                                                                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                             hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -1007,11 +1129,11 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal = false" class="bg-white rounded-[32px] shadow-2xl border border-amber-100
-                                                       w-[92%] max-w-3xl p-8 md:p-10 relative">
+                                                                         w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal = false"
           class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                                                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                                                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -1025,9 +1147,9 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32
-                                                             rounded-full p-[3px]
-                                                             bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                             shadow-xl">
+                                                                               rounded-full p-[3px]
+                                                                               bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                               shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -1038,10 +1160,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                                               file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                                               file:border file:border-amber-200 file:bg-white
-                                                               file:text-slate-700 file:cursor-pointer
-                                                               hover:file:bg-amber-50">
+                                                                                 file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                                                                 file:border file:border-amber-200 file:bg-white
+                                                                                 file:text-slate-700 file:cursor-pointer
+                                                                                 hover:file:bg-amber-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -1053,20 +1175,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                                             text-sm md:text-base
-                                                             focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                                             focus:border-[#c98a00]">
+                                                                               text-sm md:text-base
+                                                                               focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                                                               focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                                             hover:bg-slate-200 transition">
+                                                                               hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                             hover:opacity-90 transition">
+                                                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                               hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -1088,11 +1210,11 @@
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="applyMuaModal = false"
         class="bg-white rounded-[28px] shadow-2xl border border-amber-100
-                                                       w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
+                                                                         w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
 
         <button type="button" @click="applyMuaModal = false"
           class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100
-                                                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                                                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -1184,24 +1306,27 @@
           @if ($isMuaReq)
             <div class="mt-6 text-center">
               <a href="{{ route('mua.panel') }}"
-                class="px-6 py-2.5 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-semibold inline-block">
+                class="inline-block px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-semibold">
                 ← Kembali
               </a>
             </div>
           @else
-            <div class="flex justify-between items-center mt-6">
-              <button type="button" @click="applyMuaModal = false"
-                class="px-5 py-2.5 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-semibold">
-                ← Kembali
+            {{-- TOMBOL AKSI RESPONSIVE --}}
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+
+              {{-- tombol kirim --}}
+              <button type="submit" class="w-full sm:w-auto px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white
+                                                           font-semibold text-sm shadow-md">
+                Kirim Pengajuan
               </button>
 
-              <button type="submit"
-                class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm shadow-md">
-                Kirim Pengajuan
+              {{-- tombol kembali --}}
+              <button type="button" @click="applyMuaModal = false" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300
+                                                           text-sm font-semibold">
+                ← Kembali
               </button>
             </div>
           @endif
-
         </form>
       </div>
     </div>
@@ -1344,62 +1469,95 @@
   </section>
 
   {{-- FOOTER --}}
-  <footer class="mt-6">
-    <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
+  <footer class="mt-10">
+    <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-12 pb-8 px-5">
+
+      {{-- TEXTURE --}}
       <div
-        class="absolute inset-0 opacity-[0.09] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+        class="absolute inset-0 opacity-[0.08] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
       </div>
 
-      <div class="relative max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-3 gap-8 items-start">
-          {{-- Brand & intro --}}
+      <div class="relative max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-4 gap-10">
+
+          {{-- BRAND --}}
           <div>
-            <h1
-              class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+            <h1 class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                        bg-clip-text text-transparent drop-shadow">
               AdatKu
             </h1>
-            <p class="text-sm mt-2 text-[#f5e9df] leading-relaxed">
+
+            <p class="text-sm mt-3 text-[#f5e9df] leading-relaxed">
               Platform penyewaan MUA, busana adat, dan pelaminan untuk mempercantik acara istimewa kamu.
               Budaya tetap hidup, tampilan tetap elegan ✨
             </p>
+
+            {{-- SOCIAL MEDIA --}}
+            <div class="flex items-center gap-3 mt-4">
+              <a href="https://www.instagram.com/_.adatku" target="_blank"
+                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                📸
+              </a>
+              <a href="#"
+                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                🎵
+              </a>
+              <a href="#"
+                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                ▶️
+              </a>
+            </div>
           </div>
 
-          {{-- Link cepat --}}
+          {{-- NAVIGASI --}}
           <div class="text-sm">
             <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
-            <ul class="space-y-1.5">
+            <ul class="space-y-2">
               <li><a href="{{ route('home') }}" class="hover:text-[#f7e07b] transition">Beranda</a></li>
               <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
               <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
               <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
               <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi Kami</a></li>
+              <li><a href="{{ route('mua.entry') }}" class="hover:text-[#f7e07b] transition">Daftar Jadi MUA</a></li>
             </ul>
           </div>
 
-          {{-- Kontak & kredit --}}
+          {{-- INFO & OPERASIONAL --}}
           <div class="text-sm">
-            <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
-            <p class="text-[#f5e9df] text-[13px]">
-              Email: <a href="mailto:adatku11@gmail.com" class="hover:text-[#f7e07b]">adatku11@gmail.com</a><br>
-              Instagram: <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl" target="_blank"
-                class="hover:text-[#f7e07b]">@_.adatku</a>
+            <h3 class="font-semibold text-[#f7e07b] mb-3">Informasi</h3>
+            <p class="text-[#f5e9df] text-[13px] leading-relaxed">
+              📍 Bengkalis, Riau, Indonesia<br>
+              ⏰ Layanan: 08:00 — 23:00<br>
+              💬 WhatsApp: <a href="https://wa.me/6282284886932" target="_blank"
+                class="hover:text-[#f7e07b]">082284886932</a>
             </p>
 
-            <div class="mt-4 text-[11px] text-[#e2c9bf] leading-relaxed">
-              <p>Dikembangkan oleh:</p>
-              <p class="mt-1">
-                <span class="font-semibold">Zidan Fahrezy Syafril</span> (Koordinator & Fullstack)<br>
-                <span class="font-semibold">Cahyani Putri Sofari</span> (Frontend & Dokumentasi)<br>
-                <span class="font-semibold">Fetty Ratna Dewi</span> (Frontend & Dokumentasi)
-              </p>
+            <div class="mt-4 text-[12px] space-y-1">
+              <a href="#" class="hover:text-[#f7e07b]">Kebijakan Privasi</a><br>
+              <a href="#" class="hover:text-[#f7e07b]">Syarat & Ketentuan</a>
             </div>
+          </div>
+
+          {{-- DEVELOPER --}}
+          <div class="text-sm">
+            <h3 class="font-semibold text-[#f7e07b] mb-3">Dikembangkan oleh</h3>
+            <p class="text-[13px] text-[#e2c9bf] leading-relaxed">
+              <span class="font-semibold">Zidan Fahrezy Syafril</span> — Fullstack & Koordinator<br>
+              <span class="font-semibold">Cahyani Putri Sofari</span> — Frontend & Dokumentasi<br>
+              <span class="font-semibold">Fetty Ratna Dewi</span> — Frontend & Dokumentasi
+            </p>
+
+            <p class="mt-3 text-[11px] text-[#c9b3aa]">
+              Versi Platform: 1.0.0<br>
+              Dibuat dengan ❤️ oleh Team 3
+            </p>
           </div>
         </div>
 
-        <p class="mt-2 text-xs text-center text-[#f7e07b]">
+        {{-- COPYRIGHT --}}
+        <p class="mt-8 text-xs text-center text-[#f7e07b] opacity-90">
           &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
         </p>
-
       </div>
     </div>
   </footer>
@@ -1412,28 +1570,34 @@
     @endphp
 
     @if (!$isMuaFloat)
-      <button type="button" @click="applyMuaModal = true" class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
-                                                                   items-center justify-center px-6 py-2.5 rounded-full
-                                                                   text-sm font-semibold
-                                                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                   text-white hover:brightness-110 transition
-                                                                   hover:-translate-y-0.5 hover:scale-[1.02]
-                                                                   cta-mua-floating">
+      <button type="button" @click="
+                  if (mustVerifyEmail) {
+                    verifyModal = true;
+                  } else {
+                    applyMuaModal = true;
+                  }
+                " class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
+                       items-center justify-center px-6 py-2.5 rounded-full
+                       text-sm font-semibold
+                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                       text-white hover:brightness-110 transition
+                       hover:-translate-y-0.5 hover:scale-[1.02]
+                       cta-mua-floating">
         Daftarkan jasa MUA kamu di sini
       </button>
     @endif
+
   @else
     <a href="{{ route('login') }}" class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
-                                       items-center justify-center px-6 py-2.5 rounded-full
-                                       text-sm font-semibold
-                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                       text-white hover:brightness-110 transition
-                                       hover:-translate-y-0.5 hover:scale-[1.02]
-                                       cta-mua-floating">
+                                                         items-center justify-center px-6 py-2.5 rounded-full
+                                                         text-sm font-semibold
+                                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                         text-white hover:brightness-110 transition
+                                                         hover:-translate-y-0.5 hover:scale-[1.02]
+                                                         cta-mua-floating">
       Daftarkan jasa MUA kamu di sini
     </a>
   @endauth
-
 
   {{-- ICON MELAYANG --}}
   <span class="floating-icon from-bottom icon-lg"

@@ -283,7 +283,8 @@
     {{-- POPUP ERROR: VALIDASI REGISTER --}}
     @if ($errors->any())
         @php
-            $errorMessage = implode("<br>", $errors->all());
+            // Gabungkan semua error jadi satu string, dipisah newline
+            $errorMessage = implode("\n", $errors->all());
         @endphp
 
         <div id="reg-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden z-[998]"></div>
@@ -296,7 +297,8 @@
             <div
                 class="bg-[#fffdf7] w-[340px] px-6 py-5 rounded-2xl text-center shadow-xl border border-[#f4ddab] animate-fadeIn">
                 <h3 class="text-red-600 font-semibold mb-1 text-lg">Pendaftaran gagal</h3>
-                <p class="text-[13px] text-red-700">{!! $errorMessage !!}</p>
+                {{-- aman: di-escape dulu pakai e(), baru newline diubah ke <br> --}}
+                <p class="text-[13px] text-red-700">{!! nl2br(e($errorMessage)) !!}</p>
             </div>
         </div>
 

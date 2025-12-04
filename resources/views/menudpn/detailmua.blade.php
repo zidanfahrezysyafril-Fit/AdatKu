@@ -632,10 +632,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                        '{{ addslashes($item->nama) }}',
-                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                        '{{ $item->id }}'
-                                                                    )"
+                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                    '{{ $item->id }}'
+                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -714,10 +714,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                        '{{ addslashes($item->nama) }}',
-                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                        '{{ $item->id }}'
-                                                                    )"
+                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                    '{{ $item->id }}'
+                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -796,10 +796,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                        '{{ addslashes($item->nama) }}',
-                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                        '{{ $item->id }}'
-                                                                    )"
+                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                    '{{ $item->id }}'
+                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -878,10 +878,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                        '{{ addslashes($item->nama) }}',
-                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                        '{{ $item->id }}'
-                                                                    )"
+                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                    '{{ $item->id }}'
+                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -973,64 +973,96 @@
         </div>
     </main>
 
-    {{-- ============ FOOTER ============ --}}
-    <footer class="mt-6">
-        <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
+    {{-- FOOTER --}}
+    <footer class="mt-10">
+        <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-12 pb-8 px-5">
+
+            {{-- TEXTURE --}}
             <div
-                class="absolute inset-0 opacity-[0.09] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+                class="absolute inset-0 opacity-[0.08] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
             </div>
 
-            <div class="relative max-w-6xl mx-auto">
-                <div class="grid md:grid-cols-3 gap-8 items-start">
+            <div class="relative max-w-7xl mx-auto">
+                <div class="grid md:grid-cols-4 gap-10">
+
+                    {{-- BRAND --}}
                     <div>
-                        <h1
-                            class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+                        <h1 class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                        bg-clip-text text-transparent drop-shadow">
                             AdatKu
                         </h1>
-                        <p class="text-sm mt-2 text-[#f5e9df] leading-relaxed">
+
+                        <p class="text-sm mt-3 text-[#f5e9df] leading-relaxed">
                             Platform penyewaan MUA, busana adat, dan pelaminan untuk mempercantik acara istimewa kamu.
                             Budaya tetap hidup, tampilan tetap elegan ✨
                         </p>
+
+                        {{-- SOCIAL MEDIA --}}
+                        <div class="flex items-center gap-3 mt-4">
+                            <a href="https://www.instagram.com/_.adatku" target="_blank"
+                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                                📸
+                            </a>
+                            <a href="#"
+                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                                🎵
+                            </a>
+                            <a href="#"
+                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                                ▶️
+                            </a>
+                        </div>
                     </div>
 
+                    {{-- NAVIGASI --}}
                     <div class="text-sm">
                         <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
-                        <ul class="space-y-1.5">
+                        <ul class="space-y-2">
                             <li><a href="{{ route('home') }}" class="hover:text-[#f7e07b] transition">Beranda</a></li>
-                            <li><a href="{{ url('/daftarmua') }}" class="hover:text-[#f7e07b] transition">Daftar MUA</a>
-                            </li>
+                            <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
+                            <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
+                            <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
                             <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi
                                     Kami</a></li>
+                            <li><a href="{{ route('mua.entry') }}" class="hover:text-[#f7e07b] transition">Daftar Jadi
+                                    MUA</a></li>
                         </ul>
                     </div>
 
+                    {{-- INFO & OPERASIONAL --}}
                     <div class="text-sm">
-                        <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
-                        <p class="text-[#f5e9df] text-[13px]">
-                            Email: <a href="mailto:adatku11@gmail.com"
-                                class="hover:text-[#f7e07b]">adatku11@gmail.com</a><br>
-                            Instagram: <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl"
-                                target="_blank" class="hover:text-[#f7e07b]">@_.adatku</a>
+                        <h3 class="font-semibold text-[#f7e07b] mb-3">Informasi</h3>
+                        <p class="text-[#f5e9df] text-[13px] leading-relaxed">
+                            📍 Bengkalis, Riau, Indonesia<br>
+                            ⏰ Layanan: 08:00 — 23:00<br>
+                            💬 WhatsApp: <a href="https://wa.me/6282284886932" target="_blank"
+                                class="hover:text-[#f7e07b]">082284886932</a>
                         </p>
 
-                        <div class="mt-4 text-[11px] text-[#e2c9bf] leading-relaxed">
-                            <p>Dikembangkan oleh:</p>
-                            <p class="mt-1">
-                                <span class="font-semibold">Zidan Fahrezy Syafril</span> (Koordinator & Fullstack)<br>
-                                <span class="font-semibold">Cahyani Putri Sofari</span> (Frontend & Dokumentasi)<br>
-                                <span class="font-semibold">Fetty Ratna Dewi</span> (Frontend & Dokumentasi)
-                            </p>
+                        <div class="mt-4 text-[12px] space-y-1">
+                            <a href="#" class="hover:text-[#f7e07b]">Kebijakan Privasi</a><br>
+                            <a href="#" class="hover:text-[#f7e07b]">Syarat & Ketentuan</a>
                         </div>
+                    </div>
+
+                    {{-- DEVELOPER --}}
+                    <div class="text-sm">
+                        <h3 class="font-semibold text-[#f7e07b] mb-3">Dikembangkan oleh</h3>
+                        <p class="text-[13px] text-[#e2c9bf] leading-relaxed">
+                            <span class="font-semibold">Zidan Fahrezy Syafril</span> — Fullstack & Koordinator<br>
+                            <span class="font-semibold">Cahyani Putri Sofari</span> — Frontend & Dokumentasi<br>
+                            <span class="font-semibold">Fetty Ratna Dewi</span> — Frontend & Dokumentasi
+                        </p>
+
+                        <p class="mt-3 text-[11px] text-[#c9b3aa]">
+                            Versi Platform: 1.0.0<br>
+                            Dibuat dengan ❤️ oleh Team 3
+                        </p>
                     </div>
                 </div>
 
-                <p class="mt-4 text-xs text-center text-[#e2c9bf]">
-                    Dikembangkan oleh
-                    <span class="font-semibold">Zidan Fahrezy Syafril</span>,
-                    <span class="font-semibold">Cahyani Putri Sofari</span>,
-                    dan <span class="font-semibold">Fetty Ratna Dewi</span>.
-                </p>
-                <p class="mt-2 text-xs text-center text-[#f7e07b]">
+                {{-- COPYRIGHT --}}
+                <p class="mt-8 text-xs text-center text-[#f7e07b] opacity-90">
                     &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
                 </p>
             </div>

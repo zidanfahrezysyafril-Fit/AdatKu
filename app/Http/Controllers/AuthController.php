@@ -22,10 +22,10 @@ class AuthController extends Controller
 
     /**
      * Proses login user (email + password) + Remember Me.
+     * Flow hybrid: BOLEH login walau email belum terverifikasi.
      */
     public function login(Request $request)
     {
-        // Validasi input + custom message
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
             'password' => ['required', 'string', 'min:6'],
@@ -36,41 +36,36 @@ class AuthController extends Controller
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
 
-        if (session()->has('login_attempts') && session('login_attempts') >= 5) {
-            return back()->withErrors([
-                'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam 1 menit.',
-            ]);
-        }
-
         $remember = $request->boolean('remember');
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            session()->forget('login_attempts');
 
             $user = Auth::user();
             $role = strtolower($user->role ?? '');
 
+            // DI SINI sengaja TIDAK dicek email_verified_at,
+            // karena dibatasi di middleware 'verified' pada route penting.
+
             if ($role === 'mua') {
                 return redirect()->route('dashboard');
             }
+
             if ($role === 'pengguna') {
                 return redirect()->route('home');
             }
+
             if ($role === 'admin') {
-                return redirect()->route('dashboard_a');
+                return redirect()->route('admin.dashboard');
             }
 
-            return redirect()->route('dashboard');
+            return redirect()->route('home');
         }
-
-        session()->increment('login_attempts', 1);
 
         throw ValidationException::withMessages([
             'email' => 'Email atau password salah.',
         ]);
     }
-
 
     /**
      * Tampilkan halaman register.
@@ -82,6 +77,7 @@ class AuthController extends Controller
 
     /**
      * Proses registrasi user baru.
+     * Setelah register → langsung login + kirim email verifikasi.
      */
     public function register(Request $request)
     {
@@ -91,25 +87,31 @@ class AuthController extends Controller
             'password'              => 'required|string|min:8|confirmed',
         ]);
 
-        User::create([
-            'name'              => e($validated['name']),
-            'email'             => $validated['email'],
-            'password'          => Hash::make($validated['password']),
-            'role'              => 'Pengguna',
-            // Kalau mau dianggap sudah verifikasi email, boleh tambahkan:
-            // 'email_verified_at' => now(),
+        $user = User::create([
+            'name'     => e($validated['name']),
+            'email'    => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role'     => 'Pengguna',
         ]);
 
-        return redirect()->route('login')
-            ->with('success', 'Registrasi berhasil. Silakan login.');
+        // Kirim email verifikasi
+        $user->sendEmailVerificationNotification();
+
+        // Login otomatis
+        Auth::login($user);
+
+        // ALIHAN BARU: ke beranda + flag untuk popup verifikasi
+        return redirect()
+            ->route('home')
+            ->with('show_verify_modal', true);
     }
+
 
     /**
      * Logout user.
      */
     public function logout(Request $request)
     {
-
         Auth::logout();
 
         $request->session()->invalidate();
@@ -124,7 +126,6 @@ class AuthController extends Controller
      */
     public function redirectToGoogle()
     {
-        // Tanpa prompt -> setelah logout, login lagi langsung pakai akun Google terakhir
         return Socialite::driver('google')->redirect();
     }
 
@@ -142,14 +143,17 @@ class AuthController extends Controller
                 ->first();
 
             if ($user) {
-                // Update google_id jika belum ada
                 if (!$user->google_id) {
                     $user->google_id = $googleUser->id;
                 }
 
-                // Update avatar kalau di DB masih kosong
                 if ($googleUser->avatar && !$user->avatar) {
                     $user->avatar = $googleUser->avatar;
+                }
+
+                // User login via Google dianggap verified (karena email sudah diverifikasi Google)
+                if (is_null($user->email_verified_at)) {
+                    $user->email_verified_at = now();
                 }
 
                 $user->save();
@@ -159,30 +163,30 @@ class AuthController extends Controller
                     'email'             => $googleUser->email,
                     'google_id'         => $googleUser->id,
                     'avatar'            => $googleUser->avatar,
-                    'password'          => null,    
-                    'role'              => 'Pengguna', 
+                    'password'          => null,
+                    'role'              => 'Pengguna',
                     'email_verified_at' => now(),
                 ]);
             }
 
-            // Login user + aktifkan remember me juga
             Auth::login($user, true);
-            session()->regenerate();
+            request()->session()->regenerate();
 
-            // Redirect sesuai role (sama seperti login biasa)
             $role = strtolower($user->role ?? '');
 
             if ($role === 'mua') {
                 return redirect()->route('dashboard');
             }
+
             if ($role === 'pengguna') {
                 return redirect()->route('home');
             }
+
             if ($role === 'admin') {
-                return redirect()->route('dashboard_a');
+                return redirect()->route('admin.dashboard');
             }
 
-            return redirect()->route('dashboard');
+            return redirect()->route('home');
         } catch (Exception $e) {
             return redirect()->route('login')
                 ->with('error', 'Gagal login dengan Google. Silakan coba lagi.');

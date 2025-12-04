@@ -183,9 +183,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-20 z-[60]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                      backdrop-blur-md border border-[#fff3b0]/40
-                      @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                      @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                          backdrop-blur-md border border-[#fff3b0]/40
+                          @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                          @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -258,8 +258,8 @@
           @guest
             {{-- tombol login (desktop & mobile) --}}
             <a href="{{ route('pengguna.home') }}" class="hidden md:inline-flex bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                          text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
-                          transition text-sm font-semibold">
+                              text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
+                              transition text-sm font-semibold">
               Masuk
             </a>
           @endguest
@@ -369,8 +369,9 @@
             </button>
           </form>
         @else
-          <button @click="navOpen = false; window.location='{{ route('pengguna.home') }}'" class="mt-3 flex w-full items-center justify-center gap-2 py-2.5 rounded-full bg-gradient-to-r
-                     from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold shadow-md hover:brightness-110">
+          <button @click="navOpen = false; window.location='{{ route('pengguna.home') }}'"
+            class="mt-3 flex w-full items-center justify-center gap-2 py-2.5 rounded-full bg-gradient-to-r
+                         from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold shadow-md hover:brightness-110">
             Sign In
           </button>
         @endauth
@@ -686,8 +687,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                             hover:opacity-90 transition">
+                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                 hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -698,10 +699,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[90] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                      w-[92%] max-w-3xl p-8 md:p-10 relative">
+                          w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal=false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                               hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -718,8 +719,8 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center
-                            w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
-                            bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
+                                w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
+                                bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -731,10 +732,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                file:border file:border-yellow-200 file:bg-white
-                                file:text-slate-700 file:cursor-pointer
-                                hover:file:bg-yellow-50">
+                                    file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                    file:border file:border-yellow-200 file:bg-white
+                                    file:text-slate-700 file:cursor-pointer
+                                    hover:file:bg-yellow-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -746,20 +747,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                              text-sm md:text-base
-                              focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                              focus:border-[#c98a00]">
+                                  text-sm md:text-base
+                                  focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                  focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal=false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                               hover:bg-slate-200 transition">
+                                   hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                               hover:opacity-90 transition">
+                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                   hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -769,68 +770,94 @@
   @endauth
 
   {{-- FOOTER --}}
-  <footer class="mt-6">
-    <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-10 pb-6 px-5">
+  <footer class="mt-10">
+    <div class="relative bg-gradient-to-br from-[#3b2128] via-[#4a2e38] to-[#351b27] text-[wheat] pt-12 pb-8 px-5">
+
+      {{-- TEXTURE --}}
       <div
-        class="absolute inset-0 opacity-[0.09] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+        class="absolute inset-0 opacity-[0.08] bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
       </div>
 
-      <div class="relative max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-3 gap-8 items-start">
-          {{-- Brand & intro --}}
+      <div class="relative max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-4 gap-10">
+
+          {{-- BRAND --}}
           <div>
-            <h1
-              class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]">
+            <h1 class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                        bg-clip-text text-transparent drop-shadow">
               AdatKu
             </h1>
-            <p class="text-sm mt-2 text-[#f5e9df] leading-relaxed">
+
+            <p class="text-sm mt-3 text-[#f5e9df] leading-relaxed">
               Platform penyewaan MUA, busana adat, dan pelaminan untuk mempercantik acara istimewa kamu.
               Budaya tetap hidup, tampilan tetap elegan ✨
             </p>
+
+            {{-- SOCIAL MEDIA --}}
+            <div class="flex items-center gap-3 mt-4">
+              <a href="https://www.instagram.com/_.adatku" target="_blank"
+                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                📸
+              </a>
+              <a href="#"
+                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                🎵
+              </a>
+              <a href="#"
+                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                ▶️
+              </a>
+            </div>
           </div>
 
-          {{-- Link cepat --}}
+          {{-- NAVIGASI --}}
           <div class="text-sm">
             <h3 class="font-semibold text-[#f7e07b] mb-3">Navigasi</h3>
-            <ul class="space-y-1.5">
+            <ul class="space-y-2">
               <li><a href="{{ route('home') }}" class="hover:text-[#f7e07b] transition">Beranda</a></li>
               <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
               <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
               <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
               <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi Kami</a></li>
+              <li><a href="{{ route('mua.entry') }}" class="hover:text-[#f7e07b] transition">Daftar Jadi MUA</a></li>
             </ul>
           </div>
 
-          {{-- Kontak & kredit --}}
+          {{-- INFO & OPERASIONAL --}}
           <div class="text-sm">
-            <h3 class="font-semibold text-[#f7e07b] mb-3">Kontak</h3>
-            <p class="text-[#f5e9df] text-[13px]">
-              Email: <a href="mailto:adatku11@gmail.com" class="hover:text-[#f7e07b]">adatku11@gmail.com</a><br>
-              Instagram: <a href="https://www.instagram.com/_.adatku?igsh=Nm1mbWk2emx1cGZl" target="_blank"
-                class="hover:text-[#f7e07b]">@_.adatku</a>
+            <h3 class="font-semibold text-[#f7e07b] mb-3">Informasi</h3>
+            <p class="text-[#f5e9df] text-[13px] leading-relaxed">
+              📍 Bengkalis, Riau, Indonesia<br>
+              ⏰ Layanan: 08:00 — 23:00<br>
+              💬 WhatsApp: <a href="https://wa.me/6282284886932" target="_blank" class="hover:text-[#f7e07b]">082284886932</a>
             </p>
 
-            <div class="mt-4 text-[11px] text-[#e2c9bf] leading-relaxed">
-              <p>Dikembangkan oleh:</p>
-              <p class="mt-1">
-                <span class="font-semibold">Zidan Fahrezy Syafril</span> (Koordinator & Fullstack)<br>
-                <span class="font-semibold">Cahyani Putri Sofari</span> (Frontend & Dokumentasi)<br>
-                <span class="font-semibold">Fetty Ratna Dewi</span> (Frontend & Dokumentasi)
-              </p>
+            <div class="mt-4 text-[12px] space-y-1">
+              <a href="#" class="hover:text-[#f7e07b]">Kebijakan Privasi</a><br>
+              <a href="#" class="hover:text-[#f7e07b]">Syarat & Ketentuan</a>
             </div>
+          </div>
+
+          {{-- DEVELOPER --}}
+          <div class="text-sm">
+            <h3 class="font-semibold text-[#f7e07b] mb-3">Dikembangkan oleh</h3>
+            <p class="text-[13px] text-[#e2c9bf] leading-relaxed">
+              <span class="font-semibold">Zidan Fahrezy Syafril</span> — Fullstack & Koordinator<br>
+              <span class="font-semibold">Cahyani Putri Sofari</span> — Frontend & Dokumentasi<br>
+              <span class="font-semibold">Fetty Ratna Dewi</span> — Frontend & Dokumentasi
+            </p>
+
+            <p class="mt-3 text-[11px] text-[#c9b3aa]">
+              Versi Platform: 1.0.0<br>
+              Dibuat dengan ❤️ oleh Team 3
+            </p>
           </div>
         </div>
 
-        <p class="mt-4 text-xs text-center text-[#e2c9bf]">
-          Dikembangkan oleh
-          <span class="font-semibold">Zidan Fahrezy Syafril</span>,
-          <span class="font-semibold">Cahyani Putri Sofari</span>,
-          dan <span class="font-semibold">Fetty Ratna Dewi</span>.
-        </p>
-        <p class="mt-2 text-xs text-center text-[#f7e07b]">
+        {{-- COPYRIGHT --}}
+        <p class="mt-8 text-xs text-center text-[#f7e07b] opacity-90">
           &copy; 2025 <span class="font-semibold">AdatKu</span> — Semua Hak Dilindungi.
         </p>
-
       </div>
     </div>
   </footer>

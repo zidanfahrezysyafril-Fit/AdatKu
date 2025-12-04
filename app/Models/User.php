@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Mua;
+use App\Models\MuaRequest;
+use App\Models\Pesanan;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Mua;
-use App\Models\MuaRequest;
 
-
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'google_id',
         'role',
+        'email_verified_at',
     ];
 
     /**
@@ -48,9 +49,12 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
+
+    // ================= RELASI =================
+
     public function mua()
     {
         return $this->hasOne(Mua::class);
@@ -60,10 +64,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pesanan::class, 'id_pengguna');
     }
+
     public function muaRequest()
     {
         return $this->hasOne(MuaRequest::class);
     }
+
+    // ================= HELPER ROLE =================
 
     public function isAdmin(): bool
     {
@@ -72,7 +79,7 @@ class User extends Authenticatable
 
     public function isMua(): bool
     {
-        return strtolower($this->role ?? '') === 'MUA';
+        return strtolower($this->role ?? '') === 'mua';
     }
 
     public function isPengguna(): bool

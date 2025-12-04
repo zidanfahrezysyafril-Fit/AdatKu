@@ -124,7 +124,7 @@
                 </p>
 
                 {{-- Dashboard --}}
-                <a href="{{ route('admin.dashboard') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition
+                <a href="{{ route('admin.dashboard_a') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition
                    @if(request()->routeIs('admin.dashboard'))
                        bg-gradient-to-r from-[#f2b044] via-[#ffd369] to-[#f9b44f] text-[#201317] font-semibold shadow-[0_6px_18px_rgba(0,0,0,0.6)]
                    @else

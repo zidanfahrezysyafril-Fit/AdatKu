@@ -21,7 +21,7 @@
                                bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
                                shadow-md hover:brightness-110 transition">
                     <span class="text-lg leading-none">＋</span>
-                    <span>Tambah Anggota</span>
+                    <span>Tambah TIM</span>
                 </button>
             </div>
         </div>
@@ -34,8 +34,8 @@
         @endif
 
         {{-- List / Tabel --}}
-        <div class="card-table">
-            <div class="px-4 py-3 border-b border-amber-50 flex items-center justify-between text-xs text-slate-500">
+        <div class="card-table border border-amber-50 rounded-2xl overflow-hidden bg-white shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
+            <div class="px-4 py-3 border-b border-amber-50 flex items-center justify-between text-xs text-slate-500 bg-amber-50/40">
                 <span>Daftar anggota tim</span>
             </div>
 
@@ -50,7 +50,7 @@
                         @php
                             $photoUrl = $m->photo
                                 ? asset('storage/' . $m->photo)
-                                : 'https://placehold.co/80x80?text=' . urlencode(Str::limit($m->name, 2, ''));
+                                : 'https://placehold.co/80x80?text=' . urlencode(\Illuminate\Support\Str::limit($m->name, 2, ''));
                         @endphp
 
                         <div class="px-4 py-4" x-data="{ showEdit:false, showDelete:false }">
@@ -100,8 +100,9 @@
                                 </button>
                             </div>
 
-                            {{-- MODAL EDIT --}}
+                            {{-- MODAL EDIT (MOBILE) --}}
                             <div x-show="showEdit" x-cloak
+                                 x-transition.opacity
                                  class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
                                 <div @click.outside="showEdit = false"
                                      class="bg-white rounded-2xl shadow-2xl border border-amber-100 w-[92%] max-w-xl max-h-[90vh] overflow-y-auto p-6 relative">
@@ -212,8 +213,9 @@
                                 </div>
                             </div>
 
-                            {{-- MODAL DELETE --}}
+                            {{-- MODAL DELETE (MOBILE) --}}
                             <div x-show="showDelete" x-cloak
+                                 x-transition.opacity
                                  class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
                                 <div @click.outside="showDelete = false"
                                      class="bg-white rounded-2xl shadow-2xl border border-red-100 w-[90%] max-w-sm p-6 relative">
@@ -268,7 +270,7 @@
                                 @php
                                     $photoUrl = $m->photo
                                         ? asset('storage/' . $m->photo)
-                                        : 'https://placehold.co/80x80?text=' . urlencode(Str::limit($m->name, 2, ''));
+                                        : 'https://placehold.co/80x80?text=' . urlencode(\Illuminate\Support\Str::limit($m->name, 2, ''));
                                 @endphp
 
                                 <tr class="border-t border-amber-50" x-data="{ showEdit:false, showDelete:false }">
@@ -312,9 +314,158 @@
                                             class="text-xs px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-100 hover:bg-red-100">
                                             Hapus
                                         </button>
-
-                                        {{-- (modal edit & delete sama seperti di mobile, boleh diulang atau di-include) --}}
                                     </td>
+
+                                    {{-- MODAL EDIT (DESKTOP) - TELEPORT KE BODY --}}
+                                    <template x-teleport="body">
+                                        <div x-show="showEdit" x-cloak
+                                             x-transition.opacity
+                                             class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                                            <div @click.outside="showEdit = false"
+                                                 class="bg-white rounded-2xl shadow-2xl border border-amber-100 w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 relative">
+
+                                                <button type="button" @click="showEdit = false"
+                                                        class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 text-sm">
+                                                    ✕
+                                                </button>
+
+                                                <h2 class="text-lg md:text-xl font-semibold text-[#c98a00] mb-4">
+                                                    Edit Anggota Tim
+                                                </h2>
+
+                                                <form action="{{ route('admin.team-members.update', $m) }}" method="POST"
+                                                      enctype="multipart/form-data" class="space-y-4 text-sm">
+                                                    @csrf
+                                                    @method('PUT')
+
+                                                    <div class="grid grid-cols-1 md:grid-cols-[1.1fr,1fr] gap-4">
+                                                        <div>
+                                                            <label
+                                                                class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
+                                                                Nama Lengkap
+                                                            </label>
+                                                            <input type="text" name="name" value="{{ $m->name }}"
+                                                                   class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400">
+                                                        </div>
+                                                        <div>
+                                                            <label
+                                                                class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
+                                                                Urutan
+                                                            </label>
+                                                            <input type="number" name="urutan" value="{{ $m->urutan }}"
+                                                                   class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label
+                                                                class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
+                                                                Peran (role)
+                                                            </label>
+                                                            <input type="text" name="role" value="{{ $m->role }}"
+                                                                   class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
+                                                                   placeholder="Contoh: Koordinator & Fullstack">
+                                                        </div>
+                                                        <div>
+                                                            <label
+                                                                class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
+                                                                Divisi
+                                                            </label>
+                                                            <input type="text" name="division" value="{{ $m->division }}"
+                                                                   class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
+                                                                   placeholder="Contoh: UI/UX & Dokumentasi">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label
+                                                                class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
+                                                                Foto Saat Ini
+                                                            </label>
+                                                            <div
+                                                                class="w-full h-32 rounded-xl overflow-hidden border border-amber-100 bg-slate-100">
+                                                                <img src="{{ $photoUrl }}" class="w-full h-full object-cover"
+                                                                     alt="{{ $m->name }}">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label
+                                                                class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
+                                                                Ganti Foto (opsional)
+                                                            </label>
+                                                            <input type="file" name="photo" class="block w-full text-xs text-slate-600
+                                                                              file:mr-3 file:rounded-lg file:px-3 file:py-1.5
+                                                                              file:border file:border-amber-200 file:bg-white
+                                                                              file:text-slate-700 file:cursor-pointer
+                                                                              hover:file:bg-amber-50">
+                                                            <p class="text-[11px] text-slate-400 mt-1">
+                                                                Biarkan kosong jika tidak ingin mengubah foto.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <label class="inline-flex items-center gap-2 text-xs text-slate-700">
+                                                            <input type="checkbox" name="is_active" value="1"
+                                                                   class="rounded border-slate-300 text-amber-500 focus:ring-amber-400"
+                                                                   {{ $m->is_active ? 'checked' : '' }}>
+                                                            <span>Tampilkan di halaman beranda</span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="flex justify-end gap-2 pt-3">
+                                                        <button type="button" @click="showEdit = false"
+                                                                class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold hover:bg-slate-200">
+                                                            Batal
+                                                        </button>
+                                                        <button type="submit" class="px-5 py-2 rounded-xl text-xs md:text-sm font-semibold text-white
+                                                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                           shadow-md hover:brightness-110">
+                                                            Simpan Perubahan
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    {{-- MODAL DELETE (DESKTOP) - TELEPORT KE BODY --}}
+                                    <template x-teleport="body">
+                                        <div x-show="showDelete" x-cloak
+                                             x-transition.opacity
+                                             class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                                            <div @click.outside="showDelete = false"
+                                                 class="bg-white rounded-2xl shadow-2xl border border-red-100 w-[90%] max-w-sm p-6 relative">
+
+                                                <h3 class="text-base md:text-lg font-semibold text-slate-800 mb-2">
+                                                    Hapus Anggota?
+                                                </h3>
+                                                <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                                                    Anggota <span class="font-semibold">"{{ $m->name }}"</span> akan dihapus dari
+                                                    daftar tim.
+                                                    Tindakan ini tidak dapat dibatalkan.
+                                                </p>
+
+                                                <div class="flex justify-end gap-2 mt-2">
+                                                    <button type="button" @click="showDelete = false"
+                                                            class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold hover:bg-slate-200">
+                                                        Batal
+                                                    </button>
+
+                                                    <form action="{{ route('admin.team-members.destroy', $m) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                                class="px-4 py-2 rounded-xl bg-red-500 text-white text-xs font-semibold shadow-md hover:bg-red-600">
+                                                            Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -330,6 +481,7 @@
 
         {{-- =============== MODAL CREATE (GLOBAL) =============== --}}
         <div x-show="showCreate" x-cloak
+            x-transition.opacity
             class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
             <div @click.outside="showCreate = false"
                 class="bg-white rounded-2xl shadow-2xl border border-amber-100 w-[92%] max-w-xl max-h-[90vh] overflow-y-auto p-6 relative">
