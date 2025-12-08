@@ -166,11 +166,11 @@
         @if (session('success') || session('error'))
             <div class="max-w-6xl mx-auto px-6 mt-4">
                 <div class="mb-4 flex items-start gap-3 px-4 py-3 rounded-2xl text-sm shadow-sm
-                        @if(session('success'))
-                            bg-emerald-50 border border-emerald-200 text-emerald-800
-                        @else
-                            bg-rose-50 border border-rose-200 text-rose-800
-                        @endif">
+                                    @if(session('success'))
+                                        bg-emerald-50 border border-emerald-200 text-emerald-800
+                                    @else
+                                        bg-rose-50 border border-rose-200 text-rose-800
+                                    @endif">
                     <div class="mt-0.5">
                         @if (session('success')) ✓ @else ! @endif
                     </div>
@@ -203,6 +203,41 @@
                 $groupedPesanan = $pesanan->groupBy(function ($p) {
                     return $p->kode_checkout ?: ('single-' . $p->id);
                 });
+
+                // helper format nomor WA (bikin sekali, aman kalau dipakai di view lain juga)
+                if (!function_exists('formatWaNumber')) {
+                    function formatWaNumber(?string $number): ?string
+                    {
+                        if (empty($number)) {
+                            return null;
+                        }
+
+                        // buang semua non-angka
+                        $n = preg_replace('/\D+/', '', $number);
+
+                        if ($n === '' || $n === null) {
+                            return null;
+                        }
+
+                        // 0xxxxxxxxx -> 62xxxxxxxxx
+                        if (substr($n, 0, 1) === '0') {
+                            return '62' . substr($n, 1);
+                        }
+
+                        // sudah 62xxxxxxxx
+                        if (substr($n, 0, 2) === '62') {
+                            return $n;
+                        }
+
+                        // 8xxxxxxxx -> 628xxxxxxxx
+                        if (substr($n, 0, 1) === '8') {
+                            return '62' . $n;
+                        }
+
+                        // fallback
+                        return $n;
+                    }
+                }
             @endphp
 
             @if ($groupedPesanan->isEmpty())
@@ -244,7 +279,8 @@
                             // MUA pertama (buat teks WA)
                             $mua = optional(optional($first->layanan)->mua);
                             if ($mua) {
-                                $waNumber = $mua->kontak_wa ?? null;
+                                // pakai helper biar selalu 62xxxxxxxx
+                                $waNumber = formatWaNumber($mua->kontak_wa ?? null);
                                 $namaMua = $mua->nama_toko ?? $mua->nama_usaha ?? $mua->nama;
                             } else {
                                 $waNumber = null;
@@ -256,8 +292,8 @@
 
                             $namaUser = optional($first->pengguna)->name ?? 'Pelanggan';
 
-                            $waText = $mua
-                                ? urlencode(
+                            $waText = ($mua && $waNumber)
+                                ? rawurlencode(
                                     "Halo Kak $namaMua, saya $namaUser ingin melanjutkan / konfirmasi pembayaran pesanan (" .
                                     $layananList->implode(', ') .
                                     ") untuk tanggal {$tanggalBookingLong} dengan total Rp " .
@@ -412,7 +448,7 @@
                                     @if ($waNumber && $status !== 'Dibatalkan')
                                         <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank"
                                             class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full
-                                                                                      bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
+                                                                                                                          bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
                                             <span>💬</span>
                                             <span>Chat MUA via WhatsApp</span>
                                         </a>
@@ -425,9 +461,10 @@
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="button" class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
-                                                                                               bg-rose-600 text-white hover:bg-rose-700 transition
-                                                                                               btn-cancel-pesanan"
+                                            <button type="button"
+                                                class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
+                                                                                                                                   bg-rose-600 text-white hover:bg-rose-700 transition
+                                                                                                                                   btn-cancel-pesanan"
                                                 data-id="{{ $first->id }}">
                                                 Batalkan Pesanan
                                             </button>

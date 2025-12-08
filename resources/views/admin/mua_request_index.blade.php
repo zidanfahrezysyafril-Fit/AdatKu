@@ -97,10 +97,13 @@
                                     Detail
                                 </button>
 
-                                <form action="{{ route('admin.mua-requests.approve', $req) }}" method="POST" class="flex-1"
-                                    onsubmit="return confirm('Setujui pengajuan ini dan jadikan user sebagai MUA?');">
+                                <form id="approveForm-{{ $req->id }}"
+                                      action="{{ route('admin.mua-requests.approve', $req) }}"
+                                      method="POST"
+                                      class="flex-1">
                                     @csrf
-                                    <button type="submit"
+                                    <button type="button"
+                                        onclick="openApproveModal({{ $req->id }}, '{{ addslashes(optional($req->user)->name ?? 'User') }}')"
                                         class="w-full inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-[11px] font-medium bg-emerald-500 text-white hover:bg-emerald-600">
                                         Setujui
                                     </button>
@@ -145,7 +148,7 @@
                                     </td>
                                     <td class="py-3 px-4 align-top">
                                         <span class="font-medium">{{ $req->nama_usaha }}</span>
-                                        @if($req->alamat)
+                                        @if ($req->alamat)
                                             <div class="text-[11px] text-slate-400">
                                                 {{ $req->alamat }}
                                             </div>
@@ -165,10 +168,12 @@
                                                 Detail
                                             </button>
 
-                                            <form action="{{ route('admin.mua-requests.approve', $req) }}" method="POST"
-                                                onsubmit="return confirm('Setujui pengajuan ini dan jadikan user sebagai MUA?');">
+                                            <form id="approveForm-{{ $req->id }}"
+                                                  action="{{ route('admin.mua-requests.approve', $req) }}"
+                                                  method="POST">
                                                 @csrf
-                                                <button type="submit"
+                                                <button type="button"
+                                                    onclick="openApproveModal({{ $req->id }}, '{{ addslashes(optional($req->user)->name ?? 'User') }}')"
                                                     class="w-full inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs bg-emerald-500 text-white hover:bg-emerald-600">
                                                     Setujui
                                                 </button>
@@ -240,12 +245,12 @@
                             </p>
 
                             <div class="mb-2">
-                                @if($req->status === 'approved')
+                                @if ($req->status === 'approved')
                                     <span
                                         class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] bg-emerald-50 text-emerald-700">
                                         Disetujui
                                     </span>
-                                @elseif($req->status === 'rejected')
+                                @elseif ($req->status === 'rejected')
                                     <span
                                         class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] bg-rose-50 text-rose-700">
                                         Ditolak
@@ -296,12 +301,12 @@
                                         {{ $req->nama_usaha }}
                                     </td>
                                     <td class="py-3 px-4 align-top">
-                                        @if($req->status === 'approved')
+                                        @if ($req->status === 'approved')
                                             <span
                                                 class="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-emerald-50 text-emerald-700">
                                                 Disetujui
                                             </span>
-                                        @elseif($req->status === 'rejected')
+                                        @elseif ($req->status === 'rejected')
                                             <span
                                                 class="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-rose-50 text-rose-700">
                                                 Ditolak
@@ -360,15 +365,53 @@
                     class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400"></textarea>
 
                 <div class="mt-5 flex justify-end gap-2">
-                    <button type="button" onclick="closeRejectModal()
-                            " class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm">
+                    <button type="button" onclick="closeRejectModal()"
+                        class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm">
                         Batal
                     </button>
-                    <button type="submit" class="px-5 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm">
+                    <button type="submit"
+                        class="px-5 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm">
                         Ya, Tolak
                     </button>
                 </div>
             </form>
+        </div>
+
+        {{-- ========= MODAL SETUJUI PENGAJUAN ========= --}}
+        <div id="approveModal"
+            class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-2xl w-[90%] max-w-md p-6 shadow-lg border border-emerald-100">
+
+                <h2 class="text-lg md:text-xl font-semibold text-emerald-700 mb-2">
+                    Setujui Pengajuan MUA
+                </h2>
+                <p class="text-xs text-slate-500 mb-4">
+                    Setujui pengajuan <span id="approveUserName" class="font-semibold text-slate-800">user</span>
+                    dan jadikan akun ini sebagai <span class="font-semibold text-emerald-700">MUA</span>?
+                </p>
+
+                <div class="flex items-center gap-3 mb-4 text-[11px] text-slate-500 bg-emerald-50/60 rounded-xl px-3 py-2">
+                    <span
+                        class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 text-sm">
+                        ⚠
+                    </span>
+                    <p>
+                        Setelah disetujui, role user akan berubah menjadi
+                        <span class="font-semibold text-emerald-700">MUA</span> dan bisa mengakses panel MUA.
+                    </p>
+                </div>
+
+                <div class="mt-5 flex justify-end gap-2">
+                    <button type="button" onclick="closeApproveModal()"
+                        class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-sm">
+                        Batal
+                    </button>
+                    <button type="button" onclick="confirmApprove()"
+                        class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm">
+                        Ya, Setujui
+                    </button>
+                </div>
+            </div>
         </div>
 
         {{-- ========= MODAL DETAIL PENGAJUAN ========= --}}
@@ -471,13 +514,16 @@
             </div>
         </div>
 
+        {{-- ========= SCRIPT ========= --}}
         <script>
+            let currentApproveId = null;
+
+            // ========= REJECT MODAL =========
             function openRejectModal(id, name) {
                 const modal = document.getElementById('rejectModal');
                 const form = document.getElementById('rejectForm');
                 const span = document.getElementById('rejectUserName');
 
-                // set URL action: /admin/mua-requests/{id}/reject
                 form.action = "{{ url('admin/mua-requests') }}/" + id + "/reject";
                 span.textContent = name || 'user';
 
@@ -489,7 +535,33 @@
                 modal.classList.add('hidden');
             }
 
-            // ========== DETAIL MODAL ==========
+            // ========= APPROVE MODAL =========
+            function openApproveModal(id, name) {
+                currentApproveId = id;
+
+                const modal = document.getElementById('approveModal');
+                const span = document.getElementById('approveUserName');
+
+                span.textContent = name || 'user';
+                modal.classList.remove('hidden');
+            }
+
+            function closeApproveModal() {
+                const modal = document.getElementById('approveModal');
+                modal.classList.add('hidden');
+                currentApproveId = null;
+            }
+
+            function confirmApprove() {
+                if (!currentApproveId) return;
+
+                const form = document.getElementById('approveForm-' + currentApproveId);
+                if (form) {
+                    form.submit();
+                }
+            }
+
+            // ========= DETAIL MODAL =========
             function openDetailModal(id) {
                 const modal = document.getElementById('detailModal');
 
@@ -540,8 +612,10 @@
 
             function fillDetailModal(data) {
                 // user
-                document.getElementById('detailUserName').textContent = (data.user && data.user.name) ? data.user.name : '-';
-                document.getElementById('detailUserEmail').textContent = (data.user && data.user.email) ? data.user.email : '-';
+                document.getElementById('detailUserName').textContent =
+                    (data.user && data.user.name) ? data.user.name : '-';
+                document.getElementById('detailUserEmail').textContent =
+                    (data.user && data.user.email) ? data.user.email : '-';
 
                 // field utama
                 document.getElementById('detailNamaUsaha').textContent = data.nama_usaha || '-';

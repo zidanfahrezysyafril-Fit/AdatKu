@@ -105,10 +105,6 @@
                                     class="pointer-events-none absolute -inset-2 rounded-3xl border border-white/70 shadow-[0_0_0_1px_rgba(248,250,252,0.7)]">
                                 </div>
                             </div>
-
-                            <p class="text-xs text-slate-500 max-w-xs text-center md:text-left">
-                                Foto ini akan muncul di kartu pencarian pelanggan.
-                            </p>
                         </div>
 
                         {{-- DESKRIPSI --}}

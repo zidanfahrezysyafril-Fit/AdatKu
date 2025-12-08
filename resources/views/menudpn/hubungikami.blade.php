@@ -183,9 +183,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-20 z-[60]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                          backdrop-blur-md border border-[#fff3b0]/40
-                          @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                          @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                              backdrop-blur-md border border-[#fff3b0]/40
+                              @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                              @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -258,8 +258,8 @@
           @guest
             {{-- tombol login (desktop & mobile) --}}
             <a href="{{ route('pengguna.home') }}" class="hidden md:inline-flex bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                              text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
-                              transition text-sm font-semibold">
+                                  text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
+                                  transition text-sm font-semibold">
               Masuk
             </a>
           @endguest
@@ -371,7 +371,7 @@
         @else
           <button @click="navOpen = false; window.location='{{ route('pengguna.home') }}'"
             class="mt-3 flex w-full items-center justify-center gap-2 py-2.5 rounded-full bg-gradient-to-r
-                         from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold shadow-md hover:brightness-110">
+                             from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold shadow-md hover:brightness-110">
             Sign In
           </button>
         @endauth
@@ -488,9 +488,26 @@
               <label class="block text-sm mb-2 font-semibold text-slate-700">
                 Nomor Telepon
               </label>
-              <input type="tel" x-model="formData.telepon" placeholder="+62 812 3456 7890" class="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm
-                            focus:outline-none focus:ring-2 focus:ring-[#eab308] focus:border-[#eab308] transition">
+
+              <div class="w-full rounded-xl border-2 border-slate-200 flex items-stretch overflow-hidden
+           focus-within:ring-2 focus-within:ring-[#eab308] focus-within:border-[#eab308] transition">
+
+                {{-- Prefix negara: ID +62 --}}
+                <div class="flex items-center gap-1 px-3 bg-slate-50 border-r border-slate-200 text-xs">
+                  <span class="px-1.5 py-0.5 rounded-full bg-white text-slate-600 font-semibold">ID</span>
+                  <span class="text-slate-700 font-semibold text-sm">+62</span>
+                </div>
+
+                {{-- Input nomor (tanpa +62) --}}
+                <input id="contact-phone" type="tel" x-model="formData.telepon" placeholder="812 3456 7890"
+                  class="flex-1 px-3 py-3 text-sm bg-transparent border-none focus:outline-none focus:ring-0" />
+              </div>
+
+              <p class="mt-1 text-[11px] text-slate-400">
+                Tulis nomor tanpa 0 di depan. Contoh: <span class="font-semibold">81234567890</span>
+              </p>
             </div>
+
           </div>
 
           {{-- Email --}}
@@ -585,8 +602,8 @@
             <span class="text-2xl">⏰</span>
             <div>
               <p class="font-semibold text-xs text-slate-500 mb-1">Jam Layanan</p>
-              <p class="font-medium">Senin - Jumat</p>
-              <p class="text-xs text-slate-600">09.00 - 17.00 WIB</p>
+              <p class="font-medium">Setiap Hari</p>
+              <p class="text-xs text-slate-600">08.00 - 23.00 WIB</p>
             </div>
           </li>
         </ul>
@@ -687,8 +704,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                 hover:opacity-90 transition">
+                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                     hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -699,10 +716,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[90] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                          w-[92%] max-w-3xl p-8 md:p-10 relative">
+                              w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal=false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                               hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                   hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -719,8 +736,8 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center
-                                w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
-                                bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
+                                    w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
+                                    bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -732,10 +749,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                    file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                    file:border file:border-yellow-200 file:bg-white
-                                    file:text-slate-700 file:cursor-pointer
-                                    hover:file:bg-yellow-50">
+                                        file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                        file:border file:border-yellow-200 file:bg-white
+                                        file:text-slate-700 file:cursor-pointer
+                                        hover:file:bg-yellow-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -747,20 +764,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                  text-sm md:text-base
-                                  focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                  focus:border-[#c98a00]">
+                                      text-sm md:text-base
+                                      focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                      focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal=false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                   hover:bg-slate-200 transition">
+                                       hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                   hover:opacity-90 transition">
+                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                       hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -796,16 +813,12 @@
             {{-- SOCIAL MEDIA --}}
             <div class="flex items-center gap-3 mt-4">
               <a href="https://www.instagram.com/_.adatku" target="_blank"
-                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                📸
+                class="w-24 h-6 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                Instagram
               </a>
-              <a href="#"
-                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                🎵
-              </a>
-              <a href="#"
-                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                ▶️
+              <a href="mailto:adatku11@gmail.com"
+                class="w-24 h-6 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                adatku11
               </a>
             </div>
           </div>
@@ -818,8 +831,10 @@
               <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
               <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
               <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
-              <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi Kami</a></li>
-              <li><a href="{{ route('mua.entry') }}" class="hover:text-[#f7e07b] transition">Daftar Jadi MUA</a></li>
+              <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi
+                  Kami</a></li>
+              <li><a href="{{ route('mua.entry') }}" class="hover:text-[#f7e07b] transition">Daftar Jadi
+                  MUA</a></li>
             </ul>
           </div>
 
@@ -829,7 +844,8 @@
             <p class="text-[#f5e9df] text-[13px] leading-relaxed">
               📍 Bengkalis, Riau, Indonesia<br>
               ⏰ Layanan: 08:00 — 23:00<br>
-              💬 WhatsApp: <a href="https://wa.me/6282284886932" target="_blank" class="hover:text-[#f7e07b]">082284886932</a>
+              💬 WhatsApp: <a href="https://wa.me/6282284886932" target="_blank"
+                class="hover:text-[#f7e07b]">082284886932</a>
             </p>
 
             <div class="mt-4 text-[12px] space-y-1">

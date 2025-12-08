@@ -49,9 +49,31 @@ class MuaRequestController extends Controller
             'tiktok'     => ['nullable', 'string', 'max:100'],
         ]);
 
+        // --- NORMALISASI NOMOR WHATSAPP ---
+        // ambil hanya angka
+        $digits = preg_replace('/\D/', '', $data['kontak_wa'] ?? '');
+
+        // default null kalau kosong
+        $wa = null;
+
+        if ($digits !== '') {
+            if ($digits[0] === '0') {
+                // kalau user (bandel) nulis 08... langsung saja
+                $wa = $digits;
+            } elseif (substr($digits, 0, 2) === '62') {
+                // kalau dia tulis 62xxxx → jadikan 0xxxx
+                $wa = '0' . substr($digits, 2);
+            } else {
+                // normal: dari form kita, user nulis 8123... → simpan 08123...
+                $wa = '0' . $digits;
+            }
+        }
+
+        $data['kontak_wa']     = $wa;
         $data['user_id']       = $user->id;
         $data['status']        = 'pending';
         $data['catatan_admin'] = null;
+
 
         $muaRequest = MuaRequest::updateOrCreate(
             ['user_id' => $user->id],
@@ -73,5 +95,4 @@ class MuaRequestController extends Controller
             ->route('home')
             ->with('success', 'Pengajuan MUA berhasil dikirim. Pengajuan akan dikonfirmasi oleh admin, silakan tunggu.');
     }
-    
 }

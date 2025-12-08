@@ -77,9 +77,6 @@
                                 <span class="text-sm font-semibold text-slate-800">
                                     Klik untuk memilih foto
                                 </span>
-                                <span class="text-[11px] text-slate-500 text-center max-w-md">
-                                    atau drag & drop ke area ini (maks. beberapa foto sekaligus)
-                                </span>
                             </div>
 
                             <input id="fotoInput" type="file" name="foto[]" accept="image/*" multiple class="hidden">

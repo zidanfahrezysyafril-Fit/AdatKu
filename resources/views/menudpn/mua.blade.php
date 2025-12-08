@@ -422,7 +422,7 @@
                         </button>
                     </div>
                     <p class="text-[10px] sm:text-[11px] text-gray-400 mt-1">
-                        Contoh: “mytia”, “Siak Kecil”, “Duri”, dll.
+                        Contoh: “Fetty”, “Pakning” dll.
                     </p>
                 </form>
             </div>

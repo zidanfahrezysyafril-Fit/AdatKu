@@ -173,9 +173,6 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
               <div>
                 <p class="text-[11px] uppercase tracking-[0.16em] adat-gold">Pendapatan</p>
-                <h2 class="text-sm sm:text-base font-semibold adat-title">
-                  Bulan ini
-                </h2>
               </div>
               <span
                 class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-[11px] border border-emerald-100 adat-jade">
@@ -187,7 +184,7 @@
               Rp {{ number_format($pendapatanBulanIni, 0, ',', '.') }}
             </p>
             <p class="mt-2 text-[11px] adat-text">
-              Total pendapatan dari pesanan yang sudah berstatus lunas bulan ini.
+              Total pendapatan dari pesanan yang sudah berstatus lunas ini.
             </p>
 
             <div class="mt-4 h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">

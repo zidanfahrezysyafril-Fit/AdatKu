@@ -354,19 +354,46 @@
 
             {{-- PROFILE + LAYANAN SECTION BARU --}}
             @php
-                // foto & nomor wa
+                // foto
                 $fotoMua = $mua->foto
                     ? asset('storage/' . $mua->foto)
                     : 'https://placehold.co/400x400/FFF1F2/E11D48?text=' . urlencode($mua->nama_usaha ?? $mua->nama ?? 'MUA');
 
-                $waNumber = null;
-                if (!empty($mua->kontak_wa)) {
-                    $waNumber = preg_replace('/[^0-9]/', '', $mua->kontak_wa);
-                    if (strpos($waNumber, '0') === 0) {
-                        $waNumber = '62' . substr($waNumber, 1);
+                // helper kecil untuk format nomor WA
+                function formatWaNumber(?string $number): ?string {
+                    if (empty($number)) {
+                        return null;
                     }
+
+                    // buang semua non-angka
+                    $n = preg_replace('/\D+/', '', $number);
+
+                    if ($n === '' || $n === null) {
+                        return null;
+                    }
+
+                    // kalau diawali 0 -> 62xxx
+                    if (substr($n, 0, 1) === '0') {
+                        return '62' . substr($n, 1);
+                    }
+
+                    // kalau sudah 62xxx biarkan
+                    if (substr($n, 0, 2) === '62') {
+                        return $n;
+                    }
+
+                    // kalau diawali 8xxx -> 628xxx
+                    if (substr($n, 0, 1) === '8') {
+                        return '62' . $n;
+                    }
+
+                    // fallback: pakai apa adanya
+                    return $n;
                 }
+
+                $waNumber = formatWaNumber($mua->kontak_wa ?? null);
             @endphp
+
 
             <section class="space-y-10">
                 {{-- HERO PROFIL --}}
@@ -632,10 +659,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                    '{{ addslashes($item->nama) }}',
-                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                    '{{ $item->id }}'
-                                                                                )"
+                                                                                                '{{ addslashes($item->nama) }}',
+                                                                                                'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                '{{ $item->id }}'
+                                                                                            )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -714,10 +741,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                    '{{ addslashes($item->nama) }}',
-                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                    '{{ $item->id }}'
-                                                                                )"
+                                                                                                '{{ addslashes($item->nama) }}',
+                                                                                                'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                '{{ $item->id }}'
+                                                                                            )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -796,10 +823,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                    '{{ addslashes($item->nama) }}',
-                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                    '{{ $item->id }}'
-                                                                                )"
+                                                                                                '{{ addslashes($item->nama) }}',
+                                                                                                'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                '{{ $item->id }}'
+                                                                                            )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -878,10 +905,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                    '{{ addslashes($item->nama) }}',
-                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                    '{{ $item->id }}'
-                                                                                )"
+                                                                                                '{{ addslashes($item->nama) }}',
+                                                                                                'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                '{{ $item->id }}'
+                                                                                            )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -1000,16 +1027,12 @@
                         {{-- SOCIAL MEDIA --}}
                         <div class="flex items-center gap-3 mt-4">
                             <a href="https://www.instagram.com/_.adatku" target="_blank"
-                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                                📸
+                                class="w-24 h-6 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                                Instagram
                             </a>
-                            <a href="#"
-                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                                🎵
-                            </a>
-                            <a href="#"
-                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                                ▶️
+                            <a href="mailto:adatku11@gmail.com"
+                                class="w-24 h-6 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                                adatku11
                             </a>
                         </div>
                     </div>

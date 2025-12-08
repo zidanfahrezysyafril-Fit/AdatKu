@@ -89,7 +89,13 @@
                 <div class="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label class="{{ $lab }}">Kontak WA</label>
-                    <input type="text" name="kontak_wa" value="{{ old('kontak_wa', $mua->kontak_wa) }}" class="{{ $inp }}"
+                    {{-- tambahin id & tetap pakai placeholder +62 --}}
+                    <input
+                      id="kontak_wa"
+                      type="text"
+                      name="kontak_wa"
+                      value="{{ old('kontak_wa', $mua->kontak_wa) }}"
+                      class="{{ $inp }}"
                       placeholder="+62 812 3456 7890">
                   </div>
                   <div>
