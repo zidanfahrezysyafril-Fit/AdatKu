@@ -166,11 +166,11 @@
         @if (session('success') || session('error'))
             <div class="max-w-6xl mx-auto px-6 mt-4">
                 <div class="mb-4 flex items-start gap-3 px-4 py-3 rounded-2xl text-sm shadow-sm
-                                    @if(session('success'))
-                                        bg-emerald-50 border border-emerald-200 text-emerald-800
-                                    @else
-                                        bg-rose-50 border border-rose-200 text-rose-800
-                                    @endif">
+                                        @if(session('success'))
+                                            bg-emerald-50 border border-emerald-200 text-emerald-800
+                                        @else
+                                            bg-rose-50 border border-rose-200 text-rose-800
+                                        @endif">
                     <div class="mt-0.5">
                         @if (session('success')) ✓ @else ! @endif
                     </div>
@@ -448,7 +448,7 @@
                                     @if ($waNumber && $status !== 'Dibatalkan')
                                         <a href="https://wa.me/{{ $waNumber }}?text={{ $waText }}" target="_blank"
                                             class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full
-                                                                                                                          bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
+                                                                                                                                      bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100 hover:bg-emerald-100 transition">
                                             <span>💬</span>
                                             <span>Chat MUA via WhatsApp</span>
                                         </a>
@@ -463,8 +463,8 @@
 
                                             <button type="button"
                                                 class="w-full md:w-auto px-4 py-2 rounded-full text-xs font-semibold
-                                                                                                                                   bg-rose-600 text-white hover:bg-rose-700 transition
-                                                                                                                                   btn-cancel-pesanan"
+                                                                                                                                               bg-rose-600 text-white hover:bg-rose-700 transition
+                                                                                                                                               btn-cancel-pesanan"
                                                 data-id="{{ $first->id }}">
                                                 Batalkan Pesanan
                                             </button>
@@ -623,16 +623,12 @@
                         {{-- SOCIAL MEDIA --}}
                         <div class="flex items-center gap-3 mt-4">
                             <a href="https://www.instagram.com/_.adatku" target="_blank"
-                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                                📸
+                                class="w-24 h-6 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                                Instagram
                             </a>
-                            <a href="#"
-                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                                🎵
-                            </a>
-                            <a href="#"
-                                class="w-9 h-9 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
-                                ▶️
+                            <a href="mailto:adatku11@gmail.com"
+                                class="w-24 h-6 rounded-full bg-[#c98a00]/20 flex items-center justify-center text-[#f7e07b] hover:bg-[#c98a00]/30">
+                                adatku11
                             </a>
                         </div>
                     </div>

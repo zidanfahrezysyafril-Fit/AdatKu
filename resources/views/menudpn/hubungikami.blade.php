@@ -183,9 +183,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-20 z-[60]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                              backdrop-blur-md border border-[#fff3b0]/40
-                              @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                              @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                                  backdrop-blur-md border border-[#fff3b0]/40
+                                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -258,15 +258,15 @@
           @guest
             {{-- tombol login (desktop & mobile) --}}
             <a href="{{ route('pengguna.home') }}" class="hidden md:inline-flex bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                  text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
-                                  transition text-sm font-semibold">
+                                      text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
+                                      transition text-sm font-semibold">
               Masuk
             </a>
           @endguest
 
           @auth
             {{-- AVATAR USER (desktop & mobile) --}}
-            <div class="relative hidden md:block">
+            <div class="relative">
               <button @click="userMenuOpen = !userMenuOpen"
                 class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#f5d547] shadow focus:outline-none">
                 <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
@@ -304,7 +304,7 @@
   </header>
 
   {{-- NAV DRAWER MOBILE --}}
-  <div class="fixed inset-0 z-40 flex justify-end items-stretch transition-opacity duration-300" x-cloak
+<div class="fixed inset-0 z-[9998] flex justify-end items-stretch transition-opacity duration-300" x-cloak
     :class="navOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
     @keydown.escape.window="navOpen = false">
 
@@ -339,43 +339,58 @@
 
       {{-- menu list --}}
       <div class="flex-1 overflow-y-auto px-4 py-3 text-sm text-slate-800 space-y-1">
-        <button @click="navOpen = false; window.location='{{ route('home') }}'"
+        {{-- Beranda --}}
+        <button @click="navOpen = false; window.location='{{ url('home') }}'"
           class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
           <span class="text-lg">🏠</span><span>Beranda</span>
         </button>
 
-        @auth
-          <button @click="navOpen = false; window.location='{{ url('daftarmua') }}'"
-            class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
-            <span class="text-lg">💄</span><span>Daftar MUA</span>
-          </button>
-        @endauth
+        {{-- Daftar MUA --}}
+        <button @click="navOpen = false; window.location='{{ url('daftarmua') }}'"
+          class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+          <span class="text-lg">💄</span><span>Daftar MUA</span>
+        </button>
 
-        <button @click="navOpen = false; window.location='{{ route('hubungikami') }}'"
-          class="flex w-full items-center gap-2 py-2 rounded-lg bg-amber-50 text-amber-700 font-semibold">
+        {{-- Hubungi Kami --}}
+        <button @click="navOpen = false"
+          class="flex w-full items-center gap-2 py-2 rounded-lg bg-amber-50/80 text-amber-800 font-semibold">
           <span class="text-lg">✉️</span><span>Hubungi Kami</span>
         </button>
 
         @auth
+          @php $userNav = auth()->user(); @endphp
+
+          {{-- Pesanan Saya (kalau role Pengguna) --}}
+          @if (strtolower($userNav->role ?? '') === 'pengguna')
+            <button @click="navOpen = false; window.location='{{ route('pengguna.pesanan.index') }}'"
+              class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
+              <span class="text-lg">📦</span><span>Pesanan Saya</span>
+            </button>
+          @endif
+
+          {{-- Profil Saya --}}
           <button @click="navOpen = false; profileModal = true"
-            class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700 mt-1.5">
+            class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
             <span class="text-lg">👤</span><span>Profil Saya</span>
           </button>
 
-          <form method="POST" action="{{ route('logout') }}" class="mt-1.5">
+          {{-- Logout --}}
+          <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-red-50 text-red-600">
-              <span class="text-lg">⎋</span><span>Logout</span>
+            <button type="submit"
+              class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-red-50 text-red-600 mt-2 border-t border-amber-50 pt-2">
+              <span class="text-lg">🚪</span><span>Logout</span>
             </button>
           </form>
         @else
-          <button @click="navOpen = false; window.location='{{ route('pengguna.home') }}'"
-            class="mt-3 flex w-full items-center justify-center gap-2 py-2.5 rounded-full bg-gradient-to-r
-                             from-[#f7e07b] via-[#eab308] to-[#c98a00] text-white font-semibold shadow-md hover:brightness-110">
-            Sign In
+          {{-- Sign In (kalau belum login) --}}
+          <button @click="navOpen = false; window.location='{{ route('auth') }}'"
+            class="mt-2 flex w-full items-center gap-2 py-2 rounded-lg bg-amber-500 text-white justify-center font-semibold hover:bg-amber-600">
+            <span class="text-lg">🔐</span><span>Sign In</span>
           </button>
         @endauth
       </div>
+
     </div>
   </div>
 
@@ -704,8 +719,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                     hover:opacity-90 transition">
+                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                         hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -716,10 +731,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[90] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                              w-[92%] max-w-3xl p-8 md:p-10 relative">
+                                  w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal=false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                                   hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                       hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -736,8 +751,8 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center
-                                    w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
-                                    bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
+                                        w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
+                                        bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -749,10 +764,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                        file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                        file:border file:border-yellow-200 file:bg-white
-                                        file:text-slate-700 file:cursor-pointer
-                                        hover:file:bg-yellow-50">
+                                            file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                            file:border file:border-yellow-200 file:bg-white
+                                            file:text-slate-700 file:cursor-pointer
+                                            hover:file:bg-yellow-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -764,20 +779,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                      text-sm md:text-base
-                                      focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                      focus:border-[#c98a00]">
+                                          text-sm md:text-base
+                                          focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                          focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal=false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                       hover:bg-slate-200 transition">
+                                           hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                       hover:opacity-90 transition">
+                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                           hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>

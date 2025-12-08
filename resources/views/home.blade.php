@@ -1219,7 +1219,7 @@
           ✕
         </button>
 
-        <h1 class="text-2xl md:text-3xl font-bold text-rose-700 mb-4">
+        <h1 class="text-2xl md:text-3xl font-bold text-amber-500 mb-4">
           Ajukan Sebagai MUA
         </h1>
 
@@ -1495,6 +1495,31 @@
           <br><br>
           Setelah itu, silakan tunggu email dari admin AdatKu berisi
           <span class="font-semibold">password barumu</span>.
+        </div>
+      </div>
+
+      {{-- Q6 --}}
+      <div class="bg-white/95 rounded-2xl border border-amber-100/80 shadow-sm overflow-hidden">
+        <button type="button" class="w-full flex items-center justify-between gap-3 px-5 md:px-6 py-4 text-left"
+          @click="open = open === 6 ? null : 6">
+          <div>
+            <p class="text-sm md:text-base font-semibold text-[#5c2b33]">
+              Kenapa email Verifikasi tidak terkirim ke email saya?
+            </p>
+            <p class="text-[11px] text-amber-600 uppercase tracking-[0.18em]">
+              Email VERIFIKASI
+            </p>
+          </div>
+          <span class="text-amber-600 text-xl" x-text="open === 6 ? '−' : '+'"></span>
+        </button>
+        <div x-show="open === 6" x-collapse class="px-5 md:px-6 pb-4 text-sm text-gray-600 leading-relaxed">
+          Untuk mendapatkan <span class="font-semibold">Email verifikasi</span> pastikan Email yang kamu
+          terdaftar di Google dan verifikasi email kamu sudah dikonfirmasi.
+                  <br><br>
+                  Jika sudah memastikan hal tersebut, silakan klik tombol
+                  <span class="font-semibold">"Kirim Ulang Email Verifikasi"</span>
+                  di bagian atas halaman dan jika tidak bisa juga terkirim emailnya kamu dapat hubungi admin melalui menu
+                  <span class="font-semibold">Hubungi Kami</span>. 
         </div>
       </div>
     </div>
