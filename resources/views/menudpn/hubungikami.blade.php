@@ -383,8 +383,8 @@
             </button>
           </form>
         @else
-          {{-- Sign In (kalau belum login) --}}
-          <button @click="navOpen = false; window.location='{{ route('auth') }}'"
+          {{-- Sign In jika belum login --}}
+          <button @click="navOpen = false; window.location='{{ route('login') }}'"
             class="mt-2 flex w-full items-center gap-2 py-2 rounded-lg bg-amber-500 text-white justify-center font-semibold hover:bg-amber-600">
             <span class="text-lg">🔐</span><span>Sign In</span>
           </button>
