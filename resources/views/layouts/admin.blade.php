@@ -125,17 +125,17 @@
 
                 {{-- Dashboard --}}
                 <a href="{{ route('dashboard_a') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition
-                   @if(request()->routeIs('admin.dashboard'))
-                       bg-gradient-to-r from-[#f2b044] via-[#ffd369] to-[#f9b44f] text-[#201317] font-semibold shadow-[0_6px_18px_rgba(0,0,0,0.6)]
-                   @else
-                       text-slate-100 hover:bg-[#231729]
-                   @endif">
+   @if(request()->routeIs('admin.dashboard_a'))
+       bg-gradient-to-r from-[#f2b044] via-[#ffd369] to-[#f9b44f] text-[#201317] font-semibold shadow-[0_6px_18px_rgba(0,0,0,0.6)]
+   @else
+       text-slate-100 hover:bg-[#231729]
+   @endif">
                     <span class="w-8 h-8 rounded-xl flex items-center justify-center border text-xs transition
-                        @if(request()->routeIs('dashboard_a'))
-                            bg-white text-[#f59f0b] border-[#f9c66e]
-                        @else
-                            bg-[#1d1426] text-[#facc6b] border-[#2d1b38] group-hover:border-[#facc6b]
-                        @endif">
+        @if(request()->routeIs('dashboard_a'))
+            bg-white text-[#f59f0b] border-[#f9c66e]
+        @else
+            bg-[#1d1426] text-[#facc6b] border-[#2d1b38] group-hover:border-[#facc6b]
+        @endif">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3z" />
                         </svg>
@@ -265,9 +265,10 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition
-                                           text-slate-100 hover:bg-[#3b151b]">
-                                <span class="w-8 h-8 rounded-xl flex items-center justify-center border text-xs
-                                               bg-[#1d1426] text-[#fecaca] border-[#7f1d1d] group-hover:border-[#fecaca]">
+                                                           text-slate-100 hover:bg-[#3b151b]">
+                                <span
+                                    class="w-8 h-8 rounded-xl flex items-center justify-center border text-xs
+                                                               bg-[#1d1426] text-[#fecaca] border-[#7f1d1d] group-hover:border-[#fecaca]">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
@@ -328,12 +329,30 @@
                         </div>
                     </div>
 
+                    {{-- Tombol Dashboard (khusus MOBILE) --}}
+                    <div class="flex md:hidden items-center gap-2">
+                        @auth
+                            @unless(request()->routeIs('admin.dashboard_a'))
+                                    <a href="{{ route('admin.dashboard_a') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold
+                                  bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
+                                  hover:bg-amber-100 hover:border-amber-300 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
+                                            fill="currentColor">
+                                            <path
+                                                d="M10 19a1 1 0 0 0 1-1v-4h8v-4h-8V6a1 1 0 0 0-1.64-.77l-7 6a1 1 0 0 0 0 1.54l7 6A1 1 0 0 0 10 19Z" />
+                                        </svg>
+                                        <span>Dashboard</span>
+                                    </a>
+                            @endunless
+                        @endauth
+                    </div>
+
                     {{-- slot kanan (desktop) --}}
                     <div class="hidden md:flex items-center gap-3">
                         @auth
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold
-                                          bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
-                                          hover:bg-amber-100 hover:border-amber-300 transition">
+                                                          bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
+                                                          hover:bg-amber-100 hover:border-amber-300 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
                                     fill="currentColor">
                                     <path
