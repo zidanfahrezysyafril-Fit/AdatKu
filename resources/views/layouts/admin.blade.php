@@ -338,7 +338,7 @@
                     {{-- Tombol Dashboard (khusus MOBILE) --}}
                     <div class="flex md:hidden items-center gap-2">
                         @auth
-                            <a href="{{ route('dashboard_a') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold
+                            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold
                                       bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
                                       hover:bg-amber-100 hover:border-amber-300 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
