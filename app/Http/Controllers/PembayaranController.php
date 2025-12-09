@@ -15,14 +15,14 @@ class PembayaranController extends Controller
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (!$mua) {
+        if (! $mua) {
             abort(403, 'Profil MUA tidak ditemukan.');
         }
 
         $pembayaran = Pembayaran::with([
-                'pesanan.pengguna',
-                'pesanan.layanan',
-            ])
+            'pesanan.pengguna',
+            'pesanan.layanan',
+        ])
             ->whereHas('pesanan.layanan', function ($q) use ($mua) {
                 $q->where('mua_id', $mua->id);
             })
@@ -37,10 +37,7 @@ class PembayaranController extends Controller
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (
-            !$mua ||
-            (int) optional($pesanan->layanan)->mua_id !== (int) $mua->id
-        ) {
+        if (! $mua || (int) optional($pesanan->layanan)->mua_id !== (int) $mua->id) {
             abort(403, 'Pesanan ini tidak terkait dengan MUA yang login.');
         }
 
@@ -52,10 +49,7 @@ class PembayaranController extends Controller
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (
-            !$mua ||
-            (int) optional($pesanan->layanan)->mua_id !== (int) $mua->id
-        ) {
+        if (! $mua || (int) optional($pesanan->layanan)->mua_id !== (int) $mua->id) {
             abort(403, 'Pesanan ini tidak terkait dengan MUA yang login.');
         }
 
@@ -94,10 +88,7 @@ class PembayaranController extends Controller
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (
-            !$mua ||
-            (int) optional($pembayaran->pesanan->layanan)->mua_id !== (int) $mua->id
-        ) {
+        if (! $mua || (int) optional($pembayaran->pesanan->layanan)->mua_id !== (int) $mua->id) {
             abort(403, 'Pembayaran ini tidak terkait dengan MUA yang login.');
         }
 
@@ -120,8 +111,7 @@ class PembayaranController extends Controller
                 Storage::disk('public')->delete($pembayaran->bukti_transfer);
             }
 
-            $path = $request->file('bukti_transfer')
-                ->store('pembayaran', 'public');
+            $path = $request->file('bukti_transfer')->store('pembayaran', 'public');
 
             $data['bukti_transfer'] = $path;
         }
@@ -138,13 +128,38 @@ class PembayaranController extends Controller
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (
-            !$mua ||
-            (int) optional($pembayaran->pesanan->layanan)->mua_id !== (int) $mua->id
-        ) {
+        if (! $mua || (int) optional($pembayaran->pesanan->layanan)->mua_id !== (int) $mua->id) {
             abort(403, 'Pembayaran ini tidak terkait dengan MUA yang login.');
         }
 
         return view('pembayaran.show', compact('pembayaran'));
+    }
+
+    /**
+     * 🔹 BARU DITAMBAHKAN
+     * Stream bukti transfer lewat Laravel supaya tidak 403 dari /storage/...
+     */
+    public function viewBukti(Pembayaran $pembayaran)
+    {
+        $user = Auth::user();
+        $mua  = $user->mua;
+
+        // keamanan
+        if (! $mua || (int) optional($pembayaran->pesanan->layanan)->mua_id !== (int) $mua->id) {
+            abort(403, 'Pembayaran ini tidak terkait dengan MUA yang login.');
+        }
+
+        // cek file bukti
+        if (! $pembayaran->bukti_transfer || ! Storage::disk('public')->exists($pembayaran->bukti_transfer)) {
+            abort(404);
+        }
+
+        $path = $pembayaran->bukti_transfer;
+
+        // AMBIL FILE & MIME TYPE YANG BENAR (TANPA NAMED ARGUMENT)
+        $file = Storage::disk('public')->get($path);
+        $mime = Storage::disk('public')->mimeType($path);
+
+        return response($file, 200)->header('Content-Type', $mime);
     }
 }

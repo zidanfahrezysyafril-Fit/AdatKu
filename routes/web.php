@@ -147,6 +147,10 @@ Route::middleware(['auth', 'verified', CheckRole::class . ':mua'])->group(functi
         Route::get('/pembayaran/{pembayaran}/edit', [PembayaranController::class, 'edit'])->name('pembayaran.edit');
         Route::put('/pembayaran/{pembayaran}', [PembayaranController::class, 'update'])->name('pembayaran.update');
         Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
+
+        // 🔹 ROUTE BARU UNTUK LIHAT BUKTI
+        Route::get('/pembayaran/{pembayaran}/bukti', [PembayaranController::class, 'viewBukti'])
+            ->name('pembayaran.bukti');
     });
 });
 

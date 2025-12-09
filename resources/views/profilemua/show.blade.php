@@ -1,60 +1,115 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail MUA — {{ $mua->Nama ?? 'Profil MUA' }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+@section('title', 'Detail Pembayaran')
 
-<body class="bg-[#fff9f7] text-slate-800 min-h-screen">
+{{-- optional: judul di topbar --}}
+@section('page_title', 'Detail Pembayaran')
+@section('page_desc', 'Rincian pembayaran untuk pesanan pengguna.')
 
-    <div class="max-w-5xl mx-auto py-10 px-6">
-        <a href="{{ route('panelmua.index') }}" class="text-rose-600 hover:underline mb-6 inline-block">&larr; Kembali</a>
+@section('content')
+    <main class="w-full px-4 sm:px-6 lg:px-10 py-6 sm:py-8">
+        <div class="max-w-3xl mx-auto">
 
-        <div class="bg-white rounded-2xl shadow border border-rose-100 p-8 space-y-6">
-
-            <div class="flex flex-col md:flex-row items-start gap-6">
-                <div class="w-40 h-40 rounded-xl overflow-hidden border border-rose-100 bg-slate-100">
-                    <img src="{{ ($mua->Foto ?? null) ? asset('storage/' . $mua->Foto) : 'https://placehold.co/200x200?text=Foto' }}"
-                        class="object-cover w-full h-full" alt="Foto MUA">
+            {{-- Notif sukses (gold) --}}
+            @if (session('success'))
+                <div class="mb-4 px-4 py-3 rounded-2xl bg-[#FFF8E0] border border-[#FACC6B] text-[#8A4B00] text-sm">
+                    {{ session('success') }}
                 </div>
-                <div>
-                    <h2 class="text-3xl font-bold text-rose-700 mb-2">{{ $mua->Nama ?? 'Belum diisi' }}</h2>
-                    <p class="text-slate-600 mb-1">Kontak WA: <span class="font-medium">{{ $mua->Kontak_WA ?? '-' }}</span></p>
-                    <p class="text-slate-600 mb-1">Rekening Bank: <span class="font-medium">{{ $mua->Rekening_Bank ?? '-' }}</span></p>
-                    <p class="text-slate-600 mb-1">Alamat: <span class="font-medium">{{ $mua->Alamat ?? '-' }}</span></p>
+            @endif
+
+            <div class="bg-white/95 rounded-3xl ring-1 ring-[#FACC6B]/40 shadow-sm overflow-hidden">
+                {{-- HEADER --}}
+                <div
+                    class="px-5 sm:px-7 py-5 bg-gradient-to-r from-[#fff7f9] via-[#fff8ef] to-[#fffaf3] border-b border-rose-50">
+                    <p class="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] text-amber-500 uppercase">
+                        MUA Panel
+                    </p>
+                    <h1 class="text-xl sm:text-2xl font-bold mt-1" style="color:#C98A00;">
+                        Detail Pembayaran
+                    </h1>
+                </div>
+
+                {{-- BODY --}}
+                <div class="px-5 sm:px-7 py-5 sm:py-6 space-y-5">
+                    <h2 class="text-sm sm:text-base font-semibold text-slate-800">
+                        Pesanan: {{ $pembayaran->pesanan->layanan->nama ?? '-' }}
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                        <div>
+                            <p class="text-slate-500">Tanggal Booking</p>
+                            <p class="font-semibold">
+                                {{ \Carbon\Carbon::parse($pembayaran->pesanan->tanggal_booking)->translatedFormat('d M Y') }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-slate-500">Nama Pengguna</p>
+                            <p class="font-semibold">
+                                {{ $pembayaran->pesanan->pengguna->name ?? '-' }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-slate-500">Tanggal Bayar</p>
+                            <p class="font-semibold">
+                                {{ \Carbon\Carbon::parse($pembayaran->tanggal_bayar)->translatedFormat('d M Y') }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-slate-500">Metode Pembayaran</p>
+                            <p class="font-semibold">
+                                {{ str_replace('_', ' ', $pembayaran->metode_bayar) }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-slate-500">Total</p>
+                            <p class="font-semibold text-amber-600">
+                                Rp {{ number_format($pembayaran->pesanan->total_harga, 0, ',', '.') }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-slate-500">Alamat</p>
+                            <p class="font-semibold">
+                                {{ $pembayaran->pesanan->alamat }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Bukti transfer --}}
+                    <div class="mt-3">
+                        <p class="text-slate-500 mb-2 text-xs sm:text-sm">Bukti Transfer</p>
+
+                        @if ($pembayaran->bukti_transfer)
+                            {{-- 🔁 DIUBAH: pakai route bukti, bukan asset("storage/...") --}}
+                            <img src="{{ route('panelmua.pembayaran.bukti', $pembayaran->id) }}"
+                                 alt="Bukti Transfer"
+                                 class="rounded-xl border border-slate-200 max-h-80 w-full object-contain">
+
+                            <a href="{{ route('panelmua.pembayaran.bukti', $pembayaran->id) }}"
+                               target="_blank"
+                               class="mt-2 inline-flex items-center text-[11px] sm:text-xs text-amber-700 hover:underline">
+                                Lihat ukuran penuh ↗
+                            </a>
+                        @else
+                            <p class="text-[11px] sm:text-xs text-slate-400">
+                                Belum ada bukti transfer yang diunggah.
+                            </p>
+                        @endif
+                    </div>
+
+                    <div class="mt-4 flex flex-wrap gap-3">
+                        <a href="{{ route('panelmua.pembayaran.index') }}"
+                           class="px-4 py-2 rounded-2xl border border-slate-200 text-slate-700 text-xs sm:text-sm hover:bg-slate-50">
+                            ← Kembali ke daftar pembayaran
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div>
-                <h3 class="text-xl font-semibold text-rose-700 mb-2">Deskripsi</h3>
-                <p class="text-slate-700 leading-relaxed">{{ $mua->Deskripsi ?? 'Belum ada deskripsi yang diisi.' }}</p>
-            </div>
-
-            <div class="flex gap-3 pt-4">
-                <a href="{{ route('profilemua.edit', $mua->id) }}"
-                    class="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition">
-                    Edit Profil
-                </a>
-
-                <form action="{{ route('profilemua.destroy', $mua->id) }}" method="POST"
-                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus profil ini?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                        class="px-4 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700 transition">
-                        Hapus
-                    </button>
-                </form>
-            </div>
         </div>
-
-        <footer class="text-xs text-slate-500 mt-10 text-center">
-            © {{ date('Y') }} AdatKu — MUA Panel
-        </footer>
-    </div>
-</body>
-
-</html>
+    </main>
+@endsection
