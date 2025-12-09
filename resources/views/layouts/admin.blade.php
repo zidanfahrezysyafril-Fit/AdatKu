@@ -346,7 +346,7 @@
                                     <path
                                         d="M10 19a1 1 0 0 0 1-1v-4h8v-4h-8V6a1 1 0 0 0-1.64-.77l-7 6a1 1 0 0 0 0 1.54l7 6A1 1 0 0 0 10 19Z" />
                                 </svg>
-                                <span>Dashboard</span>
+                                <span>Kembali ke Beranda</span>
                             </a>
                         @endauth
                     </div>
