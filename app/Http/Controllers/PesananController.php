@@ -147,15 +147,25 @@ class PesananController extends Controller
      * - status 1 group checkout di-set sama semua
      *   biar tampilan panel MUA & pengguna selalu sinkron
      */
-    public function updateStatusMua(Request $request, Pesanan $pesanan)
+    public function updateStatusMua(Request $request, $id)
     {
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (!$mua || $pesanan->layanan->mua_id !== $mua->id) {
-            abort(403);
+        // kalau user belum punya profil MUA → tolak
+        if (!$mua) {
+            abort(403, 'Profil MUA tidak ditemukan.');
         }
 
+        // cari pesanan yang bener-bener milik MUA ini
+        $pesanan = Pesanan::where('id', $id)
+            ->whereHas('layanan', function ($q) use ($mua) {
+                $q->where('mua_id', $mua->id);
+            })
+            ->with('layanan')
+            ->firstOrFail();
+
+        // validasi status
         $data = $request->validate([
             'status_pembayaran' => 'required|in:Belum_Lunas,Lunas,Dibatalkan',
         ]);
@@ -177,6 +187,7 @@ class PesananController extends Controller
 
         return back()->with('success', 'Status pembayaran berhasil diperbarui.');
     }
+
 
     public function destroyMua(Pesanan $pesanan)
     {
