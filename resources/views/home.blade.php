@@ -339,7 +339,7 @@
                 Dashboard MUA
               </a>
             @elseif ($roleNavDesktop === 'admin')
-              <a href="{{ route('admin.dashboard_a') }}" class="hover:text-amber-600 transition">
+              <a href="{{ route('dashboard_a') }}" class="hover:text-amber-600 transition">
                 Dashboard Admin
               </a>
             @endif
