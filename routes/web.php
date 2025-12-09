@@ -190,7 +190,7 @@ Route::get('/daftarmua/{mua}', [PublicMuaController::class, 'show'])
 |--------------------------------------------------------------------------
 */
 Route::get('/dashboard_a', [DashboardController::class, 'index'])
-    ->name('admin.dashboard_a')
+    ->name('dashboard_a')
     ->middleware(['auth', 'verified', CheckRole::class . ':admin']);
 
 /*
