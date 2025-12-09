@@ -124,14 +124,14 @@
                 </p>
 
                 {{-- Dashboard --}}
-                <a href="{{ route('admin.dashboard_a') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition
+                <a href="{{ route('dashboard_a') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl transition
                    @if(request()->routeIs('admin.dashboard'))
                        bg-gradient-to-r from-[#f2b044] via-[#ffd369] to-[#f9b44f] text-[#201317] font-semibold shadow-[0_6px_18px_rgba(0,0,0,0.6)]
                    @else
                        text-slate-100 hover:bg-[#231729]
                    @endif">
                     <span class="w-8 h-8 rounded-xl flex items-center justify-center border text-xs transition
-                        @if(request()->routeIs('admin.dashboard'))
+                        @if(request()->routeIs('dashboard_a'))
                             bg-white text-[#f59f0b] border-[#f9c66e]
                         @else
                             bg-[#1d1426] text-[#facc6b] border-[#2d1b38] group-hover:border-[#facc6b]
