@@ -550,7 +550,7 @@
               <span class="text-lg">📊</span><span>Dashboard MUA</span>
             </button>
           @elseif ($roleNav === 'admin')
-            <button @click="navOpen = false; window.location='{{ route('admin.dashboard_a') }}'"
+            <button @click="navOpen = false; window.location='{{ route('dashboard_a') }}'"
               class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
               <span class="text-lg">🛡️</span><span>Dashboard Admin</span>
             </button>
