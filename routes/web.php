@@ -61,8 +61,7 @@ Route::get('login', [AuthController::class, 'showLogin'])->name('login');
 
 // 🔒 Proteksi brute force login: max 5 percobaan per 1 menit per IP
 Route::post('login', [AuthController::class, 'login'])
-    ->name('login.post')
-    ->middleware('throttle:5,1');
+    ->name('login.post');
 
 // REGISTER
 Route::get('register', [AuthController::class, 'showRegister'])->name('register');
