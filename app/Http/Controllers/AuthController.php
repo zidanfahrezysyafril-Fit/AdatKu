@@ -7,6 +7,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -23,9 +25,11 @@ class AuthController extends Controller
     /**
      * Proses login user (email + password) + Remember Me.
      * Flow hybrid: BOLEH login walau email belum terverifikasi.
+     * Ditambah proteksi brute force (RateLimiter).
      */
     public function login(Request $request)
     {
+        // validasi input
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
             'password' => ['required', 'string', 'min:6'],
@@ -36,9 +40,25 @@ class AuthController extends Controller
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
 
+        // key unik untuk limiter: kombinasi email + IP
+        $throttleKey = Str::lower($request->input('email')) . '|' . $request->ip();
+
+        // jika sudah terlalu banyak percobaan
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            throw ValidationException::withMessages([
+                'email' => "Terlalu banyak percobaan login. Coba lagi dalam $seconds detik.",
+            ]);
+        }
+
         $remember = $request->boolean('remember');
 
+        // coba login
         if (Auth::attempt($credentials, $remember)) {
+            // jika berhasil -> reset counter limiter
+            RateLimiter::clear($throttleKey);
+
             $request->session()->regenerate();
 
             $user = Auth::user();
@@ -61,6 +81,9 @@ class AuthController extends Controller
 
             return redirect()->route('home');
         }
+
+        // kalau gagal login -> naikkan hit dan tahan 60 detik
+        RateLimiter::hit($throttleKey, 120);
 
         throw ValidationException::withMessages([
             'email' => 'Email atau password salah.',
@@ -105,7 +128,6 @@ class AuthController extends Controller
             ->route('home')
             ->with('show_verify_modal', true);
     }
-
 
     /**
      * Logout user.
