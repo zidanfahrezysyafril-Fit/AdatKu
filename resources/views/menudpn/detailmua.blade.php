@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {{-- FONTS & TAILWIND --}}
+    <link rel="icon" type="image/png" href="/logo_1.png?v=1">
+    <link rel="shortcut icon" type="image/png" href="/logo_1.png?v=1">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -660,10 +662,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                                                        '{{ addslashes($item->nama) }}',
-                                                                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                                                        '{{ $item->id }}'
-                                                                                                                    )"
+                                                                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                                                    '{{ $item->id }}'
+                                                                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -742,10 +744,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                                                        '{{ addslashes($item->nama) }}',
-                                                                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                                                        '{{ $item->id }}'
-                                                                                                                    )"
+                                                                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                                                    '{{ $item->id }}'
+                                                                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -824,10 +826,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                                                        '{{ addslashes($item->nama) }}',
-                                                                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                                                        '{{ $item->id }}'
-                                                                                                                    )"
+                                                                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                                                    '{{ $item->id }}'
+                                                                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -906,10 +908,10 @@
                                                         </button>
 
                                                         <button type="button" onclick="openModal(
-                                                                                                                        '{{ addslashes($item->nama) }}',
-                                                                                                                        'Rp {{ number_format($item->harga, 0, ',', '.') }}',
-                                                                                                                        '{{ $item->id }}'
-                                                                                                                    )"
+                                                                                                                                    '{{ addslashes($item->nama) }}',
+                                                                                                                                    'Rp {{ number_format($item->harga, 0, ',', '.') }}',
+                                                                                                                                    '{{ $item->id }}'
+                                                                                                                                )"
                                                             class="w-full sm:flex-1 btn-primary py-3 rounded-xl text-white font-semibold shadow-lg flex items-center justify-center gap-2 text-sm">
                                                             Pesan Layanan Ini
                                                         </button>
@@ -1174,121 +1176,121 @@
                             <span class="font-semibold">＋ Keranjang</span> ya ✨
                         </p>
                     @else
-                            <div class="space-y-3 max-h-72 overflow-y-auto pr-1">
-                                @foreach ($cartItems as $item)
-                                    @php
-                                        $layananItem = $item->layanan;
-                                        if (!$layananItem) {
-                                            continue;
-                                        }
-                                        $subtotal = ($layananItem->harga ?? 0) * $item->jumlah;
-                                    @endphp
-                                    <div class="flex gap-3 p-3 rounded-2xl border border-amber-100 bg-amber-50/40">
-                                        @if ($layananItem->foto)
-                                            <img src="{{ asset('storage/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
-                                                class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
-                                        @else
-                                            <div
-                                                class="w-16 h-16 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-semibold flex-shrink-0">
-                                                {{ Str::limit($layananItem->nama, 10) }}
-                                            </div>
-                                        @endif
-                                        <div class="flex-1">
-                                            <p class="text-sm font-semibold text-slate-800">
-                                                {{ $layananItem->nama }}
-                                            </p>
-                                            <p class="text-[11px] text-slate-500 uppercase tracking-wide">
-                                                {{ strtoupper($layananItem->kategori ?? 'MAKEUP') }}
-                                            </p>
-                                            <p class="text-xs text-slate-600 mt-1">
-                                                Rp {{ number_format($layananItem->harga, 0, ',', '.') }}
-                                                <span class="text-slate-400">× {{ $item->jumlah }}</span>
-                                            </p>
+                        <div class="space-y-3 max-h-72 overflow-y-auto pr-1">
+                            @foreach ($cartItems as $item)
+                                @php
+                                    $layananItem = $item->layanan;
+                                    if (!$layananItem) {
+                                        continue;
+                                    }
+                                    $subtotal = ($layananItem->harga ?? 0) * $item->jumlah;
+                                @endphp
+                                <div class="flex gap-3 p-3 rounded-2xl border border-amber-100 bg-amber-50/40">
+                                    @if ($layananItem->foto)
+                                        <img src="{{ asset('storage/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
+                                            class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
+                                    @else
+                                        <div
+                                            class="w-16 h-16 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-semibold flex-shrink-0">
+                                            {{ Str::limit($layananItem->nama, 10) }}
                                         </div>
-                                        <div class="text-right">
-                                            <p class="text-xs text-slate-500">Subtotal</p>
-                                            <p class="text-sm font-bold text-rose-600">
-                                                Rp {{ number_format($subtotal, 0, ',', '.') }}
-                                            </p>
-                                        </div>
+                                    @endif
+                                    <div class="flex-1">
+                                        <p class="text-sm font-semibold text-slate-800">
+                                            {{ $layananItem->nama }}
+                                        </p>
+                                        <p class="text-[11px] text-slate-500 uppercase tracking-wide">
+                                            {{ strtoupper($layananItem->kategori ?? 'MAKEUP') }}
+                                        </p>
+                                        <p class="text-xs text-slate-600 mt-1">
+                                            Rp {{ number_format($layananItem->harga, 0, ',', '.') }}
+                                            <span class="text-slate-400">× {{ $item->jumlah }}</span>
+                                        </p>
                                     </div>
-                                @endforeach
+                                    <div class="text-right">
+                                        <p class="text-xs text-slate-500">Subtotal</p>
+                                        <p class="text-sm font-bold text-rose-600">
+                                            Rp {{ number_format($subtotal, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="border-top border-amber-100 pt-3 mt-2 flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-700">
+                                Total ({{ $cartCount }} item)
+                            </span>
+                            <span class="text-lg font-extrabold text-rose-700">
+                                Rp {{ number_format($cartTotal, 0, ',', '.') }}
+                            </span>
+                        </div>
+
+                        <form method="POST" action="{{ route('cart.checkout') }}" class="mt-4 space-y-3">
+                            @csrf
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Tanggal Booking <span class="text-red-500">*</span>
+                                </label>
+                                <input type="date" name="tanggal_booking"
+                                    value="{{ old('tanggal_booking', now()->toDateString()) }}"
+                                    class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400">
                             </div>
 
-                            <div class="border-top border-amber-100 pt-3 mt-2 flex items-center justify-between">
-                                <span class="text-sm font-semibold text-slate-700">
-                                    Total ({{ $cartCount }} item)
-                                </span>
-                                <span class="text-lg font-extrabold text-rose-700">
-                                    Rp {{ number_format($cartTotal, 0, ',', '.') }}
-                                </span>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Alamat Lengkap Acara <span class="text-red-500">*</span>
+                                </label>
+
+                                <textarea name="alamat" rows="2" class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm resize-none
+                                   focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
+                                    placeholder="Tulis alamat lengkap lokasi acara kamu..." required
+                                    oninvalid="this.setCustomValidity('Alamat lengkap acara wajib diisi')"
+                                    oninput="this.setCustomValidity('')">{{ old('alamat') }}</textarea>
                             </div>
 
-                            <form method="POST" action="{{ route('cart.checkout') }}" class="mt-4 space-y-3">
-                                @csrf
+                            <button type="submit"
+                                class="w-full btn-primary py-3 rounded-xl text-white font-semibold shadow-lg text-sm">
+                                Buat Pesanan
+                            </button>
+                        </form>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">
-                                        Tanggal Booking <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="date" name="tanggal_booking"
-                                        value="{{ old('tanggal_booking', now()->toDateString()) }}"
-                                        class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400">
-                                </div>
+                        @php
+                            $waCheckoutText = null;
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">
-                                        Alamat Lengkap Acara <span class="text-red-500">*</span>
-                                    </label>
+                            if (!empty($mua->kontak_wa ?? null)) {
+                                $text = "Halo kak, saya mau booking layanan MUA di AdatKu:\n";
 
-                                    <textarea name="alamat" rows="2" class="w-full border border-amber-200 rounded-xl px-3 py-2 text-sm resize-none
-                           focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
-                                        placeholder="Tulis alamat lengkap lokasi acara kamu..." required
-                                        oninvalid="this.setCustomValidity('Alamat lengkap acara wajib diisi')"
-                                        oninput="this.setCustomValidity('')">{{ old('alamat') }}</textarea>
-                                </div>
-
-                                <button type="submit"
-                                    class="w-full btn-primary py-3 rounded-xl text-white font-semibold shadow-lg text-sm">
-                                    Buat Pesanan
-                                </button>
-                            </form>
-
-                            @php
-                                $waCheckoutText = null;
-
-                                if (!empty($mua->kontak_wa ?? null)) {
-                                    $text = "Halo kak, saya mau booking layanan MUA di AdatKu:\n";
-
-                                    foreach ($cartItems as $item) {
-                                        $layananItem = $item->layanan;
-                                        if (!$layananItem) {
-                                            continue;
-                                        }
-
-                                        $subtotal = ($layananItem->harga ?? 0) * $item->jumlah;
-                                        $text .= '- ' . $layananItem->nama . ' x ' . $item->jumlah . ' (Rp '
-                                            . number_format($subtotal, 0, ',', '.') . ")\n";
+                                foreach ($cartItems as $item) {
+                                    $layananItem = $item->layanan;
+                                    if (!$layananItem) {
+                                        continue;
                                     }
 
-                                    $text .= "\nPerkiraan total: Rp " . number_format($cartTotal, 0, ',', '.');
-                                    $text .= "\n\nNama:\nTanggal acara:\nAlamat lengkap:\nCatatan tambahan:";
-
-                                    $waCheckoutText = rawurlencode($text);
+                                    $subtotal = ($layananItem->harga ?? 0) * $item->jumlah;
+                                    $text .= '- ' . $layananItem->nama . ' x ' . $item->jumlah . ' (Rp '
+                                        . number_format($subtotal, 0, ',', '.') . ")\n";
                                 }
-                            @endphp
 
-                            @if (!empty($mua->kontak_wa ?? null) && $waCheckoutText)
-                                <a href="https://wa.me/{{ $waNumber ?? '' }}?text={{ $waCheckoutText }}" target="_blank"
-                                    class="mt-3 block w-full bg-emerald-500 hover:bg-emerald-600 text-center py-3 rounded-xl text-white font-semibold shadow-lg text-sm">
-                                    Checkout via WhatsApp
-                                </a>
-                            @endif
+                                $text .= "\nPerkiraan total: Rp " . number_format($cartTotal, 0, ',', '.');
+                                $text .= "\n\nNama:\nTanggal acara:\nAlamat lengkap:\nCatatan tambahan:";
 
-                            <p class="mt-2 text-[11px] text-slate-500 text-center">
-                                Setelah pesanan dibuat, kamu bisa lihat di menu <span class="font-semibold">Pesanan
-                                    Saya</span>.
-                            </p>
+                                $waCheckoutText = rawurlencode($text);
+                            }
+                        @endphp
+
+                        @if (!empty($mua->kontak_wa ?? null) && $waCheckoutText)
+                            <a href="https://wa.me/{{ $waNumber ?? '' }}?text={{ $waCheckoutText }}" target="_blank"
+                                class="mt-3 block w-full bg-emerald-500 hover:bg-emerald-600 text-center py-3 rounded-xl text-white font-semibold shadow-lg text-sm">
+                                Checkout via WhatsApp
+                            </a>
+                        @endif
+
+                        <p class="mt-2 text-[11px] text-slate-500 text-center">
+                            Setelah pesanan dibuat, kamu bisa lihat di menu <span class="font-semibold">Pesanan
+                                Saya</span>.
+                        </p>
                     @endif
                 @endguest
             </div>

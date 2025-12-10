@@ -9,6 +9,8 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   {{-- FONTS & TAILWIND --}}
+  <link rel="icon" type="image/png" href="/logo_1.png?v=1">
+  <link rel="shortcut icon" type="image/png" href="/logo_1.png?v=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap"

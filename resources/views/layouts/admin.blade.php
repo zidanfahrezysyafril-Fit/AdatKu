@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'AdatKu Admin — Panel')</title>
+    <link rel="icon" type="image/png" href="/logo_1.png?v=1">
+    <link rel="shortcut icon" type="image/png" href="/logo_1.png?v=1">
 
     {{-- Tailwind --}}
     <script src="https://cdn.tailwindcss.com"></script>
@@ -272,9 +274,9 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition
-                                           text-slate-100 hover:bg-[#3b151b]">
+                                               text-slate-100 hover:bg-[#3b151b]">
                                 <span class="w-8 h-8 rounded-xl flex items-center justify-center border text-xs
-                                           bg-[#1d1426] text-[#fecaca] border-[#7f1d1d] group-hover:border-[#fecaca]">
+                                               bg-[#1d1426] text-[#fecaca] border-[#7f1d1d] group-hover:border-[#fecaca]">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
                                         fill="currentColor">
                                         <path
@@ -339,8 +341,8 @@
                     <div class="flex md:hidden items-center gap-2">
                         @auth
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold
-                                      bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
-                                      hover:bg-amber-100 hover:border-amber-300 transition">
+                                          bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
+                                          hover:bg-amber-100 hover:border-amber-300 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
                                     fill="currentColor">
                                     <path
@@ -355,8 +357,8 @@
                     <div class="hidden md:flex items-center gap-3">
                         @auth
                             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold
-                                      bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
-                                      hover:bg-amber-100 hover:border-amber-300 transition">
+                                          bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
+                                          hover:bg-amber-100 hover:border-amber-300 transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
                                     fill="currentColor">
                                     <path
