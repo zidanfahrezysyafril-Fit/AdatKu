@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login - AdatKu</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+
 
     <script src="https://cdn.tailwindcss.com"></script>
 

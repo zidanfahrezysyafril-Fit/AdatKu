@@ -7,6 +7,8 @@
     <title>Reset Password - AdatKu</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
 
     <style>
         body {
@@ -15,15 +17,35 @@
 
         /* ANIMASI ORNAMEN */
         @keyframes float-up {
-            0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(-140vh); opacity: 0; }
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-140vh);
+                opacity: 0;
+            }
         }
 
         @keyframes float-down {
-            0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(140vh); opacity: 0; }
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(140vh);
+                opacity: 0;
+            }
         }
 
         .floating-icon {
@@ -36,13 +58,31 @@
             animation-iteration-count: infinite;
         }
 
-        .from-bottom { bottom: -12vh; animation-name: float-up; }
-        .from-top    { top: -12vh;    animation-name: float-down; }
+        .from-bottom {
+            bottom: -12vh;
+            animation-name: float-up;
+        }
 
-        .icon-sm { font-size: 18px; }
-        .icon-md { font-size: 22px; }
-        .icon-lg { font-size: 28px; }
-        .icon-xl { font-size: 34px; }
+        .from-top {
+            top: -12vh;
+            animation-name: float-down;
+        }
+
+        .icon-sm {
+            font-size: 18px;
+        }
+
+        .icon-md {
+            font-size: 22px;
+        }
+
+        .icon-lg {
+            font-size: 28px;
+        }
+
+        .icon-xl {
+            font-size: 34px;
+        }
     </style>
 </head>
 
@@ -71,10 +111,9 @@
         style="left: 78%; animation-duration: 32s; animation-delay: 4s;">✦</span>
 
     {{-- KARTUN ADAT --}}
+    <img src="{{ asset('foto kartun2.jpg') }}" class="fixed left-6 bottom-0 h-[160px] md:h-[230px] object-contain z-10">
     <img src="{{ asset('foto kartun2.jpg') }}"
-         class="fixed left-6 bottom-0 h-[160px] md:h-[230px] object-contain z-10">
-    <img src="{{ asset('foto kartun2.jpg') }}"
-         class="fixed right-6 bottom-0 h-[160px] md:h-[230px] object-contain z-10">
+        class="fixed right-6 bottom-0 h-[160px] md:h-[230px] object-contain z-10">
 
     {{-- CARD RESET PASSWORD (MODEL 2 KOLOM SEPERTI LOGIN) --}}
     <div class="relative z-20 flex items-center justify-center min-h-screen px-4 py-4">
@@ -117,8 +156,7 @@
 
                         <div>
                             <label for="email" class="block text-[12px] font-medium text-slate-700 mb-1">Email</label>
-                            <input type="email" id="email" name="email" value="{{ $email }}"
-                                class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
+                            <input type="email" id="email" name="email" value="{{ $email }}" class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
                                        px-3 py-2 text-[13px] focus:outline-none focus:ring-2
                                        focus:ring-[#f6c453] focus:border-[#f6c453]" required>
                         </div>
@@ -128,8 +166,7 @@
                                 Password Baru
                             </label>
                             <div class="relative">
-                                <input type="password" id="password" name="password"
-                                    class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
+                                <input type="password" id="password" name="password" class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
                                            px-3 py-2 pr-10 text-[13px] focus:outline-none focus:ring-2
                                            focus:ring-[#f6c453] focus:border-[#f6c453]" required>
                                 <span
@@ -142,12 +179,11 @@
 
                         <div>
                             <label for="password_confirmation"
-                                   class="block text-[12px] font-medium text-slate-700 mb-1">
+                                class="block text-[12px] font-medium text-slate-700 mb-1">
                                 Konfirmasi Password Baru
                             </label>
                             <div class="relative">
-                                <input type="password" id="password_confirmation" name="password_confirmation"
-                                    class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
+                                <input type="password" id="password_confirmation" name="password_confirmation" class="w-full rounded-xl border border-[#efcd82] bg-[#fffdf7]
                                            px-3 py-2 pr-10 text-[13px] focus:outline-none focus:ring-2
                                            focus:ring-[#f6c453] focus:border-[#f6c453]" required>
                                 <span
@@ -158,8 +194,7 @@
                             </div>
                         </div>
 
-                        <button type="submit"
-                            class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
                                    text-white font-semibold text-sm shadow-lg hover:brightness-110
                                    transition-all duration-200">
                             Simpan Password Baru
@@ -202,4 +237,5 @@
     </script>
 
 </body>
+
 </html>

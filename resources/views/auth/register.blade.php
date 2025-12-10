@@ -8,6 +8,8 @@
     <title>Register - AdatKu</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
 
     <style>
         body {
