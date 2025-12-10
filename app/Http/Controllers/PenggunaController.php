@@ -10,8 +10,9 @@ class PenggunaController extends Controller
 {
     public function index()
     {
-        $userLogin = Auth::user();
+        // auth()->user() langsung dipakai di blade, jadi ga perlu di-pass lagi
         $users = User::orderBy('name')->get();
+
         return view('user.index', compact('users'));
     }
 
@@ -44,6 +45,7 @@ class PenggunaController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+
         return view('user.edit', compact('user'));
     }
 
@@ -69,6 +71,13 @@ class PenggunaController extends Controller
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
+
+        // ✅ Proteksi: jangan bisa hapus akun yang sedang login
+        if (Auth::id() === $user->id) {
+            return redirect()->route('users.index')
+                ->with('error', 'Kamu tidak bisa menghapus akun kamu sendiri.');
+        }
+
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
