@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'MUA Panel')</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
@@ -133,8 +135,8 @@
             {{-- Kanan: tombol beranda saja (profil & logout dipindah ke sidebar) --}}
             @auth
                 <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold
-                               bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
-                               hover:bg-amber-100 hover:border-amber-300 transition">
+                                   bg-amber-50 text-amber-800 border border-amber-200 shadow-sm
+                                   hover:bg-amber-100 hover:border-amber-300 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 3 3 11h2v9h6v-6h2v6h6v-9h2z" />
                     </svg>
@@ -202,9 +204,9 @@
                 @if ($role === 'mua')
                     <div x-data="{ openMua: {{ $isMuaActive ? 'true' : 'false' }} }" class="pt-2 space-y-1">
                         <button @click="openMua = !openMua" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl
-                                                bg-white/5 border-l-4 border-[#e0ac33]/30
-                                                hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-                                                {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                                                    bg-white/5 border-l-4 border-[#e0ac33]/30
+                                                    hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                                                    {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
@@ -222,13 +224,13 @@
                         <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
                             <a href="{{ route('mua.panel') }}"
                                 class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                                {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                                    {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Profil MUA
                             </a>
 
                             <a href="{{ route('panelmua.layanan.index') }}"
                                 class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                                {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                                    {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Layanan
                             </a>
                         </div>
@@ -351,9 +353,9 @@
                 @if ($role === 'mua')
                     <div x-data="{ openMua: {{ $isMuaActive ? 'true' : 'false' }} }" class="pt-2 space-y-1">
                         <button @click="openMua = !openMua" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl
-                                                bg-white/5 border-l-4 border-[#e0ac33]/30
-                                                hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
-                                                {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
+                                                    bg-white/5 border-l-4 border-[#e0ac33]/30
+                                                    hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
+                                                    {{ $isMuaActive ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
                             <span class="flex items-center gap-3">
                                 <svg class="w-4 h-4 opacity-80" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22a8 8 0 0116 0H4z" />
@@ -371,13 +373,13 @@
                         <div x-show="openMua" x-collapse class="ml-2 pl-4 my-1 border-l border-white/15 space-y-1">
                             <a href="{{ route('mua.panel') }}"
                                 class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                                {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                                    {{ request()->routeIs('mua.panel') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Profil MUA
                             </a>
 
                             <a href="{{ route('panelmua.layanan.index') }}"
                                 class="block px-3 py-2 rounded-lg hover:bg-white/10
-                                                {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
+                                                    {{ request()->routeIs('panelmua.layanan.*') ? 'bg-white/10 ring-1 ring-white/15' : '' }}">
                                 Layanan
                             </a>
                         </div>
@@ -421,8 +423,7 @@
                     </a>
 
                     {{-- Dokumentasi --}}
-                    <a href="{{ route('mua.portfolio.index') }}"
-                        class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
+                    <a href="{{ route('mua.portfolio.index') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl
                             bg-white/5 border-l-4 border-[#e0ac33]/30
                             hover:bg-[#f2d2841a] hover:border-[#e0ac33] hover:shadow-sm transition
                             {{ request()->routeIs('mua.portfolio.index') ? 'bg-[#f2d2841a] border-[#e0ac33]' : '' }}">
