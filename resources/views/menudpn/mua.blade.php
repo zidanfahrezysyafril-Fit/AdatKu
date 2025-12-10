@@ -7,6 +7,8 @@
     <title>Daftar MUA - AdatKu</title>
 
     {{-- FONTS & TAILWIND --}}
+    <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -170,7 +172,7 @@
                     @guest
                         <a href="{{ route('auth') }}"
                             class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                          text-white px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105 transition text-xs sm:text-sm font-semibold">
+                                              text-white px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105 transition text-xs sm:text-sm font-semibold">
                             Sign In
                         </a>
                     @endguest
@@ -439,7 +441,7 @@
                     @foreach ($muas as $mua)
                         <a href="{{ route('public.mua.show', $mua->id) }}"
                             class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden
-                                                  hover:shadow-xl hover:-translate-y-1 transition-transform duration-200 flex flex-col">
+                                                          hover:shadow-xl hover:-translate-y-1 transition-transform duration-200 flex flex-col">
 
                             {{-- FOTO --}}
                             <div class="relative">
@@ -477,12 +479,13 @@
 
                                 <div class="mt-auto flex items-center justify-between gap-2">
                                     <div class="flex flex-wrap gap-1">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px]
-                                                                   bg-yellow-50 text-[#c98a00] border border-yellow-200">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px]
+                                                                           bg-yellow-50 text-[#c98a00] border border-yellow-200">
                                             Makeup & Hairdo
                                         </span>
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px]
-                                                                   bg-amber-50 text-amber-700 border border-amber-200">
+                                                                           bg-amber-50 text-amber-700 border border-amber-200">
                                             Baju Adat
                                         </span>
                                     </div>
@@ -541,8 +544,8 @@
                     </button>
 
                     <button type="button" @click="profileModal=false; editModal=true" class="px-4 sm:px-5 py-2 rounded-lg text-xs sm:text-sm text-white shadow-md
-                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                           hover:opacity-90 transition">
+                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                               hover:opacity-90 transition">
                         Edit Profil
                     </button>
                 </div>
@@ -553,10 +556,10 @@
         <div x-show="editModal" x-cloak x-transition.opacity
             class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm px-4">
             <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                                w-full max-w-3xl p-6 sm:p-8 md:p-10 relative">
+                                    w-full max-w-3xl p-6 sm:p-8 md:p-10 relative">
 
                 <button type="button" @click="editModal=false" class="absolute top-4 sm:top-5 right-4 sm:right-5 w-8 sm:w-9 h-8 sm:h-9 rounded-full bg-slate-100
-                                       hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
                     ✕
                 </button>
 
@@ -574,10 +577,10 @@
 
                     <div class="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 md:gap-8">
                         <div class="relative flex items-center justify-center
-                                           w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32
-                                           rounded-full p-[3px]
-                                           bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                           shadow-xl">
+                                               w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32
+                                               rounded-full p-[3px]
+                                               bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                               shadow-xl">
                             <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
                             </div>
@@ -589,10 +592,10 @@
                                 Ganti Foto
                             </label>
                             <input type="file" name="profile" class="block w-full text-xs sm:text-sm text-slate-600
-                                                  file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                                  file:border file:border-yellow-200 file:bg-white
-                                                  file:text-slate-700 file:cursor-pointer
-                                                  hover:file:bg-yellow-50">
+                                                      file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                                      file:border file:border-yellow-200 file:bg-white
+                                                      file:text-slate-700 file:cursor-pointer
+                                                      hover:file:bg-yellow-50">
                             <p class="text-[11px] sm:text-xs text-slate-500 mt-1">
                                 jpg/jpeg/png, maks 2MB
                             </p>
@@ -604,20 +607,20 @@
                             Nama
                         </label>
                         <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3
-                                              text-sm md:text-base
-                                              focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                              focus:border-[#c98a00]">
+                                                  text-sm md:text-base
+                                                  focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                                  focus:border-[#c98a00]">
                     </div>
 
                     <div class="flex justify-end gap-2 sm:gap-3 pt-3 sm:pt-4">
                         <button type="button" @click="editModal=false" class="px-4 sm:px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs sm:text-sm md:text-base
-                                               hover:bg-slate-200 transition">
+                                                   hover:bg-slate-200 transition">
                             Batal
                         </button>
 
                         <button type="submit" class="px-5 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm md:text-base text-white font-semibold shadow-md
-                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                               hover:opacity-90 transition">
+                                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                   hover:opacity-90 transition">
                             Simpan Perubahan
                         </button>
                     </div>

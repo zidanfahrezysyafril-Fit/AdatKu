@@ -9,8 +9,8 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   {{-- FONTS & TAILWIND --}}
-  <link rel="icon" type="image/png" href="/logo_1.png?v=1">
-  <link rel="shortcut icon" type="image/png" href="/logo_1.png?v=1">
+  <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+  <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -185,9 +185,9 @@
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
       class="fixed left-1/2 -translate-x-1/2 top-20 z-[60]">
       <div class="flex items-center gap-3 px-6 py-3 rounded-lg shadow-xl text-[15px] font-semibold text-white
-                                  backdrop-blur-md border border-[#fff3b0]/40
-                                  @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                                  @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                                    backdrop-blur-md border border-[#fff3b0]/40
+                                    @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                    @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -260,8 +260,8 @@
           @guest
             {{-- tombol login (desktop & mobile) --}}
             <a href="{{ route('pengguna.home') }}" class="hidden md:inline-flex bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                      text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
-                                      transition text-sm font-semibold">
+                                        text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105
+                                        transition text-sm font-semibold">
               Masuk
             </a>
           @endguest
@@ -306,7 +306,7 @@
   </header>
 
   {{-- NAV DRAWER MOBILE --}}
-<div class="fixed inset-0 z-[9998] flex justify-end items-stretch transition-opacity duration-300" x-cloak
+  <div class="fixed inset-0 z-[9998] flex justify-end items-stretch transition-opacity duration-300" x-cloak
     :class="navOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
     @keydown.escape.window="navOpen = false">
 
@@ -721,8 +721,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                         hover:opacity-90 transition">
+                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                           hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -733,10 +733,10 @@
     <div x-show="editModal" x-cloak x-transition.opacity
       class="fixed inset-0 z-[90] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                                  w-[92%] max-w-3xl p-8 md:p-10 relative">
+                                    w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal=false" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                                       hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                         hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -753,8 +753,8 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center
-                                        w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
-                                        bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
+                                          w-28 h-28 sm:w-32 sm:h-32 rounded-full p-[3px]
+                                          bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00] shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -766,10 +766,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                            file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                            file:border file:border-yellow-200 file:bg-white
-                                            file:text-slate-700 file:cursor-pointer
-                                            hover:file:bg-yellow-50">
+                                              file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                              file:border file:border-yellow-200 file:bg-white
+                                              file:text-slate-700 file:cursor-pointer
+                                              hover:file:bg-yellow-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -781,20 +781,20 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                          text-sm md:text-base
-                                          focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                          focus:border-[#c98a00]">
+                                            text-sm md:text-base
+                                            focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                            focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <button type="button" @click="editModal=false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                           hover:bg-slate-200 transition">
+                                             hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                           hover:opacity-90 transition">
+                                             bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                             hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>

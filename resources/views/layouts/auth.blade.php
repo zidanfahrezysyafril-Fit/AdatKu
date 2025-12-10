@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ $title ?? 'Autentikasi' }}</title>
-  <link rel="icon" type="image/png" href="/logo_1.png?v=1">
-  <link rel="shortcut icon" type="image/png" href="/logo_1.png?v=1">
+  <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
+  <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -43,10 +43,9 @@
       @if (session('success') || session('error'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show" x-transition
           class="absolute left-1/2 -translate-x-1/2 -top-3 z-50 animate-fadePop">
-          <div
-            class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg shadow-lg text-[14px] font-medium text-white backdrop-blur-sm border border-[#fff3b0]/40
-            @if (session('success')) bg-gradient-to-r from-[#fce97a] via-[#f0c84b] to-[#c89a24]
-            @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+          <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg shadow-lg text-[14px] font-medium text-white backdrop-blur-sm border border-[#fff3b0]/40
+                @if (session('success')) bg-gradient-to-r from-[#fce97a] via-[#f0c84b] to-[#c89a24]
+                @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
             <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               @if (session('success'))
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -83,4 +82,5 @@
   </main>
 
 </body>
+
 </html>
