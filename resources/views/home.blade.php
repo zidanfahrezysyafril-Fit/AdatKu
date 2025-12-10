@@ -983,8 +983,8 @@
             ],
             (object) [
               'name' => 'Fetty Ratna Dewi',
-              'role' => 'Backend & Database',
-              'division' => 'Logika Pemesanan & Data MUA',
+              'role' => 'Frontend & Dokumentasi',
+              'division' => 'UI/UX & Penulisan Laporan',
               'photo' => null,
             ],
           ]);
