@@ -381,7 +381,7 @@
           @auth
             @php
               $user = auth()->user();
-              $avatar = $user->avatar ? asset('storage/' . $user->avatar) : asset('default-avatar.png');
+              $avatar = $user->avatar ? asset('uploads/' . $user->avatar) : asset('default-avatar.png');
             @endphp
 
             @if (strtolower($user->role ?? '') === 'pengguna')
@@ -877,7 +877,7 @@
 
             @if ($itemsBaju->isNotEmpty())
               @foreach ($itemsBaju as $item)
-                <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
+                <img src="{{ asset('uploads/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
                   alt="{{ $item->judul }}">
               @endforeach
             @else
@@ -907,7 +907,7 @@
 
             @if ($itemsMakeup->isNotEmpty())
               @foreach ($itemsMakeup as $item)
-                <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
+                <img src="{{ asset('uploads/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
                   alt="{{ $item->judul }}">
               @endforeach
             @else
@@ -937,7 +937,7 @@
 
             @if ($itemsPelamin->isNotEmpty())
               @foreach ($itemsPelamin as $item)
-                <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
+                <img src="{{ asset('uploads/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
                   alt="{{ $item->judul }}">
               @endforeach
             @else
@@ -1018,7 +1018,7 @@
           @php
             $isCenter = $loop->count >= 3 && $loop->iteration == 2;
             $photoUrl = $member->photo
-              ? asset('storage/' . $member->photo)
+              ? asset('uploads/' . $member->photo)
               : 'https://placehold.co/600x400?text=Tim';
           @endphp
 
@@ -1102,7 +1102,7 @@
     @php
       $user = auth()->user();
       $avatarUrl = ($user->avatar ?? null)
-        ? asset('storage/' . $user->avatar)
+        ? asset('uploads/' . $user->avatar)
         : 'https://placehold.co/300x300?text=Profile';
     @endphp
 
