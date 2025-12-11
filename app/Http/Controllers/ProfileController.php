@@ -26,23 +26,24 @@ class ProfileController extends Controller
             $user->name = $request->name;
         }
 
-        // ==== PROSES UPLOAD FOTO PROFIL ==== 
+        // ==== PROSES UPLOAD FOTO PROFIL ====
         if ($request->hasFile('profile')) {
 
-            // SIMPAN DI DALAM FOLDER PUBLIC/uploads/profiles/{id}
-            $folderPath = public_path('uploads/profiles/' . $user->id);
+            // 👉 PAKSA KE /public_html/adatku/uploads/profiles/{id}
+            $folderPath = base_path('../public_html/adatku/uploads/profiles/' . $user->id);
 
-            // Jika folder belum ada → buat
+            // Jika folder belum ada → buat otomatis
             if (!is_dir($folderPath)) {
                 mkdir($folderPath, 0777, true);
             }
 
             // Hapus foto lama jika ada
             if (!empty($user->avatar)) {
-                // di DB kamu simpan "uploads/profiles/{id}/file.jpg"
-                $oldFile = public_path($user->avatar);
+                // path penuh ke file lama (di public_html/adatku/...)
+                $oldFile = base_path('../public_html/adatku/' . $user->avatar);
+
                 if (file_exists($oldFile)) {
-                    unlink($oldFile);
+                    @unlink($oldFile);
                 }
             }
 
@@ -50,10 +51,11 @@ class ProfileController extends Controller
             $file = $request->file('profile');
             $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            // Pindahkan file ke folder upload
+            // Pindahkan file ke folder upload di public_html/adatku/...
             $file->move($folderPath, $filename);
 
-            // Simpan path ke database (RELATIF dari public/)
+            // 👉 SIMPAN PATH **UNTUK URL**, BUKAN ABSOLUTE PATH
+            // karena yang diakses browser mulai dari `/adatku/`
             $user->avatar = 'uploads/profiles/' . $user->id . '/' . $filename;
         }
 
