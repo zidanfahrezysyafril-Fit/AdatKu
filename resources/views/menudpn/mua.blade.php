@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar MUA - AdatKu</title>
 
-    {{-- FONTS & TAILWIND --}}
+    {{-- FAVICON, FONTS & TAILWIND --}}
     <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,7 +132,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3 sm:gap-4">
 
                 {{-- LOGO --}}
-                <a href="{{ url('home') }}" class="flex items-center gap-3">
+                <a href="{{ route('home') }}" class="flex items-center gap-3">
                     <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu"
                         class="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover shadow-md border border-amber-200">
                     <div class="leading-tight">
@@ -148,18 +148,20 @@
 
                 {{-- NAV DESKTOP --}}
                 <nav class="hidden md:flex items-center gap-6 text-[13px] sm:text-[14px] font-medium text-[#b48a00]">
-                    <a href="{{ url('home') }}" class="hover:text-[#eab308]">Beranda</a>
-                    <a href="#" class="text-[#eab308] font-semibold border-b-2 border-[#eab308] pb-0.5">
+                    <a href="{{ route('home') }}" class="hover:text-[#eab308]">Beranda</a>
+                    <a href="#"
+                        class="text-[#eab308] font-semibold border-b-2 border-[#eab308] pb-0.5">
                         Daftar MUA
                     </a>
-                    <a href="{{ url('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
+                    <a href="{{ route('hubungikami') }}" class="hover:text-[#eab308]">Hubungi Kami</a>
                 </nav>
 
                 {{-- AKSI KANAN --}}
                 <div class="flex items-center gap-2 sm:gap-3">
 
                     {{-- HAMBURGER (MOBILE) --}}
-                    <button @click="navOpen = true" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/80
+                    <button @click="navOpen = true"
+                        class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/80
                                shadow-sm hover:bg-amber-50 hover:border-amber-300 transition text-xs text-amber-800">
                         <span class="relative flex flex-col justify-between w-3.5 h-3">
                             <span class="block h-[2px] rounded-full bg-amber-500"></span>
@@ -170,9 +172,9 @@
                     </button>
 
                     @guest
-                        <a href="{{ route('auth') }}"
+                        <a href="{{ route('login') }}"
                             class="bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                              text-white px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105 transition text-xs sm:text-sm font-semibold">
+                                   text-white px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full shadow-md hover:shadow-lg hover:brightness-105 transition text-xs sm:text-sm font-semibold">
                             Sign In
                         </a>
                     @endguest
@@ -189,7 +191,7 @@
                                 : 'https://placehold.co/300x300?text=Profile';
                         @endphp
 
-                        @if ($user->role === 'Pengguna')
+                        @if (strtolower($user->role ?? '') === 'pengguna')
                             <a href="{{ route('pengguna.pesanan.index') }}"
                                 class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 hover:bg-amber-100 text-[#b48a00] font-semibold text-xs shadow-sm border border-amber-200">
                                 📦 Pesanan Saya
@@ -273,7 +275,7 @@
 
             {{-- MENU LIST --}}
             <div class="flex-1 overflow-y-auto px-4 py-3 text-sm text-slate-800 space-y-1">
-                <button @click="navOpen = false; window.location='{{ url('home') }}'"
+                <button @click="navOpen = false; window.location='{{ route('home') }}'"
                     class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
                     <span class="text-lg">🏠</span><span>Beranda</span>
                 </button>
@@ -283,7 +285,7 @@
                     <span class="text-lg">💄</span><span>Daftar MUA (Saat ini)</span>
                 </button>
 
-                <button @click="navOpen = false; window.location='{{ url('hubungikami') }}'"
+                <button @click="navOpen = false; window.location='{{ route('hubungikami') }}'"
                     class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
                     <span class="text-lg">✉️</span><span>Hubungi Kami</span>
                 </button>
@@ -311,7 +313,7 @@
                         </button>
                     </form>
                 @else
-                    <button @click="navOpen = false; window.location='{{ route('auth') }}'"
+                    <button @click="navOpen = false; window.location='{{ route('login') }}'"
                         class="mt-2 flex w-full items-center gap-2 py-2 rounded-lg bg-amber-500 text-white justify-center font-semibold hover:bg-amber-600">
                         <span class="text-lg">🔐</span><span>Sign In</span>
                     </button>
@@ -410,16 +412,25 @@
                         </span>
                         MUA yang siap membantu acara adatmu.
                     </p>
+
+                    @if (request('search'))
+                        <p class="text-[11px] sm:text-xs text-gray-400 mt-0.5">
+                            Hasil untuk kata kunci:
+                            <span class="font-semibold text-[#b48a00]">"{{ request('search') }}"</span>
+                        </p>
+                    @endif
                 </div>
 
                 <form method="GET" action="{{ url()->current() }}" class="w-full md:w-1/2">
                     <div class="relative">
                         <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Cari MUA berdasarkan nama usaha atau alamat..." class="w-full rounded-full border border-gray-300 bg-white/80 px-4 pr-24 py-2.5 text-xs sm:text-sm
-                                      outline-none focus:ring-2 focus:ring-[#f5d547] focus:border-[#eab308]">
-                        <button type="submit" class="absolute right-1 top-1 bottom-1 px-3 sm:px-4 rounded-full text-[11px] sm:text-xs font-semibold
-                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                       text-white shadow hover:brightness-105">
+                            placeholder="Cari MUA berdasarkan nama usaha atau alamat..."
+                            class="w-full rounded-full border border-gray-300 bg-white/80 px-4 pr-24 py-2.5 text-xs sm:text-sm
+                                   outline-none focus:ring-2 focus:ring-[#f5d547] focus:border-[#eab308]">
+                        <button type="submit"
+                            class="absolute right-1 top-1 bottom-1 px-3 sm:px-4 rounded-full text-[11px] sm:text-xs font-semibold
+                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                   text-white shadow hover:brightness-105">
                             Cari
                         </button>
                     </div>
@@ -433,15 +444,21 @@
             @if ($muas->isEmpty())
                 <div
                     class="border border-dashed border-gray-300 rounded-2xl py-8 sm:py-10 px-4 text-center text-gray-500 text-xs sm:text-sm">
-                    Belum ada MUA yang mendaftar di AdatKu.<br>
-                    Silakan kembali lagi nanti ya ✨
+                    @if (request('search'))
+                        Tidak ditemukan MUA dengan kata kunci
+                        <span class="font-semibold">"{{ request('search') }}"</span>.<br>
+                        Coba gunakan kata yang lebih umum ya ✨
+                    @else
+                        Belum ada MUA yang mendaftar di AdatKu.<br>
+                        Silakan kembali lagi nanti ya ✨
+                    @endif
                 </div>
             @else
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     @foreach ($muas as $mua)
                         <a href="{{ route('public.mua.show', $mua->id) }}"
                             class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden
-                                                          hover:shadow-xl hover:-translate-y-1 transition-transform duration-200 flex flex-col">
+                                   hover:shadow-xl hover:-translate-y-1 transition-transform duration-200 flex flex-col">
 
                             {{-- FOTO --}}
                             <div class="relative">
@@ -481,11 +498,12 @@
                                     <div class="flex flex-wrap gap-1">
                                         <span
                                             class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px]
-                                                                           bg-yellow-50 text-[#c98a00] border border-yellow-200">
+                                                   bg-yellow-50 text-[#c98a00] border border-yellow-200">
                                             Makeup & Hairdo
                                         </span>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px]
-                                                                           bg-amber-50 text-amber-700 border border-amber-200">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px]
+                                                   bg-amber-50 text-amber-700 border border-amber-200">
                                             Baju Adat
                                         </span>
                                     </div>
@@ -543,9 +561,10 @@
                         Tutup
                     </button>
 
-                    <button type="button" @click="profileModal=false; editModal=true" class="px-4 sm:px-5 py-2 rounded-lg text-xs sm:text-sm text-white shadow-md
-                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                               hover:opacity-90 transition">
+                    <button type="button" @click="profileModal=false; editModal=true"
+                        class="px-4 sm:px-5 py-2 rounded-lg text-xs sm:text-sm text-white shadow-md
+                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                               hover:opacity-90 transition">
                         Edit Profil
                     </button>
                 </div>
@@ -555,11 +574,13 @@
         {{-- modal Edit Profil --}}
         <div x-show="editModal" x-cloak x-transition.opacity
             class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm px-4">
-            <div @click.outside="editModal=false" class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
-                                    w-full max-w-3xl p-6 sm:p-8 md:p-10 relative">
+            <div @click.outside="editModal=false"
+                class="bg-white rounded-[32px] shadow-2xl border border-yellow-200/70
+                       w-full max-w-3xl p-6 sm:p-8 md:p-10 relative">
 
-                <button type="button" @click="editModal=false" class="absolute top-4 sm:top-5 right-4 sm:right-5 w-8 sm:w-9 h-8 sm:h-9 rounded-full bg-slate-100
-                                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                <button type="button" @click="editModal=false"
+                    class="absolute top-4 sm:top-5 right-4 sm:right-5 w-8 sm:w-9 h-8 sm:h-9 rounded-full bg-slate-100
+                           hover:bg-slate-200 flex items-center justify-center text-slate-500">
                     ✕
                 </button>
 
@@ -577,10 +598,10 @@
 
                     <div class="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 md:gap-8">
                         <div class="relative flex items-center justify-center
-                                               w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32
-                                               rounded-full p-[3px]
-                                               bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                               shadow-xl">
+                                    w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32
+                                    rounded-full p-[3px]
+                                    bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                    shadow-xl">
                             <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
                             </div>
@@ -591,11 +612,12 @@
                             <label class="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
                                 Ganti Foto
                             </label>
-                            <input type="file" name="profile" class="block w-full text-xs sm:text-sm text-slate-600
-                                                      file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                                      file:border file:border-yellow-200 file:bg-white
-                                                      file:text-slate-700 file:cursor-pointer
-                                                      hover:file:bg-yellow-50">
+                            <input type="file" name="profile"
+                                class="block w-full text-xs sm:text-sm text-slate-600
+                                       file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                       file:border file:border-yellow-200 file:bg-white
+                                       file:text-slate-700 file:cursor-pointer
+                                       hover:file:bg-yellow-50">
                             <p class="text-[11px] sm:text-xs text-slate-500 mt-1">
                                 jpg/jpeg/png, maks 2MB
                             </p>
@@ -606,21 +628,24 @@
                         <label class="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
                             Nama
                         </label>
-                        <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3
-                                                  text-sm md:text-base
-                                                  focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                                  focus:border-[#c98a00]">
+                        <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                            class="w-full rounded-xl border border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3
+                                   text-sm md:text-base
+                                   focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                   focus:border-[#c98a00]">
                     </div>
 
                     <div class="flex justify-end gap-2 sm:gap-3 pt-3 sm:pt-4">
-                        <button type="button" @click="editModal=false" class="px-4 sm:px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs sm:text-sm md:text-base
-                                                   hover:bg-slate-200 transition">
+                        <button type="button" @click="editModal=false"
+                            class="px-4 sm:px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs sm:text-sm md:text-base
+                                   hover:bg-slate-200 transition">
                             Batal
                         </button>
 
-                        <button type="submit" class="px-5 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm md:text-base text-white font-semibold shadow-md
-                                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                   hover:opacity-90 transition">
+                        <button type="submit"
+                            class="px-5 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm md:text-base text-white font-semibold shadow-md
+                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                   hover:opacity-90 transition">
                             Simpan Perubahan
                         </button>
                     </div>
@@ -644,7 +669,7 @@
                     {{-- BRAND --}}
                     <div>
                         <h1 class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                        bg-clip-text text-transparent drop-shadow">
+                                   bg-clip-text text-transparent drop-shadow">
                             AdatKu
                         </h1>
 
@@ -674,7 +699,8 @@
                             <li><a href="#tentang" class="hover:text-[#f7e07b] transition">Tentang AdatKu</a></li>
                             <li><a href="#galeri" class="hover:text-[#f7e07b] transition">Galeri</a></li>
                             <li><a href="#tim" class="hover:text-[#f7e07b] transition">Tim Pengembang</a></li>
-                            <li><a href="{{ route('hubungikami') }}" class="hover:text-[#f7e07b] transition">Hubungi
+                            <li><a href="{{ route('hubungikami') }}"
+                                    class="hover:text-[#f7e07b] transition">Hubungi
                                     Kami</a></li>
                             <li><a href="{{ route('mua.entry') }}" class="hover:text-[#f7e07b] transition">Daftar Jadi
                                     MUA</a></li>

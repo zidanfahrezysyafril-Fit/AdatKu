@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\MuaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
@@ -20,12 +21,15 @@ use App\Http\Controllers\PublicMuaController;
 use App\Http\Controllers\MuaRequestController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\MuaPortfolioController;
+
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\MuaApprovalController;
+
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -60,8 +64,7 @@ Route::get('hubungikami', fn () => view('menudpn.hubungikami'))->name('hubungika
 Route::get('login', [AuthController::class, 'showLogin'])->name('login');
 
 // 🔒 Proteksi brute force login: max 5 percobaan per 1 menit per IP
-Route::post('login', [AuthController::class, 'login'])
-    ->name('login.post');
+Route::post('login', [AuthController::class, 'login'])->name('login.post');
 
 // REGISTER
 Route::get('register', [AuthController::class, 'showRegister'])->name('register');
@@ -344,6 +347,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
 | KERANJANG
 |--------------------------------------------------------------------------
 */
+
+// 🔹 HALAMAN LIHAT KERANJANG – wajib login
+Route::middleware(['auth'])->get('/keranjang', [KeranjangController::class, 'index'])
+    ->name('keranjang.index');
 
 // Tambah ke keranjang: cukup login (boleh belum verified)
 Route::middleware(['auth'])->post('/keranjang/add', [KeranjangController::class, 'add'])->name('cart.add');
