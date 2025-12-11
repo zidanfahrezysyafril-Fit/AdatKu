@@ -29,8 +29,7 @@ class ProfileController extends Controller
         // ==== PROSES UPLOAD FOTO PROFIL ====
         if ($request->hasFile('profile')) {
 
-            // Path folder tujuan: public/uploads/profiles/{user_id}/
-            $folderPath = public_path('uploads/profiles/' . $user->id);
+            $folderPath = base_path('../public_html/adatku/uploads/profiles/' . $user->id);
 
             // Jika folder belum ada → buat otomatis
             if (!is_dir($folderPath)) {
