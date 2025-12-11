@@ -48,8 +48,22 @@ class GalleryController extends Controller
             'is_active'  => 'nullable|boolean',
         ]);
 
+        // ====== SIMPAN KE public/uploads/galeri ======
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('galeri', 'public');
+            $folder = public_path('uploads/galeri');
+
+            if (! file_exists($folder)) {
+                mkdir($folder, 0777, true);
+            }
+
+            $file     = $request->file('image');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // pindah ke public/uploads/galeri
+            $file->move($folder, $filename);
+
+            // yang disimpan di DB TANPA "uploads/"
+            $data['image_path'] = 'galeri/' . $filename;
         }
 
         $data['urutan']    = $data['urutan'] ?? 1;
@@ -57,7 +71,8 @@ class GalleryController extends Controller
 
         Gallery::create($data);
 
-        return redirect()->route('admin.galleries.index')
+        return redirect()
+            ->route('admin.galleries.index')
             ->with('success', 'Foto galeri berhasil ditambahkan.');
     }
 
@@ -78,7 +93,23 @@ class GalleryController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('galeri', 'public');
+            $folder = public_path('uploads/galeri');
+
+            if (! file_exists($folder)) {
+                mkdir($folder, 0777, true);
+            }
+
+            // hapus file lama kalau ada
+            if ($gallery->image_path && file_exists(public_path('uploads/' . $gallery->image_path))) {
+                @unlink(public_path('uploads/' . $gallery->image_path));
+            }
+
+            $file     = $request->file('image');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move($folder, $filename);
+
+            $data['image_path'] = 'galeri/' . $filename;
         }
 
         $data['urutan']    = $data['urutan'] ?? $gallery->urutan;
@@ -86,15 +117,22 @@ class GalleryController extends Controller
 
         $gallery->update($data);
 
-        return redirect()->route('admin.galleries.index')
+        return redirect()
+            ->route('admin.galleries.index')
             ->with('success', 'Foto galeri berhasil diupdate.');
     }
 
     public function destroy(Gallery $gallery)
     {
+        // hapus file fisik juga
+        if ($gallery->image_path && file_exists(public_path('uploads/' . $gallery->image_path))) {
+            @unlink(public_path('uploads/' . $gallery->image_path));
+        }
+
         $gallery->delete();
 
-        return redirect()->route('admin.galleries.index')
+        return redirect()
+            ->route('admin.galleries.index')
             ->with('success', 'Foto galeri berhasil dihapus.');
     }
 }

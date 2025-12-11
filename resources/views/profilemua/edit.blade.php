@@ -52,7 +52,7 @@
                   <figure
                     class="w-32 h-44 sm:w-36 sm:h-48 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
                     <img id="preview"
-                      src="{{ $mua->foto ? asset('storage/' . $mua->foto) : 'https://placehold.co/240x320?text=Foto' }}"
+                      src="{{ $mua->foto ? asset('uploads/' . $mua->foto) : 'https://placehold.co/240x320?text=Foto' }}"
                       class="w-full h-full object-cover" alt="Foto">
                   </figure>
                   <div

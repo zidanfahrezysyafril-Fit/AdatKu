@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Layanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -20,7 +19,9 @@ class LayananController extends Controller
             if (!$user) {
                 abort(401);
             }
+
             $role = strtolower(trim($user->role ?? ''));
+
             if (!in_array($role, ['mua', 'admin'], true)) {
                 abort(403, 'Akses khusus MUA');
             }
@@ -72,8 +73,21 @@ class LayananController extends Controller
             'foto'      => ['nullable', 'image', 'max:2048'],
         ]);
 
+        // ====== UPLOAD FOTO KE public/uploads/layanan/{mua_id}/ ======
         if ($r->hasFile('foto')) {
-            $data['foto'] = $r->file('foto')->store('layanan', 'public');
+            $folderPath = public_path('uploads/layanan/' . $mua->id);
+
+            if (!is_dir($folderPath)) {
+                mkdir($folderPath, 0777, true);
+            }
+
+            $file = $r->file('foto');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move($folderPath, $filename);
+
+            // path yang disimpan di DB
+            $data['foto'] = 'uploads/layanan/' . $mua->id . '/' . $filename;
         }
 
         $data['mua_id'] = $mua->id;
@@ -87,7 +101,7 @@ class LayananController extends Controller
 
     public function edit(string $id): View
     {
-        $mua  = Auth::user()->mua;
+        $mua = Auth::user()->mua;
         abort_unless((bool) $mua, 404);
 
         $item = Layanan::where('id', $id)
@@ -99,7 +113,7 @@ class LayananController extends Controller
 
     public function update(Request $r, string $id): RedirectResponse
     {
-        $mua  = Auth::user()->mua;
+        $mua = Auth::user()->mua;
         abort_unless((bool) $mua, 404);
 
         $item = Layanan::where('id', $id)
@@ -114,12 +128,28 @@ class LayananController extends Controller
             'foto'      => ['nullable', 'image', 'max:2048'],
         ]);
 
+        // ====== JIKA GANTI FOTO ======
         if ($r->hasFile('foto')) {
-            if ($item->foto) {
-                Storage::disk('public')->delete($item->foto);
+            // hapus foto lama kalau ada
+            if (!empty($item->foto)) {
+                $oldPath = public_path($item->foto);
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
             }
 
-            $data['foto'] = $r->file('foto')->store('layanan', 'public');
+            $folderPath = public_path('uploads/layanan/' . $mua->id);
+
+            if (!is_dir($folderPath)) {
+                mkdir($folderPath, 0777, true);
+            }
+
+            $file = $r->file('foto');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move($folderPath, $filename);
+
+            $data['foto'] = 'uploads/layanan/' . $mua->id . '/' . $filename;
         }
 
         $item->update($data);
@@ -131,15 +161,19 @@ class LayananController extends Controller
 
     public function destroy(string $id): RedirectResponse
     {
-        $mua  = Auth::user()->mua;
+        $mua = Auth::user()->mua;
         abort_unless((bool) $mua, 404);
 
         $item = Layanan::where('id', $id)
             ->where('mua_id', $mua->id)
             ->firstOrFail();
 
-        if ($item->foto) {
-            Storage::disk('public')->delete($item->foto);
+        // hapus foto dari folder upload
+        if (!empty($item->foto)) {
+            $path = public_path($item->foto);
+            if (file_exists($path)) {
+                unlink($path);
+            }
         }
 
         $item->delete();

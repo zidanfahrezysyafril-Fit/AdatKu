@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\MuaPortfolio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class MuaPortfolioController extends Controller
 {
@@ -14,7 +13,6 @@ class MuaPortfolioController extends Controller
      */
     public function index()
     {
-        // Asumsi: User punya relasi ->mua
         $mua = Auth::user()->mua;
 
         if (! $mua) {
@@ -37,24 +35,40 @@ class MuaPortfolioController extends Controller
             abort(403, 'Akun ini belum terdaftar sebagai MUA.');
         }
 
-        // validasi: minimal 1 file
+        // Validasi: minimal 1 file
         $request->validate([
             'foto'   => 'required',
             'foto.*' => 'image|max:4096', // max 4MB per file
         ], [
-            'foto.required'   => 'Pilih minimal satu foto.',
-            'foto.*.image'    => 'File harus berupa gambar.',
-            'foto.*.max'      => 'Ukuran maksimal setiap foto 4MB.',
+            'foto.required' => 'Pilih minimal satu foto.',
+            'foto.*.image'  => 'File harus berupa gambar.',
+            'foto.*.max'    => 'Ukuran maksimal setiap foto 4MB.',
         ]);
 
-        // kalau cuma 1 file tanpa multiple, Laravel akan bungkus jadi array juga
-        foreach ((array) $request->file('foto') as $file) {
-            if (! $file) continue;
+        // Folder tujuan: public/uploads/portfolio_mua
+        $basePath = public_path('uploads/portfolio_mua');
 
-            $path = $file->store('portfolio_mua', 'public');
+        if (!is_dir($basePath)) {
+            mkdir($basePath, 0777, true);
+        }
+
+        // Laravel akan jadikan array walau cuma 1 file
+        foreach ((array) $request->file('foto') as $file) {
+            if (! $file) {
+                continue;
+            }
+
+            // Nama file unik, disisipkan id MUA biar gampang tracking
+            $filename = $mua->id . '-' . time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Pindahkan ke folder public/uploads/portfolio_mua
+            $file->move($basePath, $filename);
+
+            // Path yang disimpan di DB (relatif dari folder public)
+            $relativePath = 'uploads/portfolio_mua/' . $filename;
 
             $mua->portfolios()->create([
-                'foto_path' => $path,
+                'foto_path' => $relativePath,
             ]);
         }
 
@@ -72,9 +86,13 @@ class MuaPortfolioController extends Controller
             abort(403, 'Kamu tidak berhak menghapus foto ini.');
         }
 
-        // hapus file dari storage
-        if ($portfolio->foto_path && Storage::disk('public')->exists($portfolio->foto_path)) {
-            Storage::disk('public')->delete($portfolio->foto_path);
+        // Hapus file dari folder public/uploads/portfolio_mua
+        if (!empty($portfolio->foto_path)) {
+            $fullPath = public_path($portfolio->foto_path);
+
+            if (file_exists($fullPath)) {
+                @unlink($fullPath);
+            }
         }
 
         $portfolio->delete();

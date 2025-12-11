@@ -205,11 +205,11 @@
     @php
       $user = auth()->user();
       $avatar = $user->avatar
-        ? asset('storage/' . $user->avatar)
+        ? asset('uploads/' . $user->avatar)
         : asset('default-avatar.png');
 
       $avatarUrl = ($user->avatar ?? null)
-        ? asset('storage/' . $user->avatar)
+        ? asset('uploads/' . $user->avatar)
         : 'https://placehold.co/300x300?text=Profile';
     @endphp
   @endauth

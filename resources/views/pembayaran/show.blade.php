@@ -79,7 +79,7 @@
                     <div class="mt-3">
                         <p class="text-slate-500 mb-2 text-xs sm:text-sm">Bukti Transfer</p>
                         @if ($pembayaran->bukti_transfer)
-                            <img src="{{ asset('storage/' . $pembayaran->bukti_transfer) }}" alt="Bukti Transfer"
+                            <img src="{{ asset('uploads/' . $pembayaran->bukti_transfer) }}" alt="Bukti Transfer"
                                 class="rounded-xl border border-slate-200 max-h-80 w-full object-contain">
                         @else
                             <p class="text-[11px] sm:text-xs text-slate-400">

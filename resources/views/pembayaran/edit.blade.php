@@ -88,7 +88,7 @@
                             @if ($pembayaran->bukti_transfer)
                                 <div class="mb-2">
                                     <p class="text-[11px] text-slate-500 mb-1">Bukti sekarang:</p>
-                                    <img src="{{ asset('storage/' . $pembayaran->bukti_transfer) }}"
+                                    <img src="{{ asset('uploads/' . $pembayaran->bukti_transfer) }}"
                                         class="max-h-48 rounded-xl border border-slate-200">
                                 </div>
                             @endif

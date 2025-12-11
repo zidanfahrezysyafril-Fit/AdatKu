@@ -146,7 +146,7 @@
 
                                         <td class="px-5 py-4 align-top text-center">
                                             @if ($bayar->bukti_transfer)
-                                                <a href="{{ asset('storage/' . $bayar->bukti_transfer) }}" target="_blank"
+                                                <a href="{{ asset('uploads/' . $bayar->bukti_transfer) }}" target="_blank"
                                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/60">
                                                     Lihat Bukti
                                                 </a>
@@ -261,7 +261,7 @@
                                 <div class="text-xs">
                                     <span class="text-slate-500">Bukti: </span>
                                     @if ($bayar->bukti_transfer)
-                                        <a href="{{ asset('storage/' . $bayar->bukti_transfer) }}" target="_blank"
+                                        <a href="{{ asset('uploads/' . $bayar->bukti_transfer) }}" target="_blank"
                                            class="font-semibold text-rose-600 hover:underline">
                                             Lihat
                                         </a>

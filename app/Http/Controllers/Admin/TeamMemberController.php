@@ -25,7 +25,7 @@ class TeamMemberController extends Controller
     public function index()
     {
         // ambil list + max urutan untuk default di modal create
-        $teamMembers = TeamMember::orderBy('urutan')->paginate(1);
+        $teamMembers = TeamMember::orderBy('urutan')->paginate(4); // boleh diganti 4 / 6 sesuai selera
         $maxOrder    = TeamMember::max('urutan') ?? 0;
 
         return view('admin.team_members.index', compact('teamMembers', 'maxOrder'));
@@ -55,8 +55,22 @@ class TeamMemberController extends Controller
         $data['role']     = $data['role']     ?? 'Peran Tim';
         $data['division'] = $data['division'] ?? 'Divisi';
 
+        // ===== SIMPAN FOTO KE public/uploads/team =====
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('team', 'public');
+            $uploadPath = public_path('uploads/team');
+
+            if (! file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $file = $request->file('photo');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // pindahkan file
+            $file->move($uploadPath, $filename);
+
+            // yang disimpan di DB HANYA "team/namafile.jpg"
+            $data['photo'] = 'team/' . $filename;
         }
 
         // kalau urutan kosong → otomatis max+1
@@ -88,8 +102,27 @@ class TeamMemberController extends Controller
             'is_active'   => 'nullable|boolean',
         ]);
 
+        // ===== GANTI FOTO DI public/uploads/team =====
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('team', 'public');
+            $uploadPath = public_path('uploads/team');
+
+            if (! file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            // hapus foto lama kalau ada
+            if ($team_member->photo) {
+                $oldPath = public_path('uploads/' . $team_member->photo);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+
+            $file = $request->file('photo');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($uploadPath, $filename);
+
+            $data['photo'] = 'team/' . $filename;
         }
 
         // kalau input urutan kosong, pakai yang lama
@@ -108,6 +141,14 @@ class TeamMemberController extends Controller
 
     public function destroy(TeamMember $team_member)
     {
+        // hapus file fisik juga
+        if ($team_member->photo) {
+            $oldPath = public_path('uploads/' . $team_member->photo);
+            if (file_exists($oldPath)) {
+                @unlink($oldPath);
+            }
+        }
+
         $team_member->delete();
 
         return redirect()->route('admin.team-members.index')

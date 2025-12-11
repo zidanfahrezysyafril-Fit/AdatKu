@@ -46,7 +46,7 @@
         @error('foto') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
 
         @if(!empty($item?->foto))
-            <img src="{{ asset('storage/' . $item->foto) }}" class="w-28 h-28 rounded-2xl border border-amber-200 mt-2 object-cover">
+            <img src="{{ asset('uploads/' . $item->foto) }}" class="w-28 h-28 rounded-2xl border border-amber-200 mt-2 object-cover">
         @endif
     </div>
 

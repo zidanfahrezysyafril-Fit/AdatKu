@@ -96,7 +96,7 @@
                             <div class="relative">
                                 <figure
                                     class="w-36 h-48 sm:w-40 sm:h-52 md:w-44 md:h-56 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
-                                    <img src="{{ ($mua && $mua->foto) ? asset('storage/' . $mua->foto) : 'https://placehold.co/320x416?text=Foto' }}"
+                                    <img src="{{ ($mua && $mua->foto) ? asset('uploads/' . $mua->foto) : 'https://placehold.co/320x416?text=Foto' }}"
                                         class="w-full h-full object-cover" alt="Foto MUA">
                                 </figure>
 

@@ -109,7 +109,7 @@
                                     {{-- FOTO --}}
                                     <div class="relative h-40 sm:h-44 bg-slate-100">
                                         @if($item->foto)
-                                            <img src="{{ asset('storage/' . $item->foto) }}" class="w-full h-full object-cover"
+                                            <img src="{{ asset('uploads/' . $item->foto) }}" class="w-full h-full object-cover"
                                                  alt="{{ $item->nama }}">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center text-slate-400 text-xs sm:text-sm">

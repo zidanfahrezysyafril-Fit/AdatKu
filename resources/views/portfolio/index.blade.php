@@ -146,7 +146,7 @@
                         @foreach ($portfolios as $item)
                             <div
                                 class="group relative bg-slate-900/5 rounded-3xl shadow-sm overflow-hidden ring-1 ring-amber-100/60 hover:ring-amber-300 transition">
-                                <img src="{{ asset('storage/' . $item->foto_path) }}"
+                                <img src="{{ asset('uploads/' . $item->foto_path) }}"
                                     class="w-full h-40 md:h-44 object-cover group-hover:scale-105 transition-transform duration-300"
                                     alt="Dokumentasi MUA">
 

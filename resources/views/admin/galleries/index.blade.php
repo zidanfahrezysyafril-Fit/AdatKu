@@ -63,7 +63,7 @@
                                 </p>
                             </div>
                             <div class="w-24 h-16 rounded-lg overflow-hidden border border-amber-100 bg-slate-100 shrink-0">
-                                <img src="{{ asset('storage/' . $g->image_path) }}"
+                                <img src="{{ asset('uploads/' . $g->image_path) }}"
                                      alt="Foto {{ $g->judul }}"
                                      class="w-full h-full object-cover">
                             </div>
@@ -146,7 +146,7 @@
                                                 Foto Saat Ini
                                             </label>
                                             <div class="w-full h-32 rounded-xl overflow-hidden border border-amber-100 bg-slate-100">
-                                                <img src="{{ asset('storage/' . $g->image_path) }}"
+                                                <img src="{{ asset('uploads/' . $g->image_path) }}"
                                                      class="w-full h-full object-cover"
                                                      alt="Foto {{ $g->judul }}">
                                             </div>
@@ -264,7 +264,7 @@
                                 </td>
                                 <td class="px-4 py-2 align-middle">
                                     <div class="w-20 h-14 rounded-lg overflow-hidden border border-amber-100 bg-slate-100">
-                                        <img src="{{ asset('storage/' . $g->image_path) }}"
+                                        <img src="{{ asset('uploads/' . $g->image_path) }}"
                                              class="w-full h-full object-cover"
                                              alt="Foto {{ $g->judul }}">
                                     </div>

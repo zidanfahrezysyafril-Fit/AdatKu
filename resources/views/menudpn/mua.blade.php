@@ -183,11 +183,11 @@
                         @php
                             $user = auth()->user();
                             $avatar = $user->avatar
-                                ? asset('storage/' . $user->avatar)
+                                ? asset('uploads/' . $user->avatar)
                                 : asset('default-avatar.png');
 
                             $avatarUrl = ($user->avatar ?? null)
-                                ? asset('storage/' . $user->avatar)
+                                ? asset('uploads/' . $user->avatar)
                                 : 'https://placehold.co/300x300?text=Profile';
                         @endphp
 
@@ -462,7 +462,7 @@
 
                             {{-- FOTO --}}
                             <div class="relative">
-                                <img src="{{ $mua->foto ? asset('storage/' . $mua->foto) : 'https://placehold.co/400x400?text=MUA' }}"
+                                <img src="{{ $mua->foto ? asset('uploads/' . $mua->foto) : 'https://placehold.co/400x400?text=MUA' }}"
                                     alt="{{ $mua->nama_usaha }}" class="w-full h-48 sm:h-56 object-cover">
                                 <div
                                     class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent opacity-0 group-hover:opacity-100 transition">

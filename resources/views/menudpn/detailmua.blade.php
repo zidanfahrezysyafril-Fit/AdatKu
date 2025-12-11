@@ -358,7 +358,7 @@
             @php
                 // foto
                 $fotoMua = $mua->foto
-                    ? asset('storage/' . $mua->foto)
+                    ? asset('uploads/' . $mua->foto)
                     : 'https://placehold.co/400x400/FFF1F2/E11D48?text=' . urlencode($mua->nama_usaha ?? $mua->nama ?? 'MUA');
 
                 // helper kecil untuk format nomor WA
@@ -610,7 +610,7 @@
                                                 class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
                                                 {{-- FOTO --}}
                                                 <div class="relative h-52 sm:h-56">
-                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                    <img src="{{ $item->foto ? asset('uploads/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
                                                         alt="{{ $item->nama }}" class="w-full h-full object-cover">
                                                     <div
                                                         class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
@@ -694,7 +694,7 @@
                                             <div
                                                 class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
                                                 <div class="relative h-52 sm:h-56">
-                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                    <img src="{{ $item->foto ? asset('uploads/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
                                                         alt="{{ $item->nama }}" class="w-full h-full object-cover">
                                                     <div
                                                         class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
@@ -776,7 +776,7 @@
                                             <div
                                                 class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
                                                 <div class="relative h-52 sm:h-56">
-                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                    <img src="{{ $item->foto ? asset('uploads/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
                                                         alt="{{ $item->nama }}" class="w-full h-full object-cover">
                                                     <div
                                                         class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
@@ -858,7 +858,7 @@
                                             <div
                                                 class="card-hover bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 flex flex-col">
                                                 <div class="relative h-52 sm:h-56">
-                                                    <img src="{{ $item->foto ? asset('storage/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
+                                                    <img src="{{ $item->foto ? asset('uploads/' . $item->foto) : 'https://placehold.co/600x600/FFF1F2/E11D48?text=' . urlencode($item->nama) }}"
                                                         alt="{{ $item->nama }}" class="w-full h-full object-cover">
                                                     <div
                                                         class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent">
@@ -950,7 +950,7 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         @foreach ($mua->portfolios as $portfolio)
                             <div class="relative bg-white rounded-3xl shadow-lg overflow-hidden border border-rose-100 group">
-                                <img src="{{ asset('storage/' . $portfolio->foto_path) }}"
+                                <img src="{{ asset('uploads/' . $portfolio->foto_path) }}"
                                     alt="Dokumentasi MUA {{ $mua->nama ?? $mua->nama_usaha ?? '' }}"
                                     class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div
@@ -1187,7 +1187,7 @@
                                 @endphp
                                 <div class="flex gap-3 p-3 rounded-2xl border border-amber-100 bg-amber-50/40">
                                     @if ($layananItem->foto)
-                                        <img src="{{ asset('storage/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
+                                        <img src="{{ asset('uploads/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
                                             class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
                                     @else
                                         <div

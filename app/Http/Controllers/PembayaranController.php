@@ -6,7 +6,6 @@ use App\Models\Pesanan;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class PembayaranController extends Controller
 {
@@ -60,8 +59,23 @@ class PembayaranController extends Controller
         ]);
 
         $path = null;
+
+        // ==== SIMPAN KE public/uploads/pembayaran ====
         if ($request->hasFile('bukti_transfer')) {
-            $path = $request->file('bukti_transfer')->store('pembayaran', 'public');
+
+            $folderPath = public_path('uploads/pembayaran');
+
+            if (!is_dir($folderPath)) {
+                mkdir($folderPath, 0777, true);
+            }
+
+            $file = $request->file('bukti_transfer');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move($folderPath, $filename);
+
+            // path yg disimpan di DB (relatif dari public)
+            $path = 'uploads/pembayaran/' . $filename;
         }
 
         Pembayaran::create([
@@ -95,7 +109,7 @@ class PembayaranController extends Controller
         $request->validate([
             'tanggal_bayar'  => ['required', 'date'],
             'metode_bayar'   => ['required', 'in:Transfer_Bank,E_Wallet,COD'],
-            'bukti_transfer' => ['nullable', 'image', 'max:2048'],
+            'bukti_transfer' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
         $data = [
@@ -103,17 +117,29 @@ class PembayaranController extends Controller
             'metode_bayar'  => $request->metode_bayar,
         ];
 
+        // ==== JIKA GANTI BUKTI TRANSFER ====
         if ($request->hasFile('bukti_transfer')) {
-            if (
-                $pembayaran->bukti_transfer &&
-                Storage::disk('public')->exists($pembayaran->bukti_transfer)
-            ) {
-                Storage::disk('public')->delete($pembayaran->bukti_transfer);
+
+            // hapus file lama kalau ada
+            if (!empty($pembayaran->bukti_transfer)) {
+                $oldPath = public_path($pembayaran->bukti_transfer);
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
             }
 
-            $path = $request->file('bukti_transfer')->store('pembayaran', 'public');
+            $folderPath = public_path('uploads/pembayaran');
 
-            $data['bukti_transfer'] = $path;
+            if (!is_dir($folderPath)) {
+                mkdir($folderPath, 0777, true);
+            }
+
+            $file = $request->file('bukti_transfer');
+            $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move($folderPath, $filename);
+
+            $data['bukti_transfer'] = 'uploads/pembayaran/' . $filename;
         }
 
         $pembayaran->update($data);
@@ -136,30 +162,28 @@ class PembayaranController extends Controller
     }
 
     /**
-     * 🔹 BARU DITAMBAHKAN
-     * Stream bukti transfer lewat Laravel supaya tidak 403 dari /storage/...
+     * Stream bukti transfer dari folder public/uploads/pembayaran
      */
     public function viewBukti(Pembayaran $pembayaran)
     {
         $user = Auth::user();
         $mua  = $user->mua;
 
-        // keamanan
         if (! $mua || (int) optional($pembayaran->pesanan->layanan)->mua_id !== (int) $mua->id) {
             abort(403, 'Pembayaran ini tidak terkait dengan MUA yang login.');
         }
 
-        // cek file bukti
-        if (! $pembayaran->bukti_transfer || ! Storage::disk('public')->exists($pembayaran->bukti_transfer)) {
+        if (empty($pembayaran->bukti_transfer)) {
             abort(404);
         }
 
-        $path = $pembayaran->bukti_transfer;
+        $fullPath = public_path($pembayaran->bukti_transfer);
 
-        // AMBIL FILE & MIME TYPE YANG BENAR (TANPA NAMED ARGUMENT)
-        $file = Storage::disk('public')->get($path);
-        $mime = Storage::disk('public')->mimeType($path);
+        if (!file_exists($fullPath)) {
+            abort(404);
+        }
 
-        return response($file, 200)->header('Content-Type', $mime);
+        // tampilkan langsung di browser
+        return response()->file($fullPath);
     }
 }

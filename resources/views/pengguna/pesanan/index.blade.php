@@ -385,7 +385,7 @@
                                         @if ($layananItem)
                                             <div class="flex items-center gap-3">
                                                 @if ($layananItem->foto)
-                                                    <img src="{{ asset('storage/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
+                                                    <img src="{{ asset('uploads/' . $layananItem->foto) }}" alt="{{ $layananItem->nama }}"
                                                         class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
                                                 @else
                                                     <div

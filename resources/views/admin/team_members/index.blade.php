@@ -50,7 +50,7 @@
                     @foreach($teamMembers as $m)
                         @php
                             $photoUrl = $m->photo
-                                ? asset('storage/' . $m->photo)
+                                ? asset('uploads/' . $m->photo)
                                 : 'https://placehold.co/80x80?text=' . urlencode(\Illuminate\Support\Str::limit($m->name, 2, ''));
                         @endphp
 
@@ -283,7 +283,7 @@
                             @foreach($teamMembers as $m)
                                 @php
                                     $photoUrl = $m->photo
-                                        ? asset('storage/' . $m->photo)
+                                        ? asset('uploads/' . $m->photo)
                                         : 'https://placehold.co/80x80?text=' . urlencode(\Illuminate\Support\Str::limit($m->name, 2, ''));
                                 @endphp
 
