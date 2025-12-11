@@ -29,8 +29,11 @@ class ProfileController extends Controller
         // ==== PROSES UPLOAD FOTO PROFIL ====
         if ($request->hasFile('profile')) {
 
-            // 👉 PAKSA KE /public_html/adatku/uploads/profiles/{id}
-            $folderPath = base_path('../public_html/adatku/uploads/profiles/' . $user->id);
+            // ROOT ke public_html/adatku
+            $publicRoot = '/home/ourj2192/public_html/adatku';
+
+            // Folder tujuan: /home/ourj2192/public_html/adatku/uploads/profiles/{id}
+            $folderPath = $publicRoot . '/uploads/profiles/' . $user->id;
 
             // Jika folder belum ada → buat otomatis
             if (!is_dir($folderPath)) {
@@ -39,8 +42,8 @@ class ProfileController extends Controller
 
             // Hapus foto lama jika ada
             if (!empty($user->avatar)) {
-                // path penuh ke file lama (di public_html/adatku/...)
-                $oldFile = base_path('../public_html/adatku/' . $user->avatar);
+                // $user->avatar = 'uploads/profiles/{id}/file.jpg'
+                $oldFile = $publicRoot . '/' . $user->avatar;
 
                 if (file_exists($oldFile)) {
                     @unlink($oldFile);
@@ -54,8 +57,7 @@ class ProfileController extends Controller
             // Pindahkan file ke folder upload di public_html/adatku/...
             $file->move($folderPath, $filename);
 
-            // 👉 SIMPAN PATH **UNTUK URL**, BUKAN ABSOLUTE PATH
-            // karena yang diakses browser mulai dari `/adatku/`
+            // Simpan path untuk URL (tanpa public_html)
             $user->avatar = 'uploads/profiles/' . $user->id . '/' . $filename;
         }
 
