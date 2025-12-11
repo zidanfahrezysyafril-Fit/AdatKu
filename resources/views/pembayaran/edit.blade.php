@@ -25,17 +25,22 @@
                 <div class="px-5 sm:px-7 py-5 sm:py-6 space-y-5">
                     {{-- Info pesanan --}}
                     <div class="text-xs sm:text-sm mb-2">
+                        @php
+                            $layanan = optional($pesanan)->layanan;
+                        @endphp
+
                         <p class="font-semibold text-slate-800">
-                            Pesanan: {{ $pesanan->layanan->nama ?? '-' }}
+                            Pesanan: {{ $layanan->nama ?? '-' }}
                         </p>
                         <p class="text-slate-500 text-[11px] sm:text-xs mt-1">
                             Booking:
-                            {{ \Carbon\Carbon::parse($pesanan->tanggal_booking)->translatedFormat('d M Y') }}
+                            {{ $pesanan ? \Carbon\Carbon::parse($pesanan->tanggal_booking)->translatedFormat('d M Y') : '-' }}
                             • Total:
                             <span class="font-semibold text-amber-600">
-                                Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
+                                {{ $pesanan ? 'Rp ' . number_format($pesanan->total_harga, 0, ',', '.') : '-' }}
                             </span>
                         </p>
+
                     </div>
 
                     <form action="{{ route('panelmua.pembayaran.update', $pembayaran->id) }}" method="POST"
@@ -49,8 +54,9 @@
                                 Tanggal Bayar
                             </label>
                             <input type="date" name="tanggal_bayar"
-                                value="{{ old('tanggal_bayar', $pembayaran->tanggal_bayar) }}" class="w-full border border-amber-200/70 rounded-xl px-3 py-2 text-sm bg-[#FFFBF3]
-                                              focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]">
+                                value="{{ old('tanggal_bayar', $pembayaran->tanggal_bayar) }}"
+                                class="w-full border border-amber-200/70 rounded-xl px-3 py-2 text-sm bg-[#FFFBF3]
+                                                      focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]">
                             @error('tanggal_bayar')
                                 <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                             @enderror
@@ -63,7 +69,7 @@
                             </label>
                             <select name="metode_bayar"
                                 class="w-full border border-amber-200/70 rounded-xl px-3 py-2 text-sm bg-white
-                                               focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]">
+                                                       focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]">
                                 <option value="Transfer_Bank" @selected(old('metode_bayar', $pembayaran->metode_bayar) === 'Transfer_Bank')>
                                     Transfer Bank
                                 </option>
@@ -88,7 +94,7 @@
                             @if ($pembayaran->bukti_transfer)
                                 <div class="mb-2">
                                     <p class="text-[11px] text-slate-500 mb-1">Bukti sekarang:</p>
-                                    <img src="{{ asset('uploads/' . $pembayaran->bukti_transfer) }}"
+                                    <img src="{{ asset($pembayaran->bukti_transfer) }}"
                                         class="max-h-48 rounded-xl border border-slate-200">
                                 </div>
                             @endif
@@ -112,7 +118,7 @@
 
                             <button type="submit"
                                 class="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold text-[#7A4600] shadow-sm hover:brightness-110 active:brightness-95 transition
-                                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2"
+                                                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2"
                                 style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                                 Simpan Perubahan
                             </button>

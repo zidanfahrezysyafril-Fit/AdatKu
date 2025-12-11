@@ -16,13 +16,10 @@ class LayananController extends Controller
 
         $this->middleware(function ($request, $next) {
             $user = Auth::user();
-            if (!$user) {
-                abort(401);
-            }
+            if (!$user) abort(401);
 
-            $role = strtolower(trim($user->role ?? ''));
-
-            if (!in_array($role, ['mua', 'admin'], true)) {
+            $role = strtolower($user->role ?? '');
+            if (!in_array($role, ['mua', 'admin'])) {
                 abort(403, 'Akses khusus MUA');
             }
 
@@ -33,20 +30,18 @@ class LayananController extends Controller
     public function index(): View
     {
         $mua = Auth::user()->mua;
-        abort_unless((bool) $mua, 404);
+        abort_unless($mua, 404);
 
         $kategori = request('k');
 
         $query = Layanan::where('mua_id', $mua->id);
 
-        if (!empty($kategori)) {
+        if ($kategori) {
             $query->where('kategori', $kategori);
         }
 
-        $items = $query->latest()->paginate(12);
-
         return view('layanan.index', [
-            'items'    => $items,
+            'items'    => $query->latest()->paginate(12),
             'mua'      => $mua,
             'kategori' => $kategori,
         ]);
@@ -54,28 +49,26 @@ class LayananController extends Controller
 
     public function create(): View
     {
-        abort_unless((bool) Auth::user()->mua, 404);
-
-        $item = null;
-        return view('layanan.create', compact('item'));
+        abort_unless(Auth::user()->mua, 404);
+        return view('layanan.create')->with('item', null);
     }
 
     public function store(Request $r): RedirectResponse
     {
         $mua = Auth::user()->mua;
-        abort_unless((bool) $mua, 404);
+        abort_unless($mua, 404);
 
         $data = $r->validate([
-            'nama'      => ['required', 'string', 'max:120'],
-            'harga'     => ['required', 'integer', 'min:0'],
-            'kategori'  => ['nullable', 'string', 'max:40'],
-            'deskripsi' => ['nullable', 'string'],
-            'foto'      => ['nullable', 'image', 'max:2048'],
+            'nama'      => 'required|string|max:120',
+            'harga'     => 'required|integer|min:0',
+            'kategori'  => 'nullable|string|max:40',
+            'deskripsi' => 'nullable|string',
+            'foto'      => 'nullable|image|max:2048',
         ]);
 
-        // ====== UPLOAD FOTO KE public/uploads/layanan/{mua_id}/ ======
+        // === UPLOAD FOTO ===
         if ($r->hasFile('foto')) {
-            $folderPath = public_path('uploads/layanan/' . $mua->id);
+            $folderPath = base_path('../public_html/adatku/uploads/layanan/' . $mua->id);
 
             if (!is_dir($folderPath)) {
                 mkdir($folderPath, 0777, true);
@@ -86,7 +79,6 @@ class LayananController extends Controller
 
             $file->move($folderPath, $filename);
 
-            // path yang disimpan di DB
             $data['foto'] = 'uploads/layanan/' . $mua->id . '/' . $filename;
         }
 
@@ -94,15 +86,13 @@ class LayananController extends Controller
 
         Layanan::create($data);
 
-        return redirect()
-            ->route('panelmua.layanan.index')
-            ->with('success', 'Layanan berhasil ditambahkan.');
+        return to_route('panelmua.layanan.index')->with('success', 'Layanan berhasil ditambahkan.');
     }
 
     public function edit(string $id): View
     {
         $mua = Auth::user()->mua;
-        abort_unless((bool) $mua, 404);
+        abort_unless($mua, 404);
 
         $item = Layanan::where('id', $id)
             ->where('mua_id', $mua->id)
@@ -114,35 +104,31 @@ class LayananController extends Controller
     public function update(Request $r, string $id): RedirectResponse
     {
         $mua = Auth::user()->mua;
-        abort_unless((bool) $mua, 404);
+        abort_unless($mua, 404);
 
         $item = Layanan::where('id', $id)
             ->where('mua_id', $mua->id)
             ->firstOrFail();
 
         $data = $r->validate([
-            'nama'      => ['required', 'string', 'max:120'],
-            'harga'     => ['required', 'integer', 'min:0'],
-            'kategori'  => ['nullable', 'string', 'max:40'],
-            'deskripsi' => ['nullable', 'string'],
-            'foto'      => ['nullable', 'image', 'max:2048'],
+            'nama'      => 'required|string|max:120',
+            'harga'     => 'required|integer|min:0',
+            'kategori'  => 'nullable|string|max:40',
+            'deskripsi' => 'nullable|string',
+            'foto'      => 'nullable|image|max:2048',
         ]);
 
-        // ====== JIKA GANTI FOTO ======
+        // === JIKA GANTI FOTO ===
         if ($r->hasFile('foto')) {
-            // hapus foto lama kalau ada
+            // hapus foto lama
             if (!empty($item->foto)) {
-                $oldPath = public_path($item->foto);
-                if (file_exists($oldPath)) {
-                    unlink($oldPath);
-                }
+                $oldPath = base_path('../public_html/adatku/' . $item->foto);
+                if (file_exists($oldPath)) @unlink($oldPath);
             }
 
-            $folderPath = public_path('uploads/layanan/' . $mua->id);
+            $folderPath = base_path('../public_html/adatku/uploads/layanan/' . $mua->id);
 
-            if (!is_dir($folderPath)) {
-                mkdir($folderPath, 0777, true);
-            }
+            if (!is_dir($folderPath)) mkdir($folderPath, 0777, true);
 
             $file = $r->file('foto');
             $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
@@ -154,26 +140,21 @@ class LayananController extends Controller
 
         $item->update($data);
 
-        return redirect()
-            ->route('panelmua.layanan.index')
-            ->with('success', 'Layanan berhasil diperbarui.');
+        return to_route('panelmua.layanan.index')->with('success', 'Layanan berhasil diperbarui.');
     }
 
     public function destroy(string $id): RedirectResponse
     {
         $mua = Auth::user()->mua;
-        abort_unless((bool) $mua, 404);
+        abort_unless($mua, 404);
 
         $item = Layanan::where('id', $id)
             ->where('mua_id', $mua->id)
             ->firstOrFail();
 
-        // hapus foto dari folder upload
         if (!empty($item->foto)) {
-            $path = public_path($item->foto);
-            if (file_exists($path)) {
-                unlink($path);
-            }
+            $fullPath = base_path('../public_html/adatku/' . $item->foto);
+            if (file_exists($fullPath)) @unlink($fullPath);
         }
 
         $item->delete();

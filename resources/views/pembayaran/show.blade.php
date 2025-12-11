@@ -25,7 +25,7 @@
                     </h1>
                 </div>
 
-            {{-- BODY --}}
+                {{-- BODY --}}
                 <div class="px-5 sm:px-7 py-5 sm:py-6 space-y-5">
                     <h2 class="text-sm sm:text-base font-semibold text-slate-800">
                         Pesanan: {{ $pembayaran->pesanan->layanan->nama ?? '-' }}
@@ -79,7 +79,7 @@
                     <div class="mt-3">
                         <p class="text-slate-500 mb-2 text-xs sm:text-sm">Bukti Transfer</p>
                         @if ($pembayaran->bukti_transfer)
-                            <img src="{{ asset('uploads/' . $pembayaran->bukti_transfer) }}" alt="Bukti Transfer"
+                            <img src="{{ asset($pembayaran->bukti_transfer) }}" alt="Bukti Transfer"
                                 class="rounded-xl border border-slate-200 max-h-80 w-full object-contain">
                         @else
                             <p class="text-[11px] sm:text-xs text-slate-400">

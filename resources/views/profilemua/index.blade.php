@@ -96,7 +96,7 @@
                             <div class="relative">
                                 <figure
                                     class="w-36 h-48 sm:w-40 sm:h-52 md:w-44 md:h-56 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
-                                    <img src="{{ ($mua && $mua->foto) ? asset('uploads/' . $mua->foto) : 'https://placehold.co/320x416?text=Foto' }}"
+                                    <img src="{{ $mua && $mua->foto ? asset($mua->foto) : 'https://placehold.co/320x416?text=Foto' }}"
                                         class="w-full h-full object-cover" alt="Foto MUA">
                                 </figure>
 
@@ -112,7 +112,7 @@
                             <div class="flex flex-wrap items-center gap-2">
                                 <h3
                                     class="text-xl sm:text-2xl lg:text-3xl font-extrabold adat-gold leading-tight break-words">
-                                    {{ $mua->nama_usaha ?? 'Belum diisi' }}
+                                    {{ $mua?->nama_usaha ?? 'Belum diisi' }}
                                 </h3>
 
                                 @if ($mua && $mua->kota)
@@ -171,13 +171,13 @@
                                 <div
                                     class="flex flex-col gap-1 rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3">
                                     <span class="{{ $label }}">WhatsApp</span>
-                                    <span class="{{ $value }}">{{ $mua->kontak_wa ?? '-' }}</span>
+                                    <span class="{{ $value }}">{{ optional($mua)->kontak_wa ?? '-' }}</span>
                                 </div>
 
                                 <div
                                     class="flex flex-col gap-1 rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3">
                                     <span class="{{ $label }}">Alamat</span>
-                                    <span class="{{ $value }}">{{ $mua->alamat ?? '-' }}</span>
+                                    <span class="{{ $value }}">{{ optional($mua)->alamat ?? '-' }}</span>
                                 </div>
                             </div>
                         </section>
@@ -232,14 +232,16 @@
 
                         <div>
                             @if (!$mua)
-                                <a href="{{ route('profilemua.create') }}" class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white 
-                                                  shadow-md hover:brightness-110 active:brightness-95 transition text-sm"
+                                <a href="{{ route('profilemua.create') }}"
+                                    class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white 
+                                                                  shadow-md hover:brightness-110 active:brightness-95 transition text-sm"
                                     style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                                     Buat Profil
                                 </a>
                             @else
-                                <a href="{{ route('profilemua.edit') }}" class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white
-                                                  shadow-md hover:brightness-110 active:brightness-95 transition text-sm"
+                                <a href="{{ route('profilemua.edit') }}"
+                                    class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white
+                                                                  shadow-md hover:brightness-110 active:brightness-95 transition text-sm"
                                     style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
                                     Edit Profil
                                 </a>

@@ -5,10 +5,10 @@
   @php
     // INPUT: normal abu, pas focus baru muncul border emas gradasi
     $inp = 'w-full rounded-xl px-3 py-2.5 placeholder:text-slate-400 border border-slate-300
-                focus:outline-none focus:border-[3px] focus:border-transparent
-                focus:[background-image:linear-gradient(white,white),linear-gradient(90deg,#FFE07D,#C98A00)]
-                focus:[background-origin:border-box] focus:[background-clip:padding-box,border-box]
-                focus:ring-0';
+                            focus:outline-none focus:border-[3px] focus:border-transparent
+                            focus:[background-image:linear-gradient(white,white),linear-gradient(90deg,#FFE07D,#C98A00)]
+                            focus:[background-origin:border-box] focus:[background-clip:padding-box,border-box]
+                            focus:ring-0';
 
     $lab = 'block text-[13px] font-semibold text-slate-600 mb-1.5';
   @endphp
@@ -52,7 +52,7 @@
                   <figure
                     class="w-32 h-44 sm:w-36 sm:h-48 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
                     <img id="preview"
-                      src="{{ $mua->foto ? asset('uploads/' . $mua->foto) : 'https://placehold.co/240x320?text=Foto' }}"
+                      src="{{ !empty($mua?->foto) ? asset($mua->foto) : 'https://placehold.co/240x320?text=Foto' }}"
                       class="w-full h-full object-cover" alt="Foto">
                   </figure>
                   <div
@@ -62,8 +62,8 @@
 
                 <div>
                   <input type="file" name="foto" accept="image/*" onchange="previewImg(event)" class="block w-full text-xs sm:text-sm border border-slate-300 rounded-xl
-                                  file:mr-3 file:px-3 file:py-1.5 file:rounded-xl file:border-0
-                                  file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 transition">
+                                        file:mr-3 file:px-3 file:py-1.5 file:rounded-xl file:border-0
+                                        file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 transition">
                   <p class="text-xs text-slate-500 mt-1">Format JPG/PNG, max 2MB.</p>
                 </div>
               </div>
@@ -82,7 +82,7 @@
               <div class="grid gap-4">
                 <div>
                   <label class="{{ $lab }}">Nama Usaha</label>
-                  <input type="text" name="nama_usaha" value="{{ old('nama_usaha', $mua->nama_usaha) }}"
+                  <input type="text" name="nama_usaha" value="{{ old('nama_usaha', $mua->nama_usaha ?? '') }}"
                     class="{{ $inp }}" placeholder="Masukkan nama usaha / brand MUA kamu">
                 </div>
 
@@ -90,17 +90,14 @@
                   <div>
                     <label class="{{ $lab }}">Kontak WA</label>
                     {{-- tambahin id & tetap pakai placeholder +62 --}}
-                    <input
-                      id="kontak_wa"
-                      type="text"
-                      name="kontak_wa"
-                      value="{{ old('kontak_wa', $mua->kontak_wa) }}"
-                      class="{{ $inp }}"
-                      placeholder="+62 812 3456 7890">
+                    <input id="kontak_wa" type="text" name="kontak_wa"
+                      value="{{ old('kontak_wa', $mua->kontak_wa ?? '') }}" class="{{ $inp }}"
+                      placeholder="812 3456 7890 (isi tanpa 0 / +62)">
+
                   </div>
                   <div>
                     <label class="{{ $lab }}">Alamat / Domisili</label>
-                    <input type="text" name="alamat" value="{{ old('alamat', $mua->alamat) }}" class="{{ $inp }}"
+                    <input type="text" name="alamat" value="{{ old('alamat', $mua->alamat ?? '') }}" class="{{ $inp }}"
                       placeholder="Masukkan alamat / domisili kamu">
                   </div>
                 </div>
@@ -108,7 +105,7 @@
                 <div>
                   <label class="{{ $lab }}">Deskripsi Profil</label>
                   <textarea name="deskripsi" rows="4" class="{{ $inp }} resize-y"
-                    placeholder="Ceritakan secara singkat tentang jasa MUA kamu...">{{ old('deskripsi', $mua->deskripsi) }}</textarea>
+                    placeholder="Ceritakan secara singkat tentang jasa MUA kamu...">{{ old('deskripsi', $mua->deskripsi ?? '') }}</textarea>
                   <p class="text-xs text-slate-500 mt-1">
                     Ceritakan style makeup, keunggulan, pengalaman, dan layananmu.
                   </p>
@@ -129,12 +126,12 @@
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
                 <label class="{{ $lab }}">Instagram</label>
-                <input type="text" name="instagram" value="{{ old('instagram', $mua->instagram) }}" class="{{ $inp }}"
-                  placeholder="@username">
+                <input type="text" name="instagram" value="{{ old('instagram', $mua->instagram ?? '') }}"
+                  class="{{ $inp }}" placeholder="@username">
               </div>
               <div>
                 <label class="{{ $lab }}">TikTok</label>
-                <input type="text" name="tiktok" value="{{ old('tiktok', $mua->tiktok) }}" class="{{ $inp }}"
+                <input type="text" name="tiktok" value="{{ old('tiktok', $mua->tiktok ?? '') }}" class="{{ $inp }}"
                   placeholder="@username">
               </div>
             </div>
@@ -144,7 +141,7 @@
           <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-4">
             {{-- BATAL --}}
             <a href="{{ route('mua.panel') }}" class="inline-flex items-center justify-center px-5 py-2.5 rounded-2xl font-semibold text-white
-                        shadow-sm hover:brightness-110 active:brightness-95 transition text-sm"
+                              shadow-sm hover:brightness-110 active:brightness-95 transition text-sm"
               style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
               Batal
             </a>
@@ -152,8 +149,8 @@
             {{-- SIMPAN PERUBAHAN --}}
             <button type="submit"
               class="inline-flex items-center justify-center px-6 py-2.5 rounded-2xl font-semibold text-white
-                       shadow-md hover:brightness-110 active:brightness-95 transition text-sm
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eab308] focus-visible:ring-offset-2"
+                             shadow-md hover:brightness-110 active:brightness-95 transition text-sm
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eab308] focus-visible:ring-offset-2"
               style="background: linear-gradient(90deg,#FFEB91,#DA9A00);">
               Simpan Perubahan
             </button>

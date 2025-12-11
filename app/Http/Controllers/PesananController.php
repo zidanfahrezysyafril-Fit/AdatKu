@@ -6,12 +6,17 @@ use App\Models\Layanan;
 use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class PesananController extends Controller
 {
     /* ===================== PENGGUNA ===================== */
 
-    public function indexUser()
+    /**
+     * Halaman "Pesanan Saya" untuk pengguna.
+     */
+    public function indexUser(): View
     {
         $pesanan = Pesanan::where('id_pengguna', Auth::id())
             ->with(['layanan', 'pengguna'])
@@ -21,7 +26,11 @@ class PesananController extends Controller
         return view('pengguna.pesanan.index', compact('pesanan'));
     }
 
-    public function showUser(Pesanan $pesanan)
+    /**
+     * Detail pesanan pengguna.
+     * Saat ini diarahkan kembali ke index.
+     */
+    public function showUser(Pesanan $pesanan): RedirectResponse
     {
         if ($pesanan->id_pengguna !== Auth::id()) {
             abort(403);
@@ -29,17 +38,16 @@ class PesananController extends Controller
 
         $pesanan->load('layanan', 'pengguna');
 
-        // untuk sekarang kamu memang cuma punya halaman list,
-        // jadi balikin lagi ke index
+        // sekarang masih cuma punya halaman list
         return redirect()->route('pengguna.pesanan.index');
     }
 
     /**
      * Pengguna membatalkan pesanan.
      * - 1 kartu = 1 group kode_checkout
-     * - HANYA yang statusnya Belum_Lunas yang di-set jadi Dibatalkan
+     * - HANYA yang statusnya Belum_Lunas / pending yang di-set jadi Dibatalkan
      */
-    public function destroyUser(Pesanan $pesanan)
+    public function destroyUser(Pesanan $pesanan): RedirectResponse
     {
         $userId = Auth::id();
 
@@ -60,8 +68,14 @@ class PesananController extends Controller
             $group = collect([$pesanan]);
         }
 
-        // Ambil hanya yang masih bisa dibatalkan
-        $bisaDibatalkan = $group->where('status_pembayaran', 'Belum_Lunas');
+        // Ambil hanya yang masih bisa dibatalkan (support data lama)
+        $bisaDibatalkan = $group->filter(function ($p) {
+            $raw = $p->status_pembayaran ?? '';
+            $status = strtolower(str_replace(' ', '_', $raw));
+
+            // anggap bisa dibatalkan jika masih belum lunas / pending
+            return in_array($status, ['belum_lunas', 'pending'], true);
+        });
 
         if ($bisaDibatalkan->isEmpty()) {
             return back()->with(
@@ -80,7 +94,10 @@ class PesananController extends Controller
             ->with('success', 'Pesanan berhasil dibatalkan untuk ' . $bisaDibatalkan->count() . ' layanan.');
     }
 
-    public function storeUser(Request $request)
+    /**
+     * Simpan pesanan baru dari pengguna (satu layanan).
+     */
+    public function storeUser(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'layanan_id'      => ['required', 'exists:layanans,id'],
@@ -106,19 +123,25 @@ class PesananController extends Controller
             ->with('success', 'Pesanan berhasil dibuat.');
     }
 
-    public function createUser(Layanan $layanan)
+    /**
+     * Form buat pesanan baru (satu layanan).
+     */
+    public function createUser(Layanan $layanan): View
     {
         return view('pengguna.pesanan.create', compact('layanan'));
     }
 
     /* ===================== PANEL MUA ===================== */
 
-    public function indexMua()
+    /**
+     * List pesanan di panel MUA (digroup per kode_checkout).
+     */
+    public function indexMua(): View|RedirectResponse
     {
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (!$mua) {
+        if (! $mua) {
             return redirect()
                 ->route('dashboard')
                 ->with('error', 'Profil MUA kamu belum dibuat.');
@@ -147,13 +170,13 @@ class PesananController extends Controller
      * - status 1 group checkout di-set sama semua
      *   biar tampilan panel MUA & pengguna selalu sinkron
      */
-    public function updateStatusMua(Request $request, $id)
+    public function updateStatusMua(Request $request, $id): RedirectResponse
     {
         $user = Auth::user();
         $mua  = $user->mua;
 
         // kalau user belum punya profil MUA → tolak
-        if (!$mua) {
+        if (! $mua) {
             abort(403, 'Profil MUA tidak ditemukan.');
         }
 
@@ -188,13 +211,17 @@ class PesananController extends Controller
         return back()->with('success', 'Status pembayaran berhasil diperbarui.');
     }
 
-
-    public function destroyMua(Pesanan $pesanan)
+    /**
+     * MUA menghapus satu pesanan (bukan cancel status).
+     */
+    public function destroyMua(Pesanan $pesanan): RedirectResponse
     {
         $user = Auth::user();
         $mua  = $user->mua;
 
-        if (!$mua || $pesanan->layanan->mua_id !== $mua->id) {
+        $layanan = $pesanan->layanan;
+
+        if (! $mua || ! $layanan || $layanan->mua_id !== $mua->id) {
             abort(403);
         }
 

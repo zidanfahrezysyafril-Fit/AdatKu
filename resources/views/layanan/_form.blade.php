@@ -1,8 +1,8 @@
 @php
     $inp = 'w-full rounded-2xl border border-amber-200/70 bg-[#FFFBF3]
-            px-3.5 py-2.5 text-sm
-            focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]
-            placeholder:text-slate-400 shadow-[0_1px_0_rgba(248,250,252,0.7)]';
+                px-3.5 py-2.5 text-sm
+                focus:outline-none focus:ring-2 focus:ring-[#FACC6B] focus:border-[#DA9A00]
+                placeholder:text-slate-400 shadow-[0_1px_0_rgba(248,250,252,0.7)]';
     $lab = 'block text-sm font-medium text-slate-800 mb-1.5';
 @endphp
 
@@ -46,7 +46,7 @@
         @error('foto') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
 
         @if(!empty($item?->foto))
-            <img src="{{ asset('uploads/' . $item->foto) }}" class="w-28 h-28 rounded-2xl border border-amber-200 mt-2 object-cover">
+            <img src="{{ asset($item->foto) }}" class="w-28 h-28 rounded-2xl border border-amber-200 mt-2 object-cover">
         @endif
     </div>
 

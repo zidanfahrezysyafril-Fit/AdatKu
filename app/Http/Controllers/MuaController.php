@@ -19,12 +19,12 @@ class MuaController extends Controller
 
         $this->middleware(function ($request, $next) {
             $user = Auth::user();
-            if (! $user) {
+            if (!$user) {
                 abort(401);
             }
 
             $role = strtolower(trim($user->role ?? ''));
-            if (! in_array($role, ['mua', 'admin'], true)) {
+            if (!in_array($role, ['mua', 'admin'], true)) {
                 abort(403, 'Akses khusus MUA');
             }
 
@@ -66,28 +66,33 @@ class MuaController extends Controller
             'foto'       => ['nullable', 'image', 'max:2048'],
         ]);
 
-        // ====== HANDLE FOTO PROFIL MUA (UPLOADS) ======
+        // ====== HANDLE FOTO PROFIL MUA (SIMPAN KE public_html/adatku/uploads/muas) ======
         if ($request->hasFile('foto')) {
-            $userId    = Auth::id();
-            $uploadDir = public_path('uploads/muas/' . $userId);
+            $userId = Auth::id();
 
-            // buat folder jika belum ada
-            if (! is_dir($uploadDir)) {
+            // folder fisik: /home/ourj2192/public_html/adatku/uploads/muas/{user_id}
+            $uploadDir = base_path('../public_html/adatku/uploads/muas/' . $userId);
+
+            // buat folder kalau belum ada
+            if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
 
-            // kalau sudah ada MUA dan punya foto lama → hapus dulu
-            if ($existing && $existing->foto && file_exists(public_path($existing->foto))) {
-                @unlink(public_path($existing->foto));
+            // kalau sudah ada MUA dan punya foto lama → hapus dulu di public_html/adatku/...
+            if ($existing && $existing->foto) {
+                $oldFile = base_path('../public_html/adatku/' . $existing->foto);
+                if (file_exists($oldFile)) {
+                    @unlink($oldFile);
+                }
             }
 
             $file     = $request->file('foto');
             $filename = 'mua-' . $userId . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-            // pindahkan ke public/uploads/muas/{user_id}
+            // pindahkan ke public_html/adatku/uploads/muas/{user_id}
             $file->move($uploadDir, $filename);
 
-            // simpan path relatif (dari public)
+            // SIMPAN PATH RELATIF UNTUK URL (mulai dari /uploads/...)
             $data['foto'] = 'uploads/muas/' . $userId . '/' . $filename;
         }
 
@@ -107,7 +112,7 @@ class MuaController extends Controller
     {
         $mua = Mua::where('user_id', Auth::id())->first();
 
-        if (! $mua) {
+        if (!$mua) {
             abort(404, 'Data MUA tidak ditemukan.');
         }
 
@@ -133,25 +138,32 @@ class MuaController extends Controller
             'foto'       => ['nullable', 'image', 'max:2048'],
         ]);
 
-        // ====== HANDLE FOTO PROFIL MUA (UPLOADS) ======
+        // ====== HANDLE FOTO PROFIL MUA (SIMPAN KE public_html/adatku/uploads/muas) ======
         if ($request->hasFile('foto')) {
-            $userId    = Auth::id();
-            $uploadDir = public_path('uploads/muas/' . $userId);
+            $userId = Auth::id();
 
-            if (! is_dir($uploadDir)) {
+            // folder fisik: /home/ourj2192/public_html/adatku/uploads/muas/{user_id}
+            $uploadDir = base_path('../public_html/adatku/uploads/muas/' . $userId);
+
+            if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
 
-            // hapus foto lama kalau ada
-            if ($mua->foto && file_exists(public_path($mua->foto))) {
-                @unlink(public_path($mua->foto));
+            // hapus foto lama kalau ada (di public_html/adatku/...)
+            if ($mua->foto) {
+                $oldFile = base_path('../public_html/adatku/' . $mua->foto);
+                if (file_exists($oldFile)) {
+                    @unlink($oldFile);
+                }
             }
 
             $file     = $request->file('foto');
             $filename = 'mua-' . $userId . '-' . time() . '.' . $file->getClientOriginalExtension();
 
+            // pindahkan ke public_html/adatku/uploads/muas/{user_id}
             $file->move($uploadDir, $filename);
 
+            // simpan path relatif untuk URL
             $data['foto'] = 'uploads/muas/' . $userId . '/' . $filename;
         }
 
@@ -169,7 +181,7 @@ class MuaController extends Controller
 
         $totalPesanan       = 0;
         $totalPending       = 0;
-        $totalProses        = 0; // status "proses" memang tidak dipakai
+        $totalProses        = 0;
         $totallunas         = 0;
         $pendapatanBulanIni = 0;
         $pesananTerbaru     = collect();
@@ -184,10 +196,8 @@ class MuaController extends Controller
 
                 $orders = $allPesanan->groupBy('kode_checkout');
 
-                // total pesanan = jumlah booking
                 $totalPesanan = $orders->count();
 
-                // pending & lunas berdasar status_pembayaran
                 $totalPending = $orders->filter(function ($group) {
                     $first  = $group->first();
                     $status = strtolower(str_replace(' ', '_', $first->status_pembayaran ?? ''));
@@ -200,9 +210,8 @@ class MuaController extends Controller
                     return $status === 'lunas';
                 })->count();
 
-                $totalProses = 0; // tidak dipakai
+                $totalProses = 0;
 
-                // pendapatan = total_harga semua booking yang lunas
                 $pendapatanBulanIni = $orders->filter(function ($group) {
                     $first  = $group->first();
                     $status = strtolower(str_replace(' ', '_', $first->status_pembayaran ?? ''));
@@ -211,7 +220,6 @@ class MuaController extends Controller
                     return $group->sum('total_harga');
                 });
 
-                // pesanan terbaru untuk list di dashboard
                 $pesananTerbaru = $orders
                     ->sortByDesc(function ($group) {
                         return $group->first()->tanggal_booking;

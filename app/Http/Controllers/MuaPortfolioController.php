@@ -45,27 +45,34 @@ class MuaPortfolioController extends Controller
             'foto.*.max'    => 'Ukuran maksimal setiap foto 4MB.',
         ]);
 
-        // Folder tujuan: public/uploads/portfolio_mua
-        $basePath = public_path('uploads/portfolio_mua');
+        // ====== FOLDER TUJUAN DI HOSTING ======
+        // /home/ourj2192/public_html/adatku/uploads/portfolio_mua/{mua_id}
+        $folderPath = base_path('../public_html/adatku/uploads/portfolio_mua/' . $mua->id);
 
-        if (!is_dir($basePath)) {
-            mkdir($basePath, 0777, true);
+        if (! is_dir($folderPath)) {
+            mkdir($folderPath, 0777, true);
         }
 
-        // Laravel akan jadikan array walau cuma 1 file
-        foreach ((array) $request->file('foto') as $file) {
+        // Laravel bisa kirim 1 file atau banyak → samakan jadi array
+        $files = $request->file('foto');
+        if (! is_array($files)) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
             if (! $file) {
                 continue;
             }
 
-            // Nama file unik, disisipkan id MUA biar gampang tracking
-            $filename = $mua->id . '-' . time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            // Nama file unik
+            $filename = 'portfolio-' . $mua->id . '-' . time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            // Pindahkan ke folder public/uploads/portfolio_mua
-            $file->move($basePath, $filename);
+            // Pindahkan ke /public_html/adatku/uploads/portfolio_mua/{mua_id}
+            $file->move($folderPath, $filename);
 
-            // Path yang disimpan di DB (relatif dari folder public)
-            $relativePath = 'uploads/portfolio_mua/' . $filename;
+            // Path RELATIF dari root web (/adatku/)
+            // supaya di Blade cukup pakai: asset($item->foto_path)
+            $relativePath = 'uploads/portfolio_mua/' . $mua->id . '/' . $filename;
 
             $mua->portfolios()->create([
                 'foto_path' => $relativePath,
@@ -86,9 +93,10 @@ class MuaPortfolioController extends Controller
             abort(403, 'Kamu tidak berhak menghapus foto ini.');
         }
 
-        // Hapus file dari folder public/uploads/portfolio_mua
-        if (!empty($portfolio->foto_path)) {
-            $fullPath = public_path($portfolio->foto_path);
+        // Hapus file dari /public_html/adatku/uploads/...
+        if (! empty($portfolio->foto_path)) {
+            // foto_path berisi: uploads/portfolio_mua/{mua_id}/nama-file.jpg
+            $fullPath = base_path('../public_html/adatku/' . $portfolio->foto_path);
 
             if (file_exists($fullPath)) {
                 @unlink($fullPath);

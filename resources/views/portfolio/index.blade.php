@@ -12,8 +12,8 @@
             @if (session('success') || session('error'))
                 <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" x-transition.opacity
                     class="mb-2 flex items-start gap-3 px-4 py-3 rounded-2xl border text-sm shadow-sm
-                        @if (session('success')) bg-emerald-50 border-emerald-200 text-emerald-800
-                        @else bg-red-50 border-red-200 text-red-700 @endif">
+                                @if (session('success')) bg-emerald-50 border-emerald-200 text-emerald-800
+                                @else bg-red-50 border-red-200 text-red-700 @endif">
                     <div class="font-semibold">
                         {{ session('success') ?? session('error') }}
                     </div>
@@ -104,12 +104,11 @@
                         </p>
 
                         {{-- TOMBOL UPLOAD GOLD TANPA GRADIENT --}}
-                        <button type="submit"
-                            class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold
-                                   text-white bg-[#D4A017]
-                                   shadow-[0_10px_25px_rgba(212,160,23,0.45)]
-                                   hover:brightness-110 hover:shadow-[0_14px_35px_rgba(212,160,23,0.55)]
-                                   active:translate-y-[1px] transition">
+                        <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold
+                                       text-white bg-[#D4A017]
+                                       shadow-[0_10px_25px_rgba(212,160,23,0.45)]
+                                       hover:brightness-110 hover:shadow-[0_14px_35px_rgba(212,160,23,0.55)]
+                                       active:translate-y-[1px] transition">
                             <span>Upload Foto</span>
                             <span class="text-base leading-none">↑</span>
                         </button>
@@ -146,7 +145,7 @@
                         @foreach ($portfolios as $item)
                             <div
                                 class="group relative bg-slate-900/5 rounded-3xl shadow-sm overflow-hidden ring-1 ring-amber-100/60 hover:ring-amber-300 transition">
-                                <img src="{{ asset('uploads/' . $item->foto_path) }}"
+                                <img src="{{ asset($item->foto_path) }}"
                                     class="w-full h-40 md:h-44 object-cover group-hover:scale-105 transition-transform duration-300"
                                     alt="Dokumentasi MUA">
 
@@ -161,13 +160,12 @@
                                 {{-- overlay tombol hapus --}}
                                 <div
                                     class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent
-                                           opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
+                                                       opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end">
                                     <form action="{{ route('mua.portfolio.destroy', $item) }}" method="POST" class="w-full">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                            class="w-full text-xs sm:text-[13px] font-medium text-white text-center py-2.5
-                                                   bg-red-500/95 hover:bg-red-500 border-t border-white/10">
+                                        <button type="submit" class="w-full text-xs sm:text-[13px] font-medium text-white text-center py-2.5
+                                                               bg-red-500/95 hover:bg-red-500 border-t border-white/10">
                                             Hapus Foto Ini
                                         </button>
                                     </form>
@@ -212,24 +210,24 @@
                             'relative bg-amber-50/60 border border-amber-100 rounded-2xl overflow-hidden shadow-sm';
 
                         card.innerHTML = `
-                            <button type="button"
-                                data-index="${index}"
-                                class="absolute top-1.5 right-1.5 z-10 px-2 py-0.5 rounded-full
-                                       bg-red-500/95 hover:bg-red-600 text-[10px] text-white shadow-sm">
-                                ✕
-                            </button>
+                                <button type="button"
+                                    data-index="${index}"
+                                    class="absolute top-1.5 right-1.5 z-10 px-2 py-0.5 rounded-full
+                                           bg-red-500/95 hover:bg-red-600 text-[10px] text-white shadow-sm">
+                                    ✕
+                                </button>
 
-                            <div class="w-full h-24 bg-slate-100 overflow-hidden">
-                                <img src="${e.target.result}" class="w-full h-full object-cover" />
-                            </div>
-                            <div class="px-2.5 py-2">
-                                <p class="text-[11px] font-semibold text-slate-800 line-clamp-1"
-                                   title="${file.name}">
-                                   ${file.name}
-                                </p>
-                                <p class="text-[10px] text-slate-500">${sizeKB} KB</p>
-                            </div>
-                        `;
+                                <div class="w-full h-24 bg-slate-100 overflow-hidden">
+                                    <img src="${e.target.result}" class="w-full h-full object-cover" />
+                                </div>
+                                <div class="px-2.5 py-2">
+                                    <p class="text-[11px] font-semibold text-slate-800 line-clamp-1"
+                                       title="${file.name}">
+                                       ${file.name}
+                                    </p>
+                                    <p class="text-[10px] text-slate-500">${sizeKB} KB</p>
+                                </div>
+                            `;
 
                         // masukkan card ke container
                         previewContainer.appendChild(card);
