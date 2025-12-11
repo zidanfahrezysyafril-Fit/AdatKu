@@ -26,18 +26,20 @@ class ProfileController extends Controller
             $user->name = $request->name;
         }
 
-        // ==== PROSES UPLOAD FOTO PROFIL ====
+        // ==== PROSES UPLOAD FOTO PROFIL ==== 
         if ($request->hasFile('profile')) {
 
-            $folderPath = base_path('../public_html/adatku/uploads/profiles/' . $user->id);
+            // SIMPAN DI DALAM FOLDER PUBLIC/uploads/profiles/{id}
+            $folderPath = public_path('uploads/profiles/' . $user->id);
 
-            // Jika folder belum ada → buat otomatis
+            // Jika folder belum ada → buat
             if (!is_dir($folderPath)) {
                 mkdir($folderPath, 0777, true);
             }
 
             // Hapus foto lama jika ada
             if (!empty($user->avatar)) {
+                // di DB kamu simpan "uploads/profiles/{id}/file.jpg"
                 $oldFile = public_path($user->avatar);
                 if (file_exists($oldFile)) {
                     unlink($oldFile);
@@ -51,7 +53,7 @@ class ProfileController extends Controller
             // Pindahkan file ke folder upload
             $file->move($folderPath, $filename);
 
-            // Simpan path ke database
+            // Simpan path ke database (RELATIF dari public/)
             $user->avatar = 'uploads/profiles/' . $user->id . '/' . $filename;
         }
 
