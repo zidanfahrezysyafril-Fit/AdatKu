@@ -2,7 +2,7 @@
 
 @section('title', 'Kelola Tim Pengembang')
 @section('page_title', 'Tim Pengembang')
-@section('page_desc', 'Kelola anggota tim yang tampil di section "Di Balik AdatKu" di halaman utama.')
+@section('page_desc', 'Kelola foto, urutan, dan status tampil anggota tim di section "Di Balik AdatKu" di halaman utama.')
 
 @section('content')
     <div x-data="{ showCreate:false }" class="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8">
@@ -12,7 +12,8 @@
             <div>
                 <h1 class="text-2xl font-bold text-[#c98a00]">Kelola Tim Pengembang</h1>
                 <p class="text-xs text-slate-500 mt-1">
-                    Atur nama, peran, divisi, dan foto anggota tim yang muncul di beranda.
+                    Di sini kamu hanya mengatur <span class="font-semibold">foto, urutan, dan status tampil</span>.
+                    Nama, peran, dan divisi anggota tim dikunci dari tampilan beranda.
                 </p>
             </div>
             <div class="flex justify-start md:justify-end">
@@ -127,8 +128,13 @@
                                                     class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
                                                     Nama Lengkap
                                                 </label>
-                                                <input type="text" name="name" value="{{ $m->name }}"
-                                                       class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400">
+                                                <p class="text-sm font-semibold text-slate-800">
+                                                    {{ $m->name }}
+                                                </p>
+                                                <p class="text-[11px] text-slate-400 mt-1">
+                                                    Teks nama dikunci dan mengikuti pengaturan di beranda.
+                                                </p>
+                                                <input type="hidden" name="name" value="{{ $m->name }}">
                                             </div>
                                             <div>
                                                 <label
@@ -146,18 +152,26 @@
                                                     class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
                                                     Peran (role)
                                                 </label>
-                                                <input type="text" name="role" value="{{ $m->role }}"
-                                                       class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-                                                       placeholder="Contoh: Koordinator & Fullstack">
+                                                <p class="text-sm text-slate-700">
+                                                    {{ $m->role ?: '-' }}
+                                                </p>
+                                                <p class="text-[11px] text-slate-400 mt-1">
+                                                    Teks peran dikunci di tampilan beranda.
+                                                </p>
+                                                <input type="hidden" name="role" value="{{ $m->role }}">
                                             </div>
                                             <div>
                                                 <label
                                                     class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
                                                     Divisi
                                                 </label>
-                                                <input type="text" name="division" value="{{ $m->division }}"
-                                                       class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-                                                       placeholder="Contoh: UI/UX & Dokumentasi">
+                                                <p class="text-sm text-slate-700">
+                                                    {{ $m->division ?: '-' }}
+                                                </p>
+                                                <p class="text-[11px] text-slate-400 mt-1">
+                                                    Teks divisi dikunci di tampilan beranda.
+                                                </p>
+                                                <input type="hidden" name="division" value="{{ $m->division }}">
                                             </div>
                                         </div>
 
@@ -344,8 +358,13 @@
                                                                 class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
                                                                 Nama Lengkap
                                                             </label>
-                                                            <input type="text" name="name" value="{{ $m->name }}"
-                                                                   class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400">
+                                                            <p class="text-sm font-semibold text-slate-800">
+                                                                {{ $m->name }}
+                                                            </p>
+                                                            <p class="text-[11px] text-slate-400 mt-1">
+                                                                Teks nama dikunci dan mengikuti pengaturan di beranda.
+                                                            </p>
+                                                            <input type="hidden" name="name" value="{{ $m->name }}">
                                                         </div>
                                                         <div>
                                                             <label
@@ -363,18 +382,26 @@
                                                                 class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
                                                                 Peran (role)
                                                             </label>
-                                                            <input type="text" name="role" value="{{ $m->role }}"
-                                                                   class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-                                                                   placeholder="Contoh: Koordinator & Fullstack">
+                                                            <p class="text-sm text-slate-700">
+                                                                {{ $m->role ?: '-' }}
+                                                            </p>
+                                                            <p class="text-[11px] text-slate-400 mt-1">
+                                                                Teks peran dikunci di tampilan beranda.
+                                                            </p>
+                                                            <input type="hidden" name="role" value="{{ $m->role }}">
                                                         </div>
                                                         <div>
                                                             <label
                                                                 class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
                                                                 Divisi
                                                             </label>
-                                                            <input type="text" name="division" value="{{ $m->division }}"
-                                                                   class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-                                                                   placeholder="Contoh: UI/UX & Dokumentasi">
+                                                            <p class="text-sm text-slate-700">
+                                                                {{ $m->division ?: '-' }}
+                                                            </p>
+                                                            <p class="text-[11px] text-slate-400 mt-1">
+                                                                Teks divisi dikunci di tampilan beranda.
+                                                            </p>
+                                                            <input type="hidden" name="division" value="{{ $m->division }}">
                                                         </div>
                                                     </div>
 
@@ -502,11 +529,20 @@
                     <div class="grid grid-cols-1 md:grid-cols-[1.1fr,1fr] gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
-                                Nama Lengkap
+                                Nama / Keterangan
                             </label>
-                            <input type="text" name="name" value="{{ old('name') }}"
-                                class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-                                placeholder="Contoh: Cahyani Putri Sofari">
+                            <p class="text-sm text-slate-700">
+                                Teks nama, peran, dan divisi yang tampil di beranda
+                                sudah dikunci di file <span class="font-semibold">home.blade.php</span>.
+                            </p>
+                            <p class="text-[11px] text-slate-400 mt-1">
+                                Dari sini kamu hanya menambahkan slot baru (foto & urutan) bila diperlukan.
+                            </p>
+
+                            {{-- Hidden default supaya validasi controller tetap aman --}}
+                            <input type="hidden" name="name" value="{{ old('name', 'Anggota Tim') }}">
+                            <input type="hidden" name="role" value="{{ old('role', 'Peran Tim') }}">
+                            <input type="hidden" name="division" value="{{ old('division', 'Divisi') }}">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
@@ -518,25 +554,6 @@
                             <p class="text-[11px] text-slate-400 mt-1">
                                 Urutan tampilan di beranda (kartu tengah bisa kamu atur dari urutan).
                             </p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
-                                Peran (role)
-                            </label>
-                            <input type="text" name="role" value="{{ old('role') }}"
-                                class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-                                placeholder="Contoh: Koordinator & Fullstack">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-[0.12em]">
-                                Divisi
-                            </label>
-                            <input type="text" name="division" value="{{ old('division') }}"
-                                class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-                                placeholder="Contoh: UI/UX & Penulisan Laporan">
                         </div>
                     </div>
 

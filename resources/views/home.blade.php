@@ -213,9 +213,9 @@
       class="fixed left-1/2 -translate-x-1/2 top-6 z-[9999]">
       <div
         class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
-                                                                            backdrop-blur-md border border-white/40
-                                                                            @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-                                                                            @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                                                                              backdrop-blur-md border border-white/40
+                                                                              @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                                                              @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -235,12 +235,12 @@
       <div x-show="verifyModal" x-cloak x-transition.opacity
         class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
         <div @click.outside="verifyModal = false" class="bg-[#fffdf7]/95 w-full max-w-lg mx-4 rounded-[28px]
-                                           shadow-[0_18px_55px_rgba(190,143,43,0.35)]
-                                           border border-[#f4ddab] px-6 py-7 md:px-8 md:py-8 relative">
+                                               shadow-[0_18px_55px_rgba(190,143,43,0.35)]
+                                               border border-[#f4ddab] px-6 py-7 md:px-8 md:py-8 relative">
 
           {{-- Tombol close kecil --}}
           <button type="button" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200
-                                             flex items-center justify-center text-slate-500 text-sm"
+                                                 flex items-center justify-center text-slate-500 text-sm"
             @click="verifyModal = false">
             ✕
           </button>
@@ -248,7 +248,7 @@
           {{-- Logo --}}
           <div class="flex justify-center mb-4 mt-2">
             <div class="flex items-center justify-center w-28 h-10 rounded-full
-                                                  border border-[#f4c970] bg-white shadow-md">
+                                                      border border-[#f4c970] bg-white shadow-md">
               <img src="{{ asset('logos3.jpg') }}" class="h-8 object-contain" alt="AdatKu">
             </div>
           </div>
@@ -273,8 +273,9 @@
           {{-- Form kirim ulang --}}
           <form method="POST" action="{{ route('verification.send') }}" class="space-y-3">
             @csrf
-            <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
-                                               text-white font-semibold text-sm shadow-lg hover:brightness-110 transition">
+            <button type="submit"
+              class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#f5c052] to-[#d09212]
+                                                   text-white font-semibold text-sm shadow-lg hover:brightness-110 transition">
               Kirim Ulang Email Verifikasi
             </button>
           </form>
@@ -369,9 +370,9 @@
           {{-- TOMBOL LOGIN (HANYA SAAT BELUM LOGIN) --}}
           @guest
             <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold
-                                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] border border-amber-300 text-[white] shadow-sm
-                                                     hover:bg-amber-500 hover:brightness-105
-                                                                transition text-sm font-semibold">
+                                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] border border-amber-300 text-[white] shadow-sm
+                                                       hover:bg-amber-500 hover:brightness-105
+                                                                  transition text-sm font-semibold">
               Masuk
             </a>
           @endguest
@@ -580,15 +581,15 @@
         @if (!$isMuaSheet)
           <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
             <button @click="
-                                            navOpen = false;
-                                            if (mustVerifyEmail) {
-                                              verifyModal = true;
-                                            } else {
-                                              applyMuaModal = true;
-                                            }
-                                          " class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                 text-white shadow-md hover:brightness-110">
+                                                navOpen = false;
+                                                if (mustVerifyEmail) {
+                                                  verifyModal = true;
+                                                } else {
+                                                  applyMuaModal = true;
+                                                }
+                                              " class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
+                                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                     text-white shadow-md hover:brightness-110">
               Daftarkan jasa MUA kamu di sini
             </button>
 
@@ -598,8 +599,8 @@
         <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
           <button @click="navOpen = false; window.location='{{ route('login') }}'"
             class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-                                                                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                                       text-white shadow-md hover:brightness-110">
+                                                                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                                         text-white shadow-md hover:brightness-110">
             Daftarkan jasa MUA kamu di sini
           </button>
         </div>
@@ -642,7 +643,7 @@
               @guest
                 <a href="{{ route('login') }}"
                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
-                                                                                             bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
+                                                                                               bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
                   Masuk / Daftar
                 </a>
               @endguest
@@ -971,31 +972,46 @@
       </div>
 
       @php
-        $teamToShow = $team ?? collect();
+        // DATA TEKS TETAP
+        $fixedMembers = [
+          [
+            'name' => 'Cahyani Putri Sofari',
+            'role' => 'Frontend & Dokumentasi',
+            'division' => 'UI/UX & Penulisan Laporan',
+          ],
+          [
+            'name' => 'Zidan Fahrezy Syafril',
+            'role' => 'Koordinator & Fullstack Developer',
+            'division' => 'Database & Integrasi Sistem',
+          ],
+          [
+            'name' => 'Fetty Ratna Dewi',
+            'role' => 'Frontend & Dokumentasi',
+            'division' => 'UI/UX & Penulisan Laporan',
+          ],
+        ];
 
-        if ($teamToShow->isEmpty()) {
-          $teamToShow = collect([
-            (object) [
-              'name' => 'Cahyani Putri Sofari',
-              'role' => 'Frontend & Dokumentasi',
-              'division' => 'UI/UX & Penulisan Laporan',
-              'photo' => null,
-            ],
-            (object) [
-              'name' => 'Zidan Fahrezy Syafril',
-              'role' => 'Koordinator & Fullstack Developer',
-              'division' => 'Database & Integrasi Sistem',
-              'photo' => null,
-            ],
-            (object) [
-              'name' => 'Fetty Ratna Dewi',
-              'role' => 'Frontend & Dokumentasi',
-              'division' => 'UI/UX & Penulisan Laporan',
-              'photo' => null,
-            ],
+        // AMBIL FOTO DARI DB SESUAI URUTAN
+        $teamFromDb = $team ?? collect();
+
+        $teamToShow = collect();
+
+        foreach ($fixedMembers as $index => $fixed) {
+          $photo = null;
+
+          if (isset($teamFromDb[$index]) && !empty($teamFromDb[$index]->photo)) {
+            $photo = $teamFromDb[$index]->photo;
+          }
+
+          $teamToShow->push((object) [
+            'name' => $fixed['name'],
+            'role' => $fixed['role'],
+            'division' => $fixed['division'],
+            'photo' => $photo,
           ]);
         }
       @endphp
+
 
       <div class="grid md:grid-cols-3 gap-6 md:gap-8 items-stretch">
         @foreach ($teamToShow as $index => $member)
@@ -1008,7 +1024,7 @@
 
           <div
             class="bg-white rounded-3xl border px-5 md:px-6 pt-5 pb-6 md:pb-7 flex flex-col
-                                                                                {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
+                                                                                  {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
             <div class="w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4 border border-amber-100/70 bg-slate-100">
               <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
                 onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Tim';">
@@ -1057,12 +1073,12 @@
       <div class="flex flex-wrap gap-3">
         @auth
           <button type="button" @click="
-                              if (mustVerifyEmail) {
-                                verifyModal = true;
-                              } else {
-                                window.location = '{{ route('mua.entry') }}';
-                              }
-                            "
+                                if (mustVerifyEmail) {
+                                  verifyModal = true;
+                                } else {
+                                  window.location = '{{ route('mua.entry') }}';
+                                }
+                              "
             class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-semibold bg-white text-[#c98a00] shadow-md hover:bg-amber-50">
             Daftarkan Jasa Sekarang
           </button>
@@ -1124,8 +1140,8 @@
           </button>
 
           <button type="button" @click="profileModal=false; editModal=true" class="px-5 py-2 rounded-lg text-sm text-white shadow-md
-                                                                                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                                       hover:opacity-90 transition">
+                                                                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                                         hover:opacity-90 transition">
             Edit Profil
           </button>
         </div>
@@ -1137,11 +1153,11 @@
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="editModal = false"
         class="bg-white rounded-[32px] shadow-2xl border border-amber-100
-                                                                                   w-[92%] max-w-3xl p-8 md:p-10 relative">
+                                                                                     w-[92%] max-w-3xl p-8 md:p-10 relative">
 
         <button type="button" @click="editModal = false"
           class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100
-                                                                                     hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                                                                       hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -1155,9 +1171,9 @@
 
           <div class="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
             <div class="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32
-                                                                                         rounded-full p-[3px]
-                                                                                         bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                                         shadow-xl">
+                                                                                           rounded-full p-[3px]
+                                                                                           bg-gradient-to-br from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                                           shadow-xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-slate-100">
                 <img src="{{ $avatarUrl }}" alt="Foto Profil" class="w-full h-full object-cover">
               </div>
@@ -1168,10 +1184,10 @@
                 Ganti Foto
               </label>
               <input type="file" name="profile" class="block w-full text-sm text-slate-600
-                                                                                           file:mr-3 file:rounded-lg file:px-4 file:py-2
-                                                                                           file:border file:border-amber-200 file:bg-white
-                                                                                           file:text-slate-700 file:cursor-pointer
-                                                                                           hover:file:bg-amber-50">
+                                                                                             file:mr-3 file:rounded-lg file:px-4 file:py-2
+                                                                                             file:border file:border-amber-200 file:bg-white
+                                                                                             file:text-slate-700 file:cursor-pointer
+                                                                                             hover:file:bg-amber-50">
               <p class="text-xs text-slate-500 mt-1">
                 jpg/jpeg/png, maks 2MB
               </p>
@@ -1183,20 +1199,21 @@
               Nama
             </label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-xl border border-slate-200 px-4 py-3
-                                                                                         text-sm md:text-base
-                                                                                         focus:outline-none focus:ring-2 focus:ring-[#f5d547]
-                                                                                         focus:border-[#c98a00]">
+                                                                                           text-sm md:text-base
+                                                                                           focus:outline-none focus:ring-2 focus:ring-[#f5d547]
+                                                                                           focus:border-[#c98a00]">
           </div>
 
           <div class="flex justify-end gap-3 pt-4">
-            <button type="button" @click="editModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
-                                                                                         hover:bg-slate-200 transition">
+            <button type="button" @click="editModal = false"
+              class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-sm md:text-base
+                                                                                           hover:bg-slate-200 transition">
               Batal
             </button>
 
             <button type="submit" class="px-6 py-2.5 rounded-xl text-sm md:text-base text-white font-semibold shadow-md
-                                                                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                                         hover:opacity-90 transition">
+                                                                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                                           hover:opacity-90 transition">
               Simpan Perubahan
             </button>
           </div>
@@ -1218,11 +1235,11 @@
       class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 backdrop-blur-sm">
       <div @click.outside="applyMuaModal = false"
         class="bg-white rounded-[28px] shadow-2xl border border-amber-100
-                                                                                   w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
+                                                                                     w-[92%] max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative">
 
         <button type="button" @click="applyMuaModal = false"
           class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100
-                                                                                     hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                                                                                       hover:bg-slate-200 flex items-center justify-center text-slate-500">
           ✕
         </button>
 
@@ -1355,13 +1372,13 @@
 
               {{-- tombol kirim --}}
               <button type="submit" class="w-full sm:w-auto px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white
-                                                                               font-semibold text-sm shadow-md">
+                                                                                   font-semibold text-sm shadow-md">
                 Kirim Pengajuan
               </button>
 
               {{-- tombol kembali --}}
               <button type="button" @click="applyMuaModal = false" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300
-                                                                               text-sm font-semibold">
+                                                                                   text-sm font-semibold">
                 ← Kembali
               </button>
             </div>
@@ -1633,30 +1650,30 @@
 
     @if (!$isMuaFloat)
       <button type="button" @click="
-                                      if (mustVerifyEmail) {
-                                        verifyModal = true;
-                                      } else {
-                                        applyMuaModal = true;
-                                      }
-                                    " class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
-                                           items-center justify-center px-6 py-2.5 rounded-full
-                                           text-sm font-semibold
-                                           bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                           text-white hover:brightness-110 transition
-                                           hover:-translate-y-0.5 hover:scale-[1.02]
-                                           cta-mua-floating">
+                                          if (mustVerifyEmail) {
+                                            verifyModal = true;
+                                          } else {
+                                            applyMuaModal = true;
+                                          }
+                                        " class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
+                                               items-center justify-center px-6 py-2.5 rounded-full
+                                               text-sm font-semibold
+                                               bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                               text-white hover:brightness-110 transition
+                                               hover:-translate-y-0.5 hover:scale-[1.02]
+                                               cta-mua-floating">
         Daftarkan jasa MUA kamu di sini
       </button>
     @endif
 
   @else
     <a href="{{ route('login') }}" class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
-                                                                   items-center justify-center px-6 py-2.5 rounded-full
-                                                                   text-sm font-semibold
-                                                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                                                                   text-white hover:brightness-110 transition
-                                                                   hover:-translate-y-0.5 hover:scale-[1.02]
-                                                                   cta-mua-floating">
+                                                                     items-center justify-center px-6 py-2.5 rounded-full
+                                                                     text-sm font-semibold
+                                                                     bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                     text-white hover:brightness-110 transition
+                                                                     hover:-translate-y-0.5 hover:scale-[1.02]
+                                                                     cta-mua-floating">
       Daftarkan jasa MUA kamu di sini
     </a>
   @endauth

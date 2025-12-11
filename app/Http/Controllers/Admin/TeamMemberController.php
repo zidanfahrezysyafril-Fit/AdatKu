@@ -39,8 +39,9 @@ class TeamMemberController extends Controller
 
     public function store(Request $request)
     {
+        // di create masih boleh isi name/role/division (atau dikosongkan, nanti diisi default)
         $data = $request->validate([
-            'name'        => 'required|string|max:255',
+            'name'        => 'nullable|string|max:255',
             'role'        => 'nullable|string|max:255',
             'division'    => 'nullable|string|max:255',
             'photo'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -48,6 +49,11 @@ class TeamMemberController extends Controller
             'is_highlight'=> 'nullable|boolean',
             'is_active'   => 'nullable|boolean',
         ]);
+
+        // default kalau tidak diisi (aman walau form pakai input hidden ataupun tidak)
+        $data['name']     = $data['name']     ?? 'Anggota Tim';
+        $data['role']     = $data['role']     ?? 'Peran Tim';
+        $data['division'] = $data['division'] ?? 'Divisi';
 
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('team', 'public');
@@ -74,10 +80,8 @@ class TeamMemberController extends Controller
 
     public function update(Request $request, TeamMember $team_member)
     {
+        // DI SINI kita TIDAK menyentuh name/role/division → keterangan tetap
         $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'role'        => 'nullable|string|max:255',
-            'division'    => 'nullable|string|max:255',
             'photo'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'urutan'      => 'nullable|integer|min:1',
             'is_highlight'=> 'nullable|boolean',
