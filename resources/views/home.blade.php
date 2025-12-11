@@ -331,6 +331,11 @@
               $navUser = auth()->user();
               $roleNavDesktop = strtolower($navUser->role ?? '');
             @endphp
+
+            <a href="{{ route('public.mua.index') }}" class="hover:text-amber-600 transition">
+              Daftar MUA
+            </a>
+
             @if ($roleNavDesktop === 'mua')
               <a href="{{ route('mua.panel') }}" class="hover:text-amber-600 transition">
                 Dashboard MUA
