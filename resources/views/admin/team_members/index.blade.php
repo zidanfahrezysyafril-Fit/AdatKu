@@ -48,9 +48,9 @@
                 {{-- ========== MOBILE: CARD VIEW ========== --}}
                 <div class="md:hidden bg-white divide-y divide-amber-50">
                     @foreach($teamMembers as $m)
-                        @php
+                       @php
                             $photoUrl = $m->photo
-                                ? asset('uploads/' . $m->photo)
+                                ? asset($m->photo)   // <== LANGSUNG PAKAI ISI DARI DB
                                 : 'https://placehold.co/80x80?text=' . urlencode(\Illuminate\Support\Str::limit($m->name, 2, ''));
                         @endphp
 
@@ -283,7 +283,7 @@
                             @foreach($teamMembers as $m)
                                 @php
                                     $photoUrl = $m->photo
-                                        ? asset('uploads/' . $m->photo)
+                                        ? asset($m->photo)
                                         : 'https://placehold.co/80x80?text=' . urlencode(\Illuminate\Support\Str::limit($m->name, 2, ''));
                                 @endphp
 
