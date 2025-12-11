@@ -71,7 +71,7 @@ class TeamMemberController extends Controller
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
 
-            $uploadPath = public_path('uploads/team');
+            $uploadPath = base_path('../public_html/adatku/uploads/team');
             if (! is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
@@ -124,7 +124,7 @@ class TeamMemberController extends Controller
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
 
-            $uploadPath = public_path('uploads/team');
+            $uploadPath = base_path('../public_html/adatku/uploads/team');
             if (! is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
