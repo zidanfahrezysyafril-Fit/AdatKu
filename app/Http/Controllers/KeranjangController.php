@@ -19,7 +19,9 @@ class KeranjangController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()
+                ->route('login')
+                ->with('error', 'Kamu belum login, silakan login dulu untuk melihat keranjang.');
         }
 
         // MUA aktif yang sedang dipilih user
@@ -43,7 +45,7 @@ class KeranjangController extends Controller
      */
     public function add(Request $request)
     {
-        // =============== VALIDASI INPUT ===============
+        // =============== VALIDASI INPUT =============== 
         $validated = $request->validate([
             'layanan_id' => ['required', 'exists:layanans,id'],
             'jumlah'     => ['required', 'integer', 'min:1'],
@@ -57,27 +59,29 @@ class KeranjangController extends Controller
 
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()
+                ->route('login')
+                ->with('error', 'Kamu belum login, silakan login dulu untuk melakukan pemesanan.');
         }
 
-        // =============== BATAS AKSES ===============
+        // =============== BATAS AKSES =============== 
         // Hanya ROLE: pengguna yang boleh tambah ke keranjang
         if (strtolower((string) $user->role) !== 'pengguna') {
             abort(403, 'Akses khusus pengguna.');
         }
 
-        // =============== AMBIL DATA LAYANAN ===============
+        // =============== AMBIL DATA LAYANAN =============== 
         $layanan = Layanan::select('id', 'mua_id', 'harga', 'nama')
             ->with('mua:id,nama_usaha')
             ->findOrFail($validated['layanan_id']);
 
-        // =============== SET MUA AKTIF ===============
+        // =============== SET MUA AKTIF =============== 
         KeranjangActive::updateOrCreate(
             ['id_pengguna' => $user->id],
             ['id_mua' => $layanan->mua_id]
         );
 
-        // =============== MASUKKAN / UPDATE KERANJANG ===============
+        // =============== MASUKKAN / UPDATE KERANJANG =============== 
         $item = Keranjang::firstOrNew([
             'id_pengguna' => $user->id,
             'id_layanan'  => $layanan->id,
@@ -87,7 +91,7 @@ class KeranjangController extends Controller
         $item->jumlah = ($item->exists ? $item->jumlah : 0) + (int) $validated['jumlah'];
         $item->save();
 
-        // =============== FEEDBACK ===============
+        // =============== FEEDBACK =============== 
         return back()->with('success', "{$layanan->nama} ditambahkan ke keranjang ✔");
     }
 
@@ -98,7 +102,9 @@ class KeranjangController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()
+                ->route('login')
+                ->with('error', 'Kamu belum login, silakan login dulu untuk menyelesaikan pemesanan.');
         }
 
         // Ambil MUA aktif
@@ -120,14 +126,14 @@ class KeranjangController extends Controller
             return back()->with('error', 'Keranjangmu masih kosong.');
         }
 
-        // ===== DATA TAMBAHAN CHECKOUT =====
+        // ===== DATA TAMBAHAN CHECKOUT ===== 
         $tanggalBooking = $request->input('tanggal_booking', now()->toDateString());
         $alamat         = $request->input('alamat', '- (akan diisi saat konfirmasi dengan MUA)');
 
         // Kode unik untuk mengelompokkan pesanan
         $kodeCheckout = 'ADK-' . now()->format('YmdHis') . '-' . $user->id;
 
-        // ===== SIMPAN PESANAN & KOSONGKAN KERANJANG =====
+        // ===== SIMPAN PESANAN & KOSONGKAN KERANJANG ===== 
         DB::transaction(function () use ($items, $user, $tanggalBooking, $alamat, $active, $kodeCheckout) {
 
             foreach ($items as $item) {
