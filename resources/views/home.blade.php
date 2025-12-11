@@ -4,15 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AdatKu — Sentuhan Adat, Pengalaman Modern</title>
+  <title>AdatKu</title>
 
   {{-- Fonts & Tailwind --}}
   <link rel="icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
   <link rel="shortcut icon" type="image/png" href="{{ asset('logo_2.png?v=5') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -198,8 +197,7 @@
 
 </head>
 
-<body class="text-gray-900"
-  x-data="{
+<body class="text-gray-900" x-data="{
       navOpen:false,
       userMenuOpen:false,
       profileModal:false,
@@ -207,8 +205,7 @@
       applyMuaModal: {{ session('open_mua') ? 'true' : 'false' }},
       verifyModal: {{ (session('show_verify_modal') && auth()->check() && is_null(optional(auth()->user())->email_verified_at)) ? 'true' : 'false' }},
       mustVerifyEmail: {{ auth()->check() && is_null(optional(auth()->user())->email_verified_at) ? 'true' : 'false' }}
-  }"
-  x-cloak>
+  }" x-cloak>
 
   {{-- FLASH MESSAGE --}}
   @if (session('success') || session('error'))
@@ -216,9 +213,9 @@
       class="fixed left-1/2 -translate-x-1/2 top-6 z-[9999]">
       <div
         class="flex items-center gap-3 px-5 py-3 rounded-full shadow-xl text-[13px] md:text-[14px] font-medium text-white
-        backdrop-blur-md border border-white/40
-        @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
-        @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
+                                                                        backdrop-blur-md border border-white/40
+                                                                        @if (session('success')) bg-gradient-to-r from-[#f9e88b] via-[#eab308] to-[#c98a00]
+                                                                        @else bg-gradient-to-r from-[#ef4444] via-[#dc2626] to-[#b91c1c] @endif">
         <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           @if (session('success'))
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -232,7 +229,7 @@
     </div>
   @endif
 
-  {{-- POPUP VERIFIKASI EMAIL --}}
+  {{-- POPUP VERIFIKASI EMAIL (BISA DIPANGGIL KAPAN SAJA) --}}
   @auth
     @if (is_null(auth()->user()->email_verified_at))
       <div x-show="verifyModal" x-cloak x-transition.opacity
@@ -241,18 +238,17 @@
                                    shadow-[0_18px_55px_rgba(190,143,43,0.35)]
                                    border border-[#f4ddab] px-6 py-7 md:px-8 md:py-8 relative">
 
-          {{-- Tombol close --}}
+          {{-- Tombol close kecil --}}
           <button type="button" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200
-                                     flex items-center justify-center text-slate-500 text-sm"
-            @click="verifyModal = false">
+                                     flex items-center justify-center text-slate-500 text-sm" @click="verifyModal = false">
             ✕
           </button>
 
           {{-- Logo --}}
           <div class="flex justify-center mb-4 mt-2">
-            <div
-              class="flex items-center justify-center w-28 h-10 rounded-full border border-[#f4c970] bg-white shadow-md">
-              <img src="{{ asset('logos3.jpg') }}" class="h-8 object-contain" alt="AdatKu" loading="lazy">
+            <div class="flex items-center justify-center w-28 h-10 rounded-full
+                                          border border-[#f4c970] bg-white shadow-md">
+              <img src="{{ asset('logos3.jpg') }}" class="h-8 object-contain" alt="AdatKu">
             </div>
           </div>
 
@@ -308,7 +304,7 @@
         <a href="{{ route('home') }}" class="flex items-center gap-3">
           <div
             class="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md border border-amber-200 overflow-hidden">
-            <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu" class="w-full h-full object-cover" loading="lazy">
+            <img src="{{ asset('logosu.jpg') }}" alt="Logo AdatKu" class="w-full h-full object-cover">
           </div>
           <div class="leading-tight">
             <div
@@ -355,9 +351,8 @@
         {{-- Aksi kanan --}}
         <div class="flex items-center gap-3">
 
-          {{-- HAMBURGER (MOBILE) --}}
-          <button @click="navOpen = true"
-            class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/80
+          {{-- HAMBURGER (HANYA MOBILE) --}}
+          <button @click="navOpen = true" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-full border border-amber-200/70 bg-white/80
              shadow-sm hover:bg-amber-50 hover:border-amber-300 transition text-xs md:text-sm text-amber-800">
             <span class="relative flex flex-col justify-between w-3.5 h-3">
               <span class="block h-[2px] rounded-full bg-amber-500"></span>
@@ -367,17 +362,17 @@
             <span class="hidden sm:inline">Menu</span>
           </button>
 
-          {{-- TOMBOL LOGIN --}}
+          {{-- TOMBOL LOGIN (HANYA SAAT BELUM LOGIN) --}}
           @guest
-            <a href="{{ route('login') }}"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold
-              bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] border border-amber-300 text-[white] shadow-sm
-              hover:bg-amber-500 hover:brightness-105 transition">
+            <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold
+                                                 bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00] border border-amber-300 text-[white] shadow-sm
+                                                 hover:bg-amber-500 hover:brightness-105
+                                                            transition text-sm font-semibold">
               Masuk
             </a>
           @endguest
 
-          {{-- AVATAR USER --}}
+          {{-- AVATAR / MENU USER (SETELAH LOGIN) --}}
           @auth
             @php
               $user = auth()->user();
@@ -390,8 +385,8 @@
                 📦 Pesanan Saya
               </a>
             @endif
-
             <div class="relative">
+              {{-- Tombol avatar --}}
               <button @click="userMenuOpen = !userMenuOpen"
                 class="w-10 h-10 rounded-full overflow-hidden border-2 border-amber-300 shadow focus:outline-none relative z-50">
                 <img src="{{ $avatar }}" alt="Profile" class="w-full h-full object-cover"
@@ -399,10 +394,10 @@
               </button>
 
               {{-- Dropdown user --}}
-              <div x-show="userMenuOpen" x-transition.origin.top.right x-cloak
-                @click.outside="userMenuOpen = false"
+              <div x-show="userMenuOpen" x-transition.origin.top.right x-cloak @click.outside="userMenuOpen = false"
                 class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-lg border border-amber-100/80 z-[80]">
 
+                {{-- Header: nama & email --}}
                 <div class="px-4 pt-3 pb-2 border-b border-slate-100">
                   <p class="text-sm font-semibold text-slate-800">
                     {{ $user->name }}
@@ -412,11 +407,13 @@
                   </p>
                 </div>
 
+                {{-- Item: Profil Saya --}}
                 <button type="button" @click="userMenuOpen = false; profileModal = true"
                   class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-amber-50">
                   Profil Saya
                 </button>
 
+                {{-- Item: Logout --}}
                 <form action="{{ route('logout') }}" method="POST">
                   @csrf
                   <button type="submit"
@@ -463,13 +460,15 @@
     @endif
   @endauth
 
-  {{-- NAV DRAWER (MOBILE) --}}
+  {{-- NAV DRAWER (SLIDE DARI KANAN, SMOOTH) --}}
   <div class="fixed inset-0 z-[9998] flex justify-end items-stretch transition-opacity duration-300" x-cloak
     :class="navOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
     @keydown.escape.window="navOpen = false">
 
+    {{-- overlay --}}
     <div class="flex-1 h-full bg-black/40 backdrop-blur-sm" @click="navOpen = false"></div>
 
+    {{-- PANEL KANAN --}}
     <div class="relative h-full w-[80%] max-w-xs sm:max-w-sm bg-white
                 shadow-[0_0_40px_rgba(0,0,0,0.4)] border-l border-amber-100
                 flex flex-col transform transition-transform duration-300 ease-out"
@@ -502,8 +501,7 @@
           <span class="text-lg">🏠</span><span>Beranda</span>
         </button>
 
-        <button
-          @click="navOpen = false; document.getElementById('tentang').scrollIntoView({behavior:'smooth'})"
+        <button @click="navOpen = false; document.getElementById('tentang').scrollIntoView({behavior:'smooth'})"
           class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
           <span class="text-lg">📜</span><span>Tentang</span>
         </button>
@@ -518,6 +516,7 @@
           <span class="text-lg">👥</span><span>Tim Pengembang</span>
         </button>
 
+        {{-- FAQ MOBILE --}}
         <button @click="navOpen = false; document.getElementById('faq').scrollIntoView({behavior:'smooth'})"
           class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
           <span class="text-lg">❓</span><span>FAQ</span>
@@ -546,6 +545,7 @@
             </button>
           @endif
 
+          {{-- DASHBOARD SESUAI ROLE --}}
           @if ($roleNav === 'mua')
             <button @click="navOpen = false; window.location='{{ route('mua.panel') }}'"
               class="flex w-full items-center gap-2 py-2 rounded-lg hover:bg-amber-50 hover:text-amber-700">
@@ -566,7 +566,7 @@
 
       </div>
 
-      {{-- CTA BAWAH DRAWER --}}
+      {{-- CTA BAWAH DALAM DRAWER --}}
       @auth
         @php
           $userSheet = auth()->user();
@@ -575,28 +575,27 @@
 
         @if (!$isMuaSheet)
           <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
-            <button
-              @click="
-                navOpen = false;
-                if (mustVerifyEmail) {
-                  verifyModal = true;
-                } else {
-                  applyMuaModal = true;
-                }
-              "
-              class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-              bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-              text-white shadow-md hover:brightness-110">
+            <button @click="
+                                    navOpen = false;
+                                    if (mustVerifyEmail) {
+                                      verifyModal = true;
+                                    } else {
+                                      applyMuaModal = true;
+                                    }
+                                  " class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
+                                         bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                         text-white shadow-md hover:brightness-110">
               Daftarkan jasa MUA kamu di sini
             </button>
+
           </div>
         @endif
       @else
         <div class="px-4 pb-4 pt-2 border-t border-amber-50 bg-amber-50/60">
           <button @click="navOpen = false; window.location='{{ route('login') }}'"
             class="w-full inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold
-              bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-              text-white shadow-md hover:brightness-110">
+                                                                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                                                                   text-white shadow-md hover:brightness-110">
             Daftarkan jasa MUA kamu di sini
           </button>
         </div>
@@ -607,9 +606,8 @@
   {{-- HERO --}}
   <section class="relative overflow-hidden">
     <div class="relative h-[520px] md:h-[560px]">
-      {{-- NOTE: pastikan nama file di folder public: logoss3.jpg (tanpa spasi) --}}
-      <img src="{{ asset('logoss3.jpg') }}" alt="AdatKu Hero"
-        class="w-full h-full object-cover brightness-[0.55]" loading="lazy">
+      {{-- NOTE: pastikan nama file tidak ada spasi di folder public --}}
+      <img src="{{ asset('logoss3 .jpg') }}" alt="AdatKu Hero" class="w-full h-full object-cover brightness-[0.55]">
       <div
         class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/35 to-black/55 mix-blend-multiply pointer-events-none">
       </div>
@@ -631,17 +629,16 @@
             </p>
 
             <div class="mt-6 flex flex-wrap gap-3">
-              <a href="{{ route('public.mua.index') }}"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold
-                bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-                text-white shadow-lg hover:brightness-110 transition">
+              <a href="{{ route('public.mua.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold
+                       bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                       text-white shadow-lg hover:brightness-110 transition">
                 Jelajahi MUA & Busana
               </a>
 
               @guest
                 <a href="{{ route('login') }}"
                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold
-                  bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
+                                                                                         bg-white/10 border border-amber-200/60 text-amber-50 hover:bg-white/20 transition">
                   Masuk / Daftar
                 </a>
               @endguest
@@ -667,12 +664,11 @@
 
               <div class="grid grid-cols-4 gap-3 text-center text-sm">
                 {{-- MUA --}}
-                <div
-                  class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
                   shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
                   <span class="text-xl mb-1">✨</span>
                   <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
-                    +<span class="countup" data-target="{{ $totalMua ?? 0 }}">0</span>
+                    +{{ $totalMua ?? 0 }}
                   </p>
                   <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
                     Mua Terdaftar
@@ -680,12 +676,11 @@
                 </div>
 
                 {{-- BUSANA --}}
-                <div
-                  class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
                   shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
                   <span class="text-xl mb-1">👗</span>
                   <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
-                    +<span class="countup" data-target="{{ $totalBusana ?? 0 }}">0</span>
+                    +{{ $totalBusana ?? 0 }}
                   </p>
                   <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
                     Busana Adat
@@ -693,12 +688,11 @@
                 </div>
 
                 {{-- MAKEUP --}}
-                <div
-                  class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
                   shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
                   <span class="text-xl mb-1">💄</span>
                   <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
-                    +<span class="countup" data-target="{{ $totalMakeup ?? 0 }}">0</span>
+                    +{{ $totalMakeup ?? 0 }}
                   </p>
                   <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
                     Make Up
@@ -706,12 +700,11 @@
                 </div>
 
                 {{-- PELAMINAN --}}
-                <div
-                  class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
+                <div class="rounded-3xl bg-[#fff6dd] px-3 py-4 flex flex-col items-center justify-center
                   shadow-[0_10px_30px_rgba(248,220,140,0.45)]">
                   <span class="text-xl mb-1">💍</span>
                   <p class="text-2xl font-extrabold text-[#c98a00] mb-0.5">
-                    +<span class="countup" data-target="{{ $totalPelaminan ?? 0 }}">0</span>
+                    +{{ $totalPelaminan ?? 0 }}
                   </p>
                   <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
                     Pelaminan
@@ -743,12 +736,11 @@
 
         <div class="grid grid-cols-2 gap-3 text-center text-sm">
           {{-- MUA --}}
-          <div
-            class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
-            shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
             <span class="text-lg mb-0.5">✨</span>
             <p class="text-xl font-extrabold text-[#c98a00]">
-              +<span class="countup" data-target="{{ $totalMua ?? 0 }}">0</span>
+              +{{ $totalMua ?? 0 }}
             </p>
             <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
               Mua Terdaftar
@@ -756,12 +748,11 @@
           </div>
 
           {{-- BUSANA --}}
-          <div
-            class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
-            shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
             <span class="text-lg mb-0.5">👗</span>
             <p class="text-xl font-extrabold text-[#c98a00]">
-              +<span class="countup" data-target="{{ $totalBusana ?? 0 }}">0</span>
+              +{{ $totalBusana ?? 0 }}
             </p>
             <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
               Busana Adat
@@ -769,12 +760,11 @@
           </div>
 
           {{-- MAKEUP --}}
-          <div
-            class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
-            shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
             <span class="text-lg mb-0.5">💄</span>
             <p class="text-xl font-extrabold text-[#c98a00]">
-              +<span class="countup" data-target="{{ $totalMakeup ?? 0 }}">0</span>
+              +{{ $totalMakeup ?? 0 }}
             </p>
             <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
               Make Up
@@ -782,12 +772,11 @@
           </div>
 
           {{-- PELAMINAN --}}
-          <div
-            class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
-            shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
+          <div class="rounded-2xl bg-[#fff8dd] px-3 py-3 flex flex-col items-center justify-center
+                    shadow-[0_8px_24px_rgba(248,220,140,0.5)]">
             <span class="text-lg mb-0.5">💍</span>
             <p class="text-xl font-extrabold text-[#c98a00]">
-              +<span class="countup" data-target="{{ $totalPelaminan ?? 0 }}">0</span>
+              +{{ $totalPelaminan ?? 0 }}
             </p>
             <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-800">
               Pelaminan
@@ -804,7 +793,7 @@
 
   {{-- TENTANG ADATKU --}}
   <section id="tentang" class="max-w-5xl mx-auto px-6 md:px-10 py-14 scroll-mt-24 md:scroll-mt-32">
-    <div class="text-center mb-7">
+    <div class="text-center mb-7 items-center justify-center">
       <h2 class="logo-font text-4xl text-[#5c2b33] mb-2">Sekilas Tentang AdatKu</h2>
       <p class="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
         AdatKu hadir sebagai jembatan antara tradisi dan teknologi,
@@ -822,6 +811,7 @@
       dan transparan bagi pengguna maupun penyedia jasa.
     </div>
   </section>
+
 
   {{-- KATEGORI LAYANAN --}}
   <section class="max-w-6xl mx-auto px-6 md:px-10 pb-16">
@@ -883,17 +873,13 @@
             @if ($itemsBaju->isNotEmpty())
               @foreach ($itemsBaju as $item)
                 <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
-                  alt="{{ $item->judul }}" loading="lazy">
+                  alt="{{ $item->judul }}">
               @endforeach
             @else
-              <img src="{{ asset('bajuminang.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Minang"
-                loading="lazy">
-              <img src="{{ asset('bajumelayu.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Melayu"
-                loading="lazy">
-              <img src="{{ asset('bajujawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Jawa"
-                loading="lazy">
-              <img src="{{ asset('bajusunda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Sunda"
-                loading="lazy">
+              <img src="{{ asset('bajuminang.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Minang">
+              <img src="{{ asset('bajumelayu.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Melayu">
+              <img src="{{ asset('bajujawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Jawa">
+              <img src="{{ asset('bajusunda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Baju Sunda">
             @endif
           </div>
         </div>
@@ -917,17 +903,13 @@
             @if ($itemsMakeup->isNotEmpty())
               @foreach ($itemsMakeup as $item)
                 <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
-                  alt="{{ $item->judul }}" loading="lazy">
+                  alt="{{ $item->judul }}">
               @endforeach
             @else
-              <img src="{{ asset('makeupjawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Jawa"
-                loading="lazy">
-              <img src="{{ asset('makeupnikah.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Nikah"
-                loading="lazy">
-              <img src="{{ asset('makeuplamaran.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Lamaran"
-                loading="lazy">
-              <img src="{{ asset('makeupwisuda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Wisuda"
-                loading="lazy">
+              <img src="{{ asset('makeupjawa.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Jawa">
+              <img src="{{ asset('makeupnikah.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Nikah">
+              <img src="{{ asset('makeuplamaran.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Lamaran">
+              <img src="{{ asset('makeupwisuda.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Makeup Wisuda">
             @endif
           </div>
         </div>
@@ -951,17 +933,13 @@
             @if ($itemsPelamin->isNotEmpty())
               @foreach ($itemsPelamin as $item)
                 <img src="{{ asset('storage/' . $item->image_path) }}" class="w-1/4 h-[320px] object-cover"
-                  alt="{{ $item->judul }}" loading="lazy">
+                  alt="{{ $item->judul }}">
               @endforeach
             @else
-              <img src="{{ asset('pelamin1.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 1"
-                loading="lazy">
-              <img src="{{ asset('pelamin2.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 2"
-                loading="lazy">
-              <img src="{{ asset('pelamin3.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 3"
-                loading="lazy">
-              <img src="{{ asset('pelamin4.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 4"
-                loading="lazy">
+              <img src="{{ asset('pelamin1.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 1">
+              <img src="{{ asset('pelamin2.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 2">
+              <img src="{{ asset('pelamin3.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 3">
+              <img src="{{ asset('pelamin4.jpg') }}" class="w-1/4 h-[320px] object-cover" alt="Pelamin 4">
             @endif
           </div>
         </div>
@@ -1020,15 +998,15 @@
           @php
             $isCenter = $loop->count >= 3 && $loop->iteration == 2;
             $photoUrl = $member->photo
-                ? asset('storage/' . $member->photo)
-                : 'https://placehold.co/600x400?text=Tim';
+              ? asset('storage/' . $member->photo)
+              : 'https://placehold.co/600x400?text=Tim';
           @endphp
 
           <div
             class="bg-white rounded-3xl border px-5 md:px-6 pt-5 pb-6 md:pb-7 flex flex-col
-            {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
+                                                                            {{ $isCenter ? 'shadow-lg border-amber-200 md:scale-105 md:-translate-y-2' : 'shadow-md border-amber-100/80' }}">
             <div class="w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4 border border-amber-100/70 bg-slate-100">
-              <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover" loading="lazy"
+              <img src="{{ $photoUrl }}" alt="{{ $member->name }}" class="w-full h-full object-cover"
                 onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Tim';">
             </div>
 
@@ -1054,7 +1032,7 @@
       </div>
 
       <p class="text-[11px] text-center text-gray-500 mt-5">
-        *Tim Pengembang di balik website AdatKu ✨.
+        *Tim Pengembang di Balik website Adatku✨.
       </p>
     </div>
   </section>
@@ -1074,14 +1052,13 @@
       </div>
       <div class="flex flex-wrap gap-3">
         @auth
-          <button type="button"
-            @click="
-              if (mustVerifyEmail) {
-                verifyModal = true;
-              } else {
-                window.location = '{{ route('mua.entry') }}';
-              }
-            "
+          <button type="button" @click="
+                          if (mustVerifyEmail) {
+                            verifyModal = true;
+                          } else {
+                            window.location = '{{ route('mua.entry') }}';
+                          }
+                        "
             class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-semibold bg-white text-[#c98a00] shadow-md hover:bg-amber-50">
             Daftarkan Jasa Sekarang
           </button>
@@ -1105,8 +1082,8 @@
     @php
       $user = auth()->user();
       $avatarUrl = ($user->avatar ?? null)
-          ? asset('storage/' . $user->avatar)
-          : 'https://placehold.co/300x300?text=Profile';
+        ? asset('storage/' . $user->avatar)
+        : 'https://placehold.co/300x300?text=Profile';
     @endphp
 
     {{-- Modal Profil --}}
@@ -1290,27 +1267,34 @@
             <label class="block text-sm font-medium text-slate-700 mb-1">Kontak WhatsApp</label>
 
             @php
+              // ambil nilai lama / dari pengajuan yang sudah ada
               $rawWa = old('kontak_wa', $requestMua->kontak_wa ?? '');
-              $digits = preg_replace('/\D/', '', $rawWa);
+              $digits = preg_replace('/\D/', '', $rawWa);   // buang selain angka
+
               $waWithoutPrefix = '';
 
               if ($digits !== '') {
-                  if ($digits[0] === '0') {
-                      $waWithoutPrefix = substr($digits, 1);
-                  } elseif (substr($digits, 0, 2) === '62') {
-                      $waWithoutPrefix = substr($digits, 2);
-                  } else {
-                      $waWithoutPrefix = $digits;
-                  }
+                if ($digits[0] === '0') {
+                  // kalau tersimpan 08... -> tampilkan tanpa 0 di depan
+                  $waWithoutPrefix = substr($digits, 1);
+                } elseif (substr($digits, 0, 2) === '62') {
+                  // kalau tersimpan 62... -> tampilkan tanpa 62
+                  $waWithoutPrefix = substr($digits, 2);
+                } else {
+                  // kasus lain: langsung pakai
+                  $waWithoutPrefix = $digits;
+                }
               }
             @endphp
 
             <div class="flex gap-2">
+              {{-- prefix bendera +62 --}}
               <div class="inline-flex items-center rounded-xl border border-rose-100 bg-rose-50/60 px-3">
                 <span class="text-lg mr-1">🇮🇩</span>
                 <span class="text-sm font-semibold text-slate-700">+62</span>
               </div>
 
+              {{-- input angka belakangnya saja --}}
               <input type="tel" name="kontak_wa" {{ $isDisabledReq }} value="{{ $waWithoutPrefix }}"
                 class="flex-1 border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-rose-300 focus:border-rose-400 @if($isMuaReq) bg-slate-100 cursor-not-allowed @endif"
                 placeholder="81234567890" inputmode="numeric" pattern="[0-9]{8,13}">
@@ -1361,16 +1345,18 @@
               </a>
             </div>
           @else
+            {{-- TOMBOL AKSI RESPONSIVE --}}
             <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-              <button type="submit"
-                class="w-full sm:w-auto px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white
-                font-semibold text-sm shadow-md">
+
+              {{-- tombol kirim --}}
+              <button type="submit" class="w-full sm:w-auto px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white
+                                                                       font-semibold text-sm shadow-md">
                 Kirim Pengajuan
               </button>
 
-              <button type="button" @click="applyMuaModal = false"
-                class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300
-                text-sm font-semibold">
+              {{-- tombol kembali --}}
+              <button type="button" @click="applyMuaModal = false" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300
+                                                                       text-sm font-semibold">
                 ← Kembali
               </button>
             </div>
@@ -1520,21 +1506,21 @@
           @click="open = open === 6 ? null : 6">
           <div>
             <p class="text-sm md:text-base font-semibold text-[#5c2b33]">
-              Kenapa email verifikasi tidak terkirim ke email saya?
+              Kenapa email Verifikasi tidak terkirim ke email saya?
             </p>
             <p class="text-[11px] text-amber-600 uppercase tracking-[0.18em]">
-              EMAIL VERIFIKASI
+              Email VERIFIKASI
             </p>
           </div>
           <span class="text-amber-600 text-xl" x-text="open === 6 ? '−' : '+'"></span>
         </button>
         <div x-show="open === 6" x-collapse class="px-5 md:px-6 pb-4 text-sm text-gray-600 leading-relaxed">
-          Untuk mendapatkan <span class="font-semibold">email verifikasi</span>, pastikan email yang kamu
-          gunakan terdaftar di Google dan verifikasi email kamu sudah dikonfirmasi.
+          Untuk mendapatkan <span class="font-semibold">Email verifikasi</span> pastikan Email yang kamu
+          terdaftar di Google dan verifikasi email kamu sudah dikonfirmasi.
           <br><br>
           Jika sudah memastikan hal tersebut, silakan klik tombol
           <span class="font-semibold">"Kirim Ulang Email Verifikasi"</span>
-          di bagian atas halaman. Jika tetap tidak terkirim, kamu dapat hubungi admin melalui menu
+          di bagian atas halaman dan jika tidak bisa juga terkirim emailnya kamu dapat hubungi admin melalui menu
           <span class="font-semibold">Hubungi Kami</span>.
         </div>
       </div>
@@ -1555,9 +1541,8 @@
 
           {{-- BRAND --}}
           <div>
-            <h1
-              class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-              bg-clip-text text-transparent drop-shadow">
+            <h1 class="logo-font text-4xl bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                        bg-clip-text text-transparent drop-shadow">
               AdatKu
             </h1>
 
@@ -1634,7 +1619,7 @@
     </div>
   </footer>
 
-  {{-- FLOATING CTA: Daftarkan jasa MUA (desktop) --}}
+  {{-- FLOATING CTA: Daftarkan jasa MUA (pojok kiri bawah, hanya desktop) --}}
   @auth
     @php
       $userFloat = auth()->user();
@@ -1642,21 +1627,19 @@
     @endphp
 
     @if (!$isMuaFloat)
-      <button type="button"
-        @click="
-          if (mustVerifyEmail) {
-            verifyModal = true;
-          } else {
-            applyMuaModal = true;
-          }
-        "
-        class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
-        items-center justify-center px-6 py-2.5 rounded-full
-        text-sm font-semibold
-        bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
-        text-white hover:brightness-110 transition
-        hover:-translate-y-0.5 hover:scale-[1.02]
-        cta-mua-floating">
+      <button type="button" @click="
+                              if (mustVerifyEmail) {
+                                verifyModal = true;
+                              } else {
+                                applyMuaModal = true;
+                              }
+                            " class="hidden md:inline-flex fixed bottom-6 left-6 z-[60]
+                                   items-center justify-center px-6 py-2.5 rounded-full
+                                   text-sm font-semibold
+                                   bg-gradient-to-r from-[#f7e07b] via-[#eab308] to-[#c98a00]
+                                   text-white hover:brightness-110 transition
+                                   hover:-translate-y-0.5 hover:scale-[1.02]
+                                   cta-mua-floating">
         Daftarkan jasa MUA kamu di sini
       </button>
     @endif
@@ -1683,14 +1666,10 @@
   <span class="floating-icon from-bottom icon-lg"
     style="left: 80%; animation-duration: 25s; animation-delay: 4s;">✥</span>
 
-  <span class="floating-icon from-top icon-md"
-    style="left: 15%; animation-duration: 23s; animation-delay: 2s;">✦</span>
-  <span class="floating-icon from-top icon-lg"
-    style="left: 42%; animation-duration: 27s; animation-delay: 5s;">❋</span>
-  <span class="floating-icon from-top icon-xl"
-    style="left: 68%; animation-duration: 30s; animation-delay: 8s;">◈</span>
-  <span class="floating-icon from-top icon-md"
-    style="left: 88%; animation-duration: 26s; animation-delay: 3s;">❂</span>
+  <span class="floating-icon from-top icon-md" style="left: 15%; animation-duration: 23s; animation-delay: 2s;">✦</span>
+  <span class="floating-icon from-top icon-lg" style="left: 42%; animation-duration: 27s; animation-delay: 5s;">❋</span>
+  <span class="floating-icon from-top icon-xl" style="left: 68%; animation-duration: 30s; animation-delay: 8s;">◈</span>
+  <span class="floating-icon from-top icon-md" style="left: 88%; animation-duration: 26s; animation-delay: 3s;">❂</span>
 
   {{-- ALPINE --}}
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
